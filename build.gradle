@@ -1,0 +1,120 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.0'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+	id "jacoco"
+}
+
+group = 'de.unimarburg.diz'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/snapshot' }
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+sourceSets {
+	intTest {
+		compileClasspath += sourceSets.main.output
+		runtimeClasspath += sourceSets.main.output
+	}
+}
+
+configurations {
+	intTestImplementation.extendsFrom implementation
+	intTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+task integrationTest(type: Test) {
+	description = 'Runs integration tests.'
+	group = 'verification'
+
+	testClassesDirs = sourceSets.intTest.output.classesDirs
+	classpath = sourceSets.intTest.runtimeClasspath
+	shouldRunAfter test
+}
+
+check.dependsOn integrationTest
+
+ext {
+	set('springCloudVersion', "2020.0.0-SNAPSHOT")
+	set("hapiFhirVersion", "5.1.0")
+	set('testContainersVersion', '1.15.0-rc2')
+}
+
+dependencies {
+	// spring cloud stream kafka
+	implementation 'org.apache.kafka:kafka-streams'
+	implementation 'org.springframework.cloud:spring-cloud-stream'
+	implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
+
+	// mapper
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+	// hapi fhir
+	implementation "ca.uhn.hapi.fhir:org.hl7.fhir.r4:$hapiFhirVersion"
+	implementation "ca.uhn.hapi.fhir:hapi-fhir-base:$hapiFhirVersion"
+	implementation "ca.uhn.hapi.fhir:hapi-fhir-client:$hapiFhirVersion"
+	implementation "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:$hapiFhirVersion"
+	implementation "ca.uhn.hapi.fhir:hapi-fhir-structures-r5:$hapiFhirVersion"
+	implementation "ca.uhn.hapi.fhir:hapi-fhir-validation:$hapiFhirVersion"
+	implementation "ca.uhn.hapi.fhir:hapi-fhir-validation-resources-r4:$hapiFhirVersion"
+	implementation 'org.miracum:kafka-fhir-serializer:1.0.0'
+
+	// unit tests
+	testCompile 'org.springframework.cloud:spring-cloud-stream'
+	testCompile 'org.apache.kafka:kafka-streams-test-utils:2.2.0'
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test:2.6.2'
+	testImplementation 'org.assertj:assertj-core:3.17.2'
+
+	// integration tests
+	intTestImplementation 'org.springframework.kafka:spring-kafka-test:2.6.2'
+	intTestImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	intTestCompile "org.testcontainers:kafka:$testContainersVersion"
+	intTestImplementation "org.testcontainers:junit-jupiter:$testContainersVersion"
+	intTestImplementation 'org.awaitility:awaitility:4.0.3'
+	intTestImplementation 'org.assertj:assertj-core:3.17.2'
+
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
+
+integrationTest {
+	useJUnitPlatform()
+}
+
+jacoco {
+	toolVersion = "0.8.5"
+	reportsDir = file("$buildDir/jacoco-reports")
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		csv.enabled true
+		csv.destination file("${buildDir}/jacoco/coverage.csv")
+		html.destination file("${buildDir}/jacoco/html")
+	}
+}
+
+bootJar {
+	mainClassName = 'de.unimarburg.diz.kafkastreamstemplate.Application'
+	layered()
+}

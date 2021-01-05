@@ -1,0 +1,38 @@
+include:
+  - project: "marburg/gitlab-ci-templates"
+    file: "/linting-template.yml"
+  - project: "marburg/gitlab-ci-templates"
+    file: "/build-docker-image-template.yml"
+  - project: "marburg/gitlab-ci-templates"
+    file: "/gradle-test-template.yml"
+  - project: "marburg/gitlab-ci-templates"
+    file: "/semantic-release-template.yml"
+
+image: docker:stable
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: "tcp://docker:2375"
+
+services:
+  - docker:dind
+
+stages:
+  - lint
+  - build
+  - test
+  - version
+  - release
+
+before_script:
+  - mkdir -p ~/.docker
+  - echo "$DOCKER_AUTH" > ~/.docker/config.json
+
+
+integration tests:
+  image: gradle:jdk11
+  stage: test
+  script: ./gradlew integrationTest --no-daemon
+  artifacts:
+    reports:
+      junit: build/test-results/integrationTest/TEST-*.xml
