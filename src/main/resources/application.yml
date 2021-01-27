@@ -1,1 +1,43 @@
+spring:
+  kafka:
+    bootstrapServers: ${BOOTSTRAP_SERVERS:localhost:9092}
+    security.protocol: ${SECURITY_PROTOCOL:PLAINTEXT}
 
+  cloud:
+    stream:
+      function.definition: process
+      bindings:
+        process-in-0:
+          destination: laboratory
+        process-out-0:
+          destination: test-fhir-laboratory
+      kafka:
+        streams:
+          binder:
+            applicationId: lab-to-fhir
+            configuration:
+              compression.type: gzip
+              max.request.size: 5242880
+
+fhir:
+  systems:
+    serviceRequestId: "https://fhir.diz.uni-marburg.de/NamingSystem/identifier/ServiceRequestId"
+    diagnosticReportId: "https://fhir.diz.uni-marburg.de/NamingSystem/identifier/LaboratoryReportId"
+    observationId: "https://fhir.diz.uni-marburg.de/NamingSystem/identifier/LabSurrogateObservationId"
+    patientId: "https://fhir.diz.uni-marburg.de/NamingSystem/identifier/PatientId"
+    encounterId: "https://fhir.diz.uni-marburg.de/NamingSystem/identifier/EncounterId"
+
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health
+
+logging:
+  level:
+    org.springframework.kafka.config: debug
+    de.unimarburg.diz.labtofhir: debug
