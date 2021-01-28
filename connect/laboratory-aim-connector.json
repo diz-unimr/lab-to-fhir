@@ -1,0 +1,27 @@
+{
+  "name": "laboratory-aim",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+    "tasks.max": "1",
+    "poll.interval.ms": "300000",
+    "connection.url": "jdbc:postgresql://pre-diz-staging.diz.uni-marburg.de/aim",
+    "connection.user": "aim",
+    "connection.password": "test",
+    "query": "select dr.id as \"dr.id\", dr.fhir, dr.effective_date_time, dr.effective_period, dr.fhir_version, gf.status_deleted, gf.inserted_when, gf.last_modified_when, gf.deleted_when from diagnostic_report dr left join generic_file gf on dr.generic_file_fk = gf.id",
+    "mode": "timestamp+incrementing",
+    "quote.sql.identifiers": "never",
+    "incrementing.column.name": "dr.id",
+    "timestamp.column.name": "last_modified_when",
+    "transforms": "createKey,extractInt",
+    "transforms.createKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
+    "transforms.createKey.fields": "dr.id",
+    "transforms.extractInt.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+    "transforms.extractInt.field": "dr.id",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "topic.prefix": "aim-lab",
+    "numeric.mapping": "best_fit"
+  }
+}
