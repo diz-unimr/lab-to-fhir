@@ -1,0 +1,792 @@
+{
+  "id": "181",
+  "code": {
+    "text": "Laborwerte",
+    "coding": [
+      {
+        "code": "11502-2",
+        "system": "http://loinc.org",
+        "display": "Laborwerte"
+      }
+    ]
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\"> Laborwerte </div><table class=\"hapiPropertyTable\"><tbody><tr><td>Status</td><td>PARTIAL</td></tr></tbody></table><table class=\"hapiTableOfValues\"><thead><tr><td>Name</td><td>Value</td><td>Interpretation</td><td>Reference Range</td><td>Status</td></tr></thead><tbody><tr class=\"hapiTableOfValuesRowOdd\"><td> Leuko (Stix) </td><td>++</td><td></td><td> - </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Nitrit (Stix) </td><td>negativ</td><td></td><td> - </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> pH (Stix) </td><td>5.5</td><td></td><td> 4.5 - 8.0 </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Protein (Stix) </td><td>negativ</td><td></td><td> - </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> Glukose im Urin (Stix) </td><td>norm</td><td></td><td> - </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Ketone (Stix) </td><td>negativ</td><td></td><td> - </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> Urobilinogen (Stix) </td><td>norm</td><td></td><td> - </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Hb/Ery (Stix) </td><td>negativ</td><td></td><td> - </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> Bilirubin (Stix) </td><td>negativ</td><td></td><td> - </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Harndichte (Stix) </td><td>1.006 g/cm3</td><td></td><td> 1.002 g/cm3 - 1.040 g/cm3 </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> Protein (Spontanurin) </td><td>20 g/l</td><td></td><td></td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Protein /g Kreatinin (Spontanurin) </td><td>6.2 g/g Krea</td><td></td><td></td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> Kreatinin (Spontanurin) </td><td>32.1 mg/dl</td><td></td><td></td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Freies T4 </td><td>10 pmol/l</td><td></td><td> 7.5 pmol/l - 21 pmol/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> Schilddrüsenbeurt. </td><td></td><td></td><td></td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td colspan=\"5\">Euthyreote Stoffwechsellage (falls klin. keine Zeichen einer Hyper-oder Hypothyreose vorliegen)</td></tr></tbody></table></div>",
+    "status": "generated"
+  },
+  "result": [
+    {
+      "reference": "#embedded-observation-1"
+    },
+    {
+      "reference": "#embedded-observation-2"
+    },
+    {
+      "reference": "#embedded-observation-3"
+    },
+    {
+      "reference": "#embedded-observation-4"
+    },
+    {
+      "reference": "#embedded-observation-5"
+    },
+    {
+      "reference": "#embedded-observation-6"
+    },
+    {
+      "reference": "#embedded-observation-7"
+    },
+    {
+      "reference": "#embedded-observation-8"
+    },
+    {
+      "reference": "#embedded-observation-9"
+    },
+    {
+      "reference": "#embedded-observation-10"
+    },
+    {
+      "reference": "#embedded-observation-11"
+    },
+    {
+      "reference": "#embedded-observation-12"
+    },
+    {
+      "reference": "#embedded-observation-13"
+    },
+    {
+      "reference": "#embedded-observation-14"
+    },
+    {
+      "reference": "#embedded-observation-15"
+    }
+  ],
+  "status": "partial",
+  "subject": {
+    "reference": "#embedded-patient"
+  },
+  "category": [
+    {
+      "text": "KLIN"
+    }
+  ],
+  "contained": [
+    {
+      "id": "embedded-patient",
+      "name": [
+        {
+          "given": [
+            "Testvorname"
+          ],
+          "family": "Testnachname"
+        }
+      ],
+      "gender": "male",
+      "birthDate": "1990-06-01",
+      "identifier": [
+        {
+          "value": "599999"
+        }
+      ],
+      "resourceType": "Patient"
+    },
+    {
+      "id": "embedded-visit",
+      "class": {
+        "code": "AMB",
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+        "display": "ambulatory"
+      },
+      "status": "unknown",
+      "identifier": [
+        {
+          "value": "psn-12378519"
+        }
+      ],
+      "resourceType": "Encounter"
+    },
+    {
+      "id": "embedded-producer",
+      "identifier": [
+        {
+          "value": "KLIN"
+        }
+      ],
+      "resourceType": "Organization"
+    },
+    {
+      "id": "embedded-observation-1",
+      "code": {
+        "text": "Leuko (Stix)",
+        "coding": [
+          {
+            "code": "ULEU",
+            "display": "Leuko (Stix)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urinstatus"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_ULEU"
+        }
+      ],
+      "valueString": "++",
+      "resourceType": "Observation",
+      "interpretation": [
+        {
+          "coding": [
+            {
+              "code": "A"
+            }
+          ]
+        }
+      ],
+      "referenceRange": [
+        {
+          "text": "negativ"
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-2",
+      "code": {
+        "text": "Nitrit (Stix)",
+        "coding": [
+          {
+            "code": "UNIT",
+            "display": "Nitrit (Stix)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urinstatus"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_UNIT"
+        }
+      ],
+      "valueString": "negativ",
+      "resourceType": "Observation",
+      "referenceRange": [
+        {
+          "text": "negativ"
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-3",
+      "code": {
+        "text": "pH (Stix)",
+        "coding": [
+          {
+            "code": "UPH",
+            "display": "pH (Stix)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urinstatus"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_UPH"
+        }
+      ],
+      "resourceType": "Observation",
+      "valueQuantity": {
+        "value": 5.5
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 4.5
+          },
+          "high": {
+            "value": 8.0
+          }
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-4",
+      "code": {
+        "text": "Protein (Stix)",
+        "coding": [
+          {
+            "code": "UTP",
+            "display": "Protein (Stix)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urinstatus"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_UTP"
+        }
+      ],
+      "valueString": "negativ",
+      "resourceType": "Observation",
+      "referenceRange": [
+        {
+          "text": "negativ"
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-5",
+      "code": {
+        "text": "Glukose im Urin (Stix)",
+        "coding": [
+          {
+            "code": "UZ",
+            "display": "Glukose im Urin (Stix)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urinstatus"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_UZ"
+        }
+      ],
+      "valueString": "norm",
+      "resourceType": "Observation",
+      "referenceRange": [
+        {
+          "text": "norm"
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-6",
+      "code": {
+        "text": "Ketone (Stix)",
+        "coding": [
+          {
+            "code": "UKET",
+            "display": "Ketone (Stix)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urinstatus"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_UKET"
+        }
+      ],
+      "valueString": "negativ",
+      "resourceType": "Observation",
+      "referenceRange": [
+        {
+          "text": "negativ"
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-7",
+      "code": {
+        "text": "Urobilinogen (Stix)",
+        "coding": [
+          {
+            "code": "URO",
+            "display": "Urobilinogen (Stix)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urinstatus"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_URO"
+        }
+      ],
+      "valueString": "norm",
+      "resourceType": "Observation",
+      "referenceRange": [
+        {
+          "text": "norm"
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-8",
+      "code": {
+        "text": "Hb/Ery (Stix)",
+        "coding": [
+          {
+            "code": "UHB",
+            "display": "Hb/Ery (Stix)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urinstatus"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_UHB"
+        }
+      ],
+      "valueString": "negativ",
+      "resourceType": "Observation",
+      "referenceRange": [
+        {
+          "text": "negativ"
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-9",
+      "code": {
+        "text": "Bilirubin (Stix)",
+        "coding": [
+          {
+            "code": "UBIL",
+            "display": "Bilirubin (Stix)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urinstatus"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_UBIL"
+        }
+      ],
+      "valueString": "negativ",
+      "resourceType": "Observation",
+      "referenceRange": [
+        {
+          "text": "negativ"
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-10",
+      "code": {
+        "text": "Harndichte (Stix)",
+        "coding": [
+          {
+            "code": "USg",
+            "display": "Harndichte (Stix)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urinstatus"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_USg"
+        }
+      ],
+      "resourceType": "Observation",
+      "valueQuantity": {
+        "unit": "g/cm3",
+        "value": 1.006
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "unit": "g/cm3",
+            "value": 1.002
+          },
+          "high": {
+            "unit": "g/cm3",
+            "value": 1.040
+          }
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-11",
+      "code": {
+        "text": "Protein (Spontanurin)",
+        "coding": [
+          {
+            "code": "UPROSP",
+            "display": "Protein (Spontanurin)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urin (Konzentration)"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_UPROSP"
+        }
+      ],
+      "resourceType": "Observation",
+      "valueQuantity": {
+        "unit": "g/l",
+        "value": 20
+      },
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-12",
+      "code": {
+        "text": "Protein /g Kreatinin (Spontanurin)",
+        "coding": [
+          {
+            "code": "UPROSPQ",
+            "display": "Protein /g Kreatinin (Spontanurin)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urin (Konzentration)"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_UPROSPQ"
+        }
+      ],
+      "resourceType": "Observation",
+      "valueQuantity": {
+        "unit": "g/g Krea",
+        "value": 6.2
+      },
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-13",
+      "code": {
+        "text": "Kreatinin (Spontanurin)",
+        "coding": [
+          {
+            "code": "UKRESP",
+            "display": "Kreatinin (Spontanurin)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Urin (Konzentration)"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_UKRESP"
+        }
+      ],
+      "resourceType": "Observation",
+      "valueQuantity": {
+        "unit": "mg/dl",
+        "value": 32.1
+      },
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-14",
+      "code": {
+        "text": "Freies T4",
+        "coding": [
+          {
+            "code": "FT4",
+            "display": "Freies T4"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_FT4"
+        }
+      ],
+      "resourceType": "Observation",
+      "valueQuantity": {
+        "unit": "pmol/l",
+        "value": 10
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "unit": "pmol/l",
+            "value": 7.5
+          },
+          "high": {
+            "unit": "pmol/l",
+            "value": 21
+          }
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    },
+    {
+      "id": "embedded-observation-15",
+      "code": {
+        "text": "Schilddrüsenbeurt.",
+        "coding": [
+          {
+            "code": "BETYR",
+            "display": "Schilddrüsenbeurt."
+          }
+        ]
+      },
+      "note": [
+        {
+          "text": "Euthyreote Stoffwechsellage (falls klin. keine Zeichen einer Hyper-oder Hypothyreose vorliegen)"
+        }
+      ],
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Kommentare"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351790_BETYR"
+        }
+      ],
+      "resourceType": "Observation",
+      "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+    }
+  ],
+  "encounter": {
+    "reference": "#embedded-visit"
+  },
+  "performer": [
+    {
+      "reference": "#embedded-producer"
+    }
+  ],
+  "identifier": [
+    {
+      "value": "20200720_24351790"
+    }
+  ],
+  "resourceType": "DiagnosticReport",
+  "effectiveDateTime": "2020-07-20T15:09:00+02:00"
+}

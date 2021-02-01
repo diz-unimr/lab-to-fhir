@@ -1,0 +1,302 @@
+{
+  "id": "180",
+  "code": {
+    "text": "Laborwerte",
+    "coding": [
+      {
+        "code": "11502-2",
+        "system": "http://loinc.org",
+        "display": "Laborwerte"
+      }
+    ]
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\"> Laborwerte </div><table class=\"hapiPropertyTable\"><tbody><tr><td>Status</td><td>FINAL</td></tr></tbody></table><table class=\"hapiTableOfValues\"><thead><tr><td>Name</td><td>Value</td><td>Interpretation</td><td>Reference Range</td><td>Status</td></tr></thead><tbody><tr class=\"hapiTableOfValuesRowOdd\"><td> Hepatitis A IgG </td><td>0.8 S/CO</td><td></td><td> - </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Hepatitis A IgM </td><td>0.68 S/CO</td><td></td><td> 0.8 S/CO - 1.21 S/CO </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> Adeno Virus IgG </td><td>14.1 Index</td><td></td><td> - </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Adeno Virus IgM </td><td>negativ</td><td></td><td> - </td><td>FINAL</td></tr></tbody></table></div>",
+    "status": "generated"
+  },
+  "result": [
+    {
+      "reference": "#embedded-observation-1"
+    },
+    {
+      "reference": "#embedded-observation-2"
+    },
+    {
+      "reference": "#embedded-observation-3"
+    },
+    {
+      "reference": "#embedded-observation-4"
+    }
+  ],
+  "status": "final",
+  "subject": {
+    "reference": "#embedded-patient"
+  },
+  "category": [
+    {
+      "text": "INFD"
+    }
+  ],
+  "contained": [
+    {
+      "id": "embedded-patient",
+      "name": [
+        {
+          "given": [
+            "Testvorname"
+          ],
+          "family": "Testnachname"
+        }
+      ],
+      "gender": "male",
+      "birthDate": "1990-06-01",
+      "identifier": [
+        {
+          "value": "599999"
+        }
+      ],
+      "resourceType": "Patient"
+    },
+    {
+      "id": "embedded-visit",
+      "class": {
+        "code": "AMB",
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+        "display": "ambulatory"
+      },
+      "status": "unknown",
+      "identifier": [
+        {
+          "value": "psn-12378519"
+        }
+      ],
+      "resourceType": "Encounter"
+    },
+    {
+      "id": "embedded-producer",
+      "identifier": [
+        {
+          "value": "INFD"
+        }
+      ],
+      "resourceType": "Organization"
+    },
+    {
+      "id": "embedded-observation-1",
+      "code": {
+        "text": "Hepatitis A  IgG",
+        "coding": [
+          {
+            "code": "HAVG",
+            "display": "Hepatitis A  IgG"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Infektionsdiagnostik Blut (Hepatitis)"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_80149243_HAVG"
+        }
+      ],
+      "resourceType": "Observation",
+      "valueQuantity": {
+        "unit": "S/CO",
+        "value": 0.8
+      },
+      "referenceRange": [
+        {
+          "text": "- <1.00"
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T14:53:00+02:00"
+    },
+    {
+      "id": "embedded-observation-2",
+      "code": {
+        "text": "Hepatitis A IgM",
+        "coding": [
+          {
+            "code": "HAVM",
+            "display": "Hepatitis A IgM"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Infektionsdiagnostik Blut (Hepatitis)"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_80149243_HAVM"
+        }
+      ],
+      "resourceType": "Observation",
+      "valueQuantity": {
+        "unit": "S/CO",
+        "value": 0.68
+      },
+      "interpretation": [
+        {
+          "coding": [
+            {
+              "code": "L"
+            }
+          ]
+        }
+      ],
+      "referenceRange": [
+        {
+          "low": {
+            "unit": "S/CO",
+            "value": 0.8
+          },
+          "high": {
+            "unit": "S/CO",
+            "value": 1.21
+          }
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T14:53:00+02:00"
+    },
+    {
+      "id": "embedded-observation-3",
+      "code": {
+        "text": "Adeno Virus IgG",
+        "coding": [
+          {
+            "code": "ADG",
+            "display": "Adeno Virus IgG"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Infektionsdiagnostik Blut"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_80149243_ADG"
+        }
+      ],
+      "resourceType": "Observation",
+      "valueQuantity": {
+        "unit": "Index",
+        "value": 14.1
+      },
+      "interpretation": [
+        {
+          "coding": [
+            {
+              "code": "H"
+            }
+          ]
+        }
+      ],
+      "referenceRange": [
+        {
+          "text": "8,5 - 11,5"
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T14:53:00+02:00"
+    },
+    {
+      "id": "embedded-observation-4",
+      "code": {
+        "text": "Adeno Virus IgM",
+        "coding": [
+          {
+            "code": "ADM",
+            "display": "Adeno Virus IgM"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Infektionsdiagnostik Blut"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_80149243_ADM"
+        }
+      ],
+      "valueString": "negativ",
+      "resourceType": "Observation",
+      "referenceRange": [
+        {
+          "text": "8,5 - 11,5"
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T14:53:00+02:00"
+    }
+  ],
+  "encounter": {
+    "reference": "#embedded-visit"
+  },
+  "performer": [
+    {
+      "reference": "#embedded-producer"
+    }
+  ],
+  "identifier": [
+    {
+      "value": "20200720_80149243"
+    }
+  ],
+  "resourceType": "DiagnosticReport",
+  "effectiveDateTime": "2020-07-20T14:53:00+02:00"
+}

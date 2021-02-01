@@ -1,0 +1,192 @@
+{
+  "id": "179",
+  "code": {
+    "text": "Laborwerte",
+    "coding": [
+      {
+        "code": "11502-2",
+        "system": "http://loinc.org",
+        "display": "Laborwerte"
+      }
+    ]
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\"> Laborwerte </div><table class=\"hapiPropertyTable\"><tbody><tr><td>Status</td><td>FINAL</td></tr></tbody></table><table class=\"hapiTableOfValues\"><thead><tr><td>Name</td><td>Value</td><td>Interpretation</td><td>Reference Range</td><td>Status</td></tr></thead><tbody><tr class=\"hapiTableOfValuesRowOdd\"><td> Differentialblutbild (Methode) </td><td>Automat</td><td></td><td></td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Neutrophile (abs.) </td><td>10.00 G/l</td><td></td><td> 1.5 G/l - 7.7 G/l </td><td>FINAL</td></tr></tbody></table></div>",
+    "status": "generated"
+  },
+  "result": [
+    {
+      "reference": "#embedded-observation-1"
+    },
+    {
+      "reference": "#embedded-observation-2"
+    }
+  ],
+  "status": "final",
+  "subject": {
+    "reference": "#embedded-patient"
+  },
+  "category": [
+    {
+      "text": "KLIN"
+    }
+  ],
+  "contained": [
+    {
+      "id": "embedded-patient",
+      "name": [
+        {
+          "given": [
+            "Testvorname"
+          ],
+          "family": "Testnachname"
+        }
+      ],
+      "gender": "male",
+      "birthDate": "1990-06-01",
+      "identifier": [
+        {
+          "value": "599999"
+        }
+      ],
+      "resourceType": "Patient"
+    },
+    {
+      "id": "embedded-visit",
+      "class": {
+        "code": "AMB",
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+        "display": "ambulatory"
+      },
+      "status": "unknown",
+      "identifier": [
+        {
+          "value": "psn-12378519"
+        }
+      ],
+      "resourceType": "Encounter"
+    },
+    {
+      "id": "embedded-producer",
+      "identifier": [
+        {
+          "value": "KLIN"
+        }
+      ],
+      "resourceType": "Organization"
+    },
+    {
+      "id": "embedded-observation-1",
+      "code": {
+        "text": "Differentialblutbild (Methode)",
+        "coding": [
+          {
+            "code": "DIFFART",
+            "display": "Differentialblutbild (Methode)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Hämatologie"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351797_DIFFART"
+        }
+      ],
+      "valueString": "Automat",
+      "resourceType": "Observation",
+      "effectiveDateTime": "2020-07-20T14:43:00+02:00"
+    },
+    {
+      "id": "embedded-observation-2",
+      "code": {
+        "text": "Neutrophile (abs.)",
+        "coding": [
+          {
+            "code": "NEUTad",
+            "display": "Neutrophile (abs.)"
+          }
+        ]
+      },
+      "status": "final",
+      "subject": {
+        "reference": "#embedded-patient"
+      },
+      "category": [
+        {
+          "text": "Hämatologie"
+        }
+      ],
+      "encounter": {
+        "reference": "#embedded-visit"
+      },
+      "performer": [
+        {
+          "reference": "#embedded-producer"
+        }
+      ],
+      "identifier": [
+        {
+          "value": "20200720_24351797_NEUTad"
+        }
+      ],
+      "resourceType": "Observation",
+      "valueQuantity": {
+        "unit": "G/l",
+        "value": 10.00
+      },
+      "interpretation": [
+        {
+          "coding": [
+            {
+              "code": "H"
+            }
+          ]
+        }
+      ],
+      "referenceRange": [
+        {
+          "low": {
+            "unit": "G/l",
+            "value": 1.5
+          },
+          "high": {
+            "unit": "G/l",
+            "value": 7.7
+          }
+        }
+      ],
+      "effectiveDateTime": "2020-07-20T14:43:00+02:00"
+    }
+  ],
+  "encounter": {
+    "reference": "#embedded-visit"
+  },
+  "performer": [
+    {
+      "reference": "#embedded-producer"
+    }
+  ],
+  "identifier": [
+    {
+      "value": "20200720_24351797"
+    }
+  ],
+  "resourceType": "DiagnosticReport",
+  "effectiveDateTime": "2020-07-20T14:43:00+02:00"
+}
