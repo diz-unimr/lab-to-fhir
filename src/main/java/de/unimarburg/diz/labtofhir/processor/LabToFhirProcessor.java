@@ -1,6 +1,6 @@
 package de.unimarburg.diz.labtofhir.processor;
 
-import de.unimarburg.diz.labtofhir.mapper.LabReportToFhirMapper;
+import de.unimarburg.diz.labtofhir.mapper.MiiLabReportMapper;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import java.util.function.Function;
 import org.apache.kafka.streams.kstream.KStream;
@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 public class LabToFhirProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(LabToFhirProcessor.class);
-    private final LabReportToFhirMapper fhirMapper;
+    private final MiiLabReportMapper fhirMapper;
 
     @Autowired
-    public LabToFhirProcessor(LabReportToFhirMapper fhirMapper) {
+    public LabToFhirProcessor(MiiLabReportMapper fhirMapper) {
         this.fhirMapper = fhirMapper;
     }
 

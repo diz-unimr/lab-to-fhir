@@ -21,20 +21,19 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ContextConfiguration(classes = {LabReportToFhirMapper.class, FhirConfiguration.class})
+@ContextConfiguration(classes = {MiiLabReportMapper.class, FhirConfiguration.class})
 public class LabReportToFhirMapperTests {
 
 
     @Value("classpath:test-report.json")
     Resource testReport;
     @Autowired
-    private LabReportToFhirMapper mapper;
+    private MiiLabReportMapper mapper;
     @Autowired
     private FhirContext fhirContext;
 
     @Test
     public void mapperSetsPatient() throws IOException {
-        //        var resource = new ClassPathResource("test-report.json").toString();
         var sourceResource = fhirContext.newJsonParser()
             .parseResource(DiagnosticReport.class, testReport.getInputStream());
         var sourceReport = new LaboratoryReport();
@@ -43,7 +42,7 @@ public class LabReportToFhirMapperTests {
 
         var targetBundle = new Bundle();
 
-        mapper.mapPatient(sourceReport, targetBundle);
+        mapper.setPatient(sourceReport, targetBundle);
 
         assertThat(targetBundle.getEntry()).extracting(BundleEntryComponent::getResource)
             .hasAtLeastOneElementOfType(Patient.class);
