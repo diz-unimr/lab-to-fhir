@@ -26,6 +26,10 @@ fhir:
     observationId: "https://fhir.diz.uni-marburg.de/NamingSystem/identifier/LabSurrogateObservationId"
     patientId: "https://fhir.diz.uni-marburg.de/NamingSystem/identifier/PatientId"
     encounterId: "https://fhir.diz.uni-marburg.de/NamingSystem/identifier/EncounterId"
+    assignerId: "https://www.medizininformatik-initiative.de/fhir/core/NamingSystem/org-identifier"
+    assignerCode: "UKMB"
+  generateNarrative: false
+
 
 
 management:

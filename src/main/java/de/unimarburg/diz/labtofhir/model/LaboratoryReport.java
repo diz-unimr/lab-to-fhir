@@ -50,4 +50,9 @@ public class LaboratoryReport {
     public void setResource(DiagnosticReport resource) {
         this.resource = resource;
     }
+
+    public String getReportIdentifierValue() {
+        return resource.getIdentifierFirstRep()
+            .getValue();
+    }
 }

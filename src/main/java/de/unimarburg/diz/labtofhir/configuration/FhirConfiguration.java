@@ -1,6 +1,9 @@
 package de.unimarburg.diz.labtofhir.configuration;
 
 import ca.uhn.fhir.context.FhirContext;
+import java.time.ZoneId;
+import java.util.Set;
+import java.util.TimeZone;
 import org.apache.kafka.common.serialization.Serde;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.miracum.kafka.serializers.KafkaFhirSerde;
@@ -25,14 +28,24 @@ public class FhirConfiguration {
     @Bean
     @Autowired
     public FhirProperties fhirProperties(
-        @Value("${fhir.systems.serviceRequestId}") String serviceRequestSystem,
+        @Value("${fhir.systems.serviceRequestId}") String serviceRequestIdSystem,
         @Value("${fhir.systems.diagnosticReportId}") String diagnosticReportSystem,
         @Value("${fhir.systems.observationId}") String observationIdSystem,
         @Value("${fhir.systems.patientId}") String patientIdSystem,
-        @Value("${fhir.systems.encounterId}") String encounterIdSystem) {
+        @Value("${fhir.systems.encounterId}") String encounterIdSystem,
+        @Value("${fhir.systems.assignerId}") String assignerIdSystem,
+        @Value("${fhir.systems.assignerCode}") String assignerIdCode,
+        @Value("${fhir.generateNarrative}") Boolean generateNarrative) {
 
-        return new FhirProperties(serviceRequestSystem, diagnosticReportSystem, observationIdSystem,
-            patientIdSystem, encounterIdSystem);
+        return new FhirProperties(serviceRequestIdSystem, diagnosticReportSystem,
+            observationIdSystem, patientIdSystem, encounterIdSystem, assignerIdSystem,
+            assignerIdCode, generateNarrative);
+    }
+
+    @Bean
+    public TimeZone systemTimeZone(@Value("${system.zoneId}") String zoneId) {
+        return Set.of(TimeZone.getAvailableIDs())
+            .contains(zoneId) ? TimeZone.getTimeZone(ZoneId.of(zoneId)) : TimeZone.getDefault();
     }
 }
 
