@@ -8,7 +8,12 @@ import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
 import java.io.IOException;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.Encounter;
+import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Reference;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +41,6 @@ public class MiiLabReportMapperTests {
     public void resourceTypeIsValid() throws IOException {
         var validator = FhirProfileValidator.create(fhirContext);
 
-        //        // dummy report
-        //        var report = new LaboratoryReport();
-        //        report.setResource(
-        //            new DiagnosticReport().addIdentifier(new Identifier().setValue("reportId"))
-        //                .setSubject(
-        //                    new Reference(new Patient().addIdentifier(new Identifier().setValue("test"))))
-        //                .setEncounter(new Reference(
-        //                    new Encounter().addIdentifier(new Identifier().setValue("encounterId"))))
-        //                .setEffective(DateTimeType.now()));
         var report = getTestReport();
 
         var bundle = mapper.apply(report);
@@ -60,6 +56,18 @@ public class MiiLabReportMapperTests {
         var report = new LaboratoryReport();
         report.setId(1);
         report.setResource(resource);
+        return report;
+    }
+
+    private LaboratoryReport createDummyReport() {
+        var report = new LaboratoryReport();
+        report.setResource(
+            new DiagnosticReport().addIdentifier(new Identifier().setValue("reportId"))
+                .setSubject(
+                    new Reference(new Patient().addIdentifier(new Identifier().setValue("test"))))
+                .setEncounter(new Reference(
+                    new Encounter().addIdentifier(new Identifier().setValue("encounterId"))))
+                .setEffective(DateTimeType.now()));
         return report;
     }
 }
