@@ -8,7 +8,6 @@ import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,13 +45,10 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         .hashString(i, StandardCharsets.UTF_8)
         .toString();
     private final Identifier identifierAssigner;
-    private final TimeZone timeZone;
 
     @Autowired
-    public MiiLabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties,
-        TimeZone timeZone) {
+    public MiiLabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties) {
         this.fhirProperties = fhirProperties;
-        this.timeZone = timeZone;
         fhirParser = fhirContext.newJsonParser();
         identifierAssigner = new Identifier().setSystem(fhirProperties.getAssignerIdSystem())
             .setValue(fhirProperties.getAssignerIdCode());

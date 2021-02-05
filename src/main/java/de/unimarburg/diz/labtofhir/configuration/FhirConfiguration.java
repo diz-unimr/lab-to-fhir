@@ -1,9 +1,6 @@
 package de.unimarburg.diz.labtofhir.configuration;
 
 import ca.uhn.fhir.context.FhirContext;
-import java.time.ZoneId;
-import java.util.Set;
-import java.util.TimeZone;
 import org.apache.kafka.common.serialization.Serde;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.miracum.kafka.serializers.KafkaFhirSerde;
@@ -40,12 +37,6 @@ public class FhirConfiguration {
         return new FhirProperties(serviceRequestIdSystem, diagnosticReportSystem,
             observationIdSystem, patientIdSystem, encounterIdSystem, assignerIdSystem,
             assignerIdCode, generateNarrative);
-    }
-
-    @Bean
-    public TimeZone systemTimeZone(@Value("${system.zoneId}") String zoneId) {
-        return Set.of(TimeZone.getAvailableIDs())
-            .contains(zoneId) ? TimeZone.getTimeZone(ZoneId.of(zoneId)) : TimeZone.getDefault();
     }
 }
 
