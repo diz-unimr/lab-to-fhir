@@ -50,8 +50,10 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
     public MiiLabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties) {
         this.fhirProperties = fhirProperties;
         fhirParser = fhirContext.newJsonParser();
-        identifierAssigner = new Identifier().setSystem(fhirProperties.getAssignerIdSystem())
-            .setValue(fhirProperties.getAssignerIdCode());
+        identifierAssigner = new Identifier().setSystem(fhirProperties.getSystems()
+            .getAssignerIdSystem())
+            .setValue(fhirProperties.getSystems()
+                .getAssignerId());
     }
 
     private <T extends DomainResource> void setNarrative(T resource) {
@@ -69,7 +71,41 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         Bundle bundle;
 
         try {
-            bundle = map(report);
+            // set meta information
+            bundle = new Bundle();
+
+            // set meta information
+            bundle.setId(report.getReportIdentifierValue());
+            bundle.setType(BundleType.TRANSACTION);
+
+            // TODO skip service request generation?
+            mapServiceRequest(report.getResource(), bundle);
+
+            mapDiagnosticReport(report.getResource(), bundle)
+                // observations
+                .setResult((report.getResource()
+                    .getResult()
+                    .stream()
+                    .map(BaseReference::getResource)
+                    .filter(Observation.class::isInstance)
+                    .map(Observation.class::cast)
+                    // map observations
+                    .map(this::mapObservation)
+                    .map(this::mapLoinc)
+                    .map(this::convertLoincUcum)
+                    // add to bundle
+                    .peek(o -> addResourceToBundle(bundle, o))
+                    // set result references
+                    .map(Reference::new)).collect(Collectors.toList()));
+
+            setPatient(report, bundle);
+            setEncounter(report, bundle);
+
+            if (fhirProperties.getGenerateNarrative()) {
+                generateNarratives(bundle);
+            }
+
+
         } catch (Exception e) {
             log.error("Mapping failed for LaboratoryReport with id {} and order number {}",
                 report.getId(), report.getReportIdentifierValue(), e);
@@ -82,44 +118,27 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         return bundle;
     }
 
-    private Bundle map(LaboratoryReport report) {
-
-        var bundle = new Bundle();
-        try {
-
-            // set meta information
-            bundle.setId(report.getReportIdentifierValue());
-            bundle.setType(BundleType.TRANSACTION);
-
-            // TODO skip service request generation?
-            mapServiceRequest(report, bundle);
-            // TODO
-            mapDiagnosticReport(report, bundle);
-
-            setPatient(report, bundle);
-            setEncounter(report, bundle);
-
-            convertLoincUcum(bundle);
-
-            return bundle;
-        } catch (Exception e) {
-            log.error("Error mapping LaboratoryReport with id {} and order number {}",
-                report.getId(), bundle.getId(), e);
-            throw e;
-        }
+    private void generateNarratives(Bundle bundle) {
+        bundle.getEntry()
+            .stream()
+            .map(BundleEntryComponent::getResource)
+            .filter(DomainResource.class::isInstance)
+            .map(DomainResource.class::cast)
+            .forEach(this::setNarrative);
     }
+
 
     // LOINC mapper
-    public void convertLoincUcum(Bundle bundle) {
+    public Observation convertLoincUcum(Observation observation) {
+        return observation;
 
     }
 
-    private void mapLoinc(Stream<Observation> observations) {
-
+    private Observation mapLoinc(Observation source) {
+        return source;
     }
 
-    private MiiLabReportMapper mapDiagnosticReport(LaboratoryReport labReport, Bundle bundle) {
-        var source = labReport.getResource();
+    private DiagnosticReport mapDiagnosticReport(DiagnosticReport labReport, Bundle bundle) {
         var identifierType = new CodeableConcept().addCoding(
             new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
                 .setCode("FILL"));
@@ -127,19 +146,18 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
             // identifier
             .setIdentifier(List.of(new Identifier().setType(identifierType)
-                .setSystem(fhirProperties.getDiagnosticReportSystem())
-                .setValue(labReport.getResource()
-                    .getIdentifierFirstRep()
+                .setSystem(fhirProperties.getSystems()
+                    .getDiagnosticReportId())
+                .setValue(labReport.getIdentifierFirstRep()
                     .getValue())
                 .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
 
             // basedOn
-            .setBasedOn(
-                List.of(new Reference("ServiceRequest/" + labReport.getReportIdentifierValue())))
+            .setBasedOn(List.of(new Reference("ServiceRequest/" + labReport.getIdentifierFirstRep()
+                .getValue())))
 
             // status
-            .setStatus(labReport.getResource()
-                .getStatus())
+            .setStatus(labReport.getStatus())
 
             // category
             .setCategory(Stream.of(List.of(new CodeableConcept().addCoding(
@@ -148,45 +166,71 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                 new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0074")
                     .setCode("LAB"))),
                 // with local category
-                labReport.getResource()
-                    .getCategory())
+                labReport.getCategory())
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList()))
 
             // code
-            .setCode(source.getCode())
+            .setCode(labReport.getCode())
 
             // status
-            .setStatus(source.getStatus())
+            .setStatus(labReport.getStatus())
 
             // effective
-            .setEffective(source.getEffectiveDateTimeType())
+            .setEffective(labReport.getEffectiveDateTimeType())
 
-            // effective
-            .setIssuedElement(new InstantType(source.getEffectiveDateTimeType()))
-
-            // result
-            .setResult(mapObservations(source.getResult()).stream()
-                .map(Reference::new)
-                .collect(Collectors.toList()));
+            // issued
+            .setIssuedElement(new InstantType(labReport.getEffectiveDateTimeType()));
 
         // add to bundle
         addResourceToBundle(bundle, report);
-        return this;
+
+        return report;
     }
 
-    private List<Observation> mapObservations(List<Reference> result) {
-        // TODO copy values
 
-        // map LOINC
-        mapLoinc(result.stream()
-            .map(BaseReference::getResource)
-            .map(Observation.class::cast));
+    private Observation mapObservation(Observation source) {
+        var identifierType = new CodeableConcept().addCoding(
+            new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
+                .setCode("OBI"));
 
-        return List.of();
+        var obs = new Observation()
+
+            // identifier
+            .setIdentifier(List.of(new Identifier().setType(identifierType)
+                .setSystem(fhirProperties.getSystems()
+                    .getObservationId())
+                .setValue(source.getIdentifierFirstRep()
+                    .getValue())
+                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+            // status
+            .setStatus(source.getStatus())
+            // category
+            .setCategory(Stream.of(List.of(new CodeableConcept().addCoding(
+                new Coding().setSystem("http://loinc.org")
+                    .setCode("26436-6")), new CodeableConcept().addCoding(
+                new Coding().setSystem("http://terminology.hl7.org/CodeSystem/observation-category")
+                    .setCode("laboratory"))),
+                // with local category
+                source.getCategory())
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList()))
+            // local coding: set system
+            .setCode(new CodeableConcept().setCoding(source.getCode()
+                .getCoding()
+                .stream()
+                .map(x -> x.setSystem(fhirProperties.getSystems()
+                    .getLaboratorySystem()))
+                .collect(Collectors.toList())))
+            .setEffective(source.getEffective())
+            .setValue(source.getValue())
+            .setInterpretation(source.getInterpretation())
+            .setReferenceRange(source.getReferenceRange());
+
+        return obs;
     }
 
-    public void mapServiceRequest(LaboratoryReport report, Bundle bundle) {
+    public void mapServiceRequest(DiagnosticReport report, Bundle bundle) {
         var serviceRequest = new ServiceRequest();
 
         // meta data
@@ -200,10 +244,10 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
             new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
                 .setCode("PLAC"));
 
-        var identifier = new Identifier().setSystem(fhirProperties.getServiceRequestSystem())
+        var identifier = new Identifier().setSystem(fhirProperties.getSystems()
+            .getServiceRequestId())
             .setType(identifierType)
-            .setValue(report.getResource()
-                .getIdentifierFirstRep()
+            .setValue(report.getIdentifierFirstRep()
                 .getValue())
             .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()));
         serviceRequest.addIdentifier(identifier);
@@ -213,8 +257,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
         // authoredOn
         // uses report effective (date)
-        serviceRequest.setAuthoredOnElement(report.getResource()
-            .getEffectiveDateTimeType());
+        serviceRequest.setAuthoredOnElement(report.getEffectiveDateTimeType());
 
         // status & intent
         serviceRequest.setStatus(ServiceRequest.ServiceRequestStatus.COMPLETED);
@@ -233,6 +276,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
         // add to bundle
         addResourceToBundle(bundle, serviceRequest);
+
     }
 
 
@@ -268,6 +312,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
             .setReference("Patient/" + patientId));
         getBundleEntryResources(bundle, Observation.class).forEach(o -> o.getSubject()
             .setReference("Patient/" + patientId));
+
     }
 
     public <T> List<T> getBundleEntryResources(Bundle bundle, Class<T> domainType) {
@@ -292,10 +337,6 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
     }
 
     private void addResourceToBundle(Bundle bundle, DomainResource resource) {
-        if (fhirProperties.getGenerateNarrative()) {
-            setNarrative(resource);
-        }
-
         var idElement = resource.getIdElement()
             .getValue();
         bundle.addEntry()

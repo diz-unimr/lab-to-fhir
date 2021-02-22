@@ -28,6 +28,7 @@ fhir:
     encounterId: "https://fhir.diz.uni-marburg.de/NamingSystem/identifier/EncounterId"
     assignerId: "https://www.medizininformatik-initiative.de/fhir/core/NamingSystem/org-identifier"
     assignerCode: "UKMB"
+    laboratorySystem: "https://fhir.diz.uni-marburg.de/CodeSystem/Laboratory"
   generateNarrative: false
 
 
