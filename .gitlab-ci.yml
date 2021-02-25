@@ -19,7 +19,6 @@ services:
 
 stages:
   - lint
-  - setup
   - build
   - test
   - version
