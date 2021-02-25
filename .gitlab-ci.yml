@@ -2,8 +2,6 @@ include:
   - project: "marburg/gitlab-ci-templates"
     file: "/linting-template.yml"
   - project: "marburg/gitlab-ci-templates"
-    file: "/npm-setup-template.yml"
-  - project: "marburg/gitlab-ci-templates"
     file: "/build-docker-image-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "/gradle-test-template.yml"
