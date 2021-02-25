@@ -89,6 +89,10 @@ public class FhirProfileValidator {
         return loadedValueSets;
     }
 
+    public static void prettyPrint(ValidationResult validationResult) {
+        prettyPrint(log, validationResult);
+    }
+
     public static void prettyPrint(Logger log, ValidationResult validationResult) {
         validationResult.getMessages()
             .forEach(message -> {

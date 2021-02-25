@@ -3,12 +3,13 @@ package de.unimarburg.diz.labtofhir.mapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.validation.ValidationResult;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
 import java.io.IOException;
-import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
+import java.util.stream.Collectors;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Encounter;
@@ -17,6 +18,8 @@ import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Reference;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +31,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest
 @ContextConfiguration(classes = {MiiLabReportMapper.class, FhirConfiguration.class})
 public class MiiLabReportMapperTests {
+
+    private final static Logger log = LoggerFactory.getLogger(MiiLabReportMapperTests.class);
 
     @Value("classpath:test-report.json")
     Resource testReport;
@@ -50,9 +55,14 @@ public class MiiLabReportMapperTests {
 
         var bundle = mapper.apply(report);
 
-        assertThat(bundle.getEntry()).extracting(BundleEntryComponent::getResource)
-            .allMatch(r -> validator.validateWithResult(r)
-                .isSuccessful());
+        var validations = bundle.getEntry()
+            .stream()
+            .map(x -> validator.validateWithResult(x.getResource()))
+            .collect(Collectors.toList());
+
+        validations.forEach(FhirProfileValidator::prettyPrint);
+
+        assertThat(validations).allMatch(ValidationResult::isSuccessful);
     }
 
     private LaboratoryReport getTestReport(Resource testResource) throws IOException {
