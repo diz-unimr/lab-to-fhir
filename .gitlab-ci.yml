@@ -7,6 +7,10 @@ include:
     file: "/gradle-test-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "/semantic-release-template.yml"
+  - project: "marburg/gitlab-ci-templates"
+    file: "npm-setup-template.yml"
+
+
 
 image: docker:stable
 
