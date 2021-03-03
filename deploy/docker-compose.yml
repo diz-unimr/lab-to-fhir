@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  lab-to-fhir:
+    image: registry.diz.uni-marburg.de/etl/lab-to-fhir:${IMAGE_TAG:-latest}
+    environment:
+      SPRING_CLOUD_STREAM_BINDINGS_PROCESS_IN_0_DESTINATION: ${INPUT_TOPIC:-aim-lab}
+      SPRING_CLOUD_STREAM_BINDINGS_PROCESS_OUT_0_DESTINATION: ${OUTPUT_TOPIC:-lab-fhir}
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: ${KAFKA_BROKERS:-localhost:9092,kafka1:19092}
