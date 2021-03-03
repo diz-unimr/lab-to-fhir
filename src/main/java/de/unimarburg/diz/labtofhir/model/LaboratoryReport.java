@@ -1,5 +1,6 @@
 package de.unimarburg.diz.labtofhir.model;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import java.time.Instant;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 
@@ -15,6 +16,7 @@ public class LaboratoryReport {
         return id;
     }
 
+    @JsonSetter("id")
     public void setId(int id) {
         this.id = id;
     }
@@ -23,6 +25,7 @@ public class LaboratoryReport {
         return inserted;
     }
 
+    @JsonSetter("inserted_when")
     public void setInserted(Instant inserted) {
         this.inserted = inserted;
     }
@@ -31,6 +34,7 @@ public class LaboratoryReport {
         return modified;
     }
 
+    @JsonSetter("modified")
     public void modified(Instant modified) {
         this.modified = modified;
     }
@@ -39,6 +43,7 @@ public class LaboratoryReport {
         return deleted;
     }
 
+    @JsonSetter("deleted_when")
     public void setDeleted(Instant deleted) {
         this.deleted = deleted;
     }
@@ -47,6 +52,7 @@ public class LaboratoryReport {
         return resource;
     }
 
+    @JsonSetter("fhir")
     public void setResource(DiagnosticReport resource) {
         this.resource = resource;
     }
