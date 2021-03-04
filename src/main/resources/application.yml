@@ -18,6 +18,7 @@ spring:
             configuration:
               compression.type: gzip
               max.request.size: 5242880
+            deserializationExceptionHandler: sendToDlq
 
 fhir:
   systems:
