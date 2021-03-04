@@ -109,6 +109,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         } catch (Exception e) {
             log.error("Mapping failed for LaboratoryReport with id {} and order number {}",
                 report.getId(), report.getReportIdentifierValue(), e);
+            // TODO add metrics and dlq handling
+            // throw e;
             return null;
         }
 
@@ -284,6 +286,16 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
      * Set the encounter reference for {@link DiagnosticReport} and {@link Observation}
      */
     private void setEncounter(LaboratoryReport report, Bundle bundle) {
+        if (report.getResource()
+            .getEncounter()
+            .getResource() == null) {
+            throw new IllegalArgumentException(String.format(
+                "Missing referenced encounter resource in report '%s'. Reference is '%s'",
+                report.getId(), report.getResource()
+                    .getEncounter()
+                    .getReference()));
+        }
+
         var encounterId = ((Encounter) report.getResource()
             .getEncounter()
             .getResource()).getIdentifierFirstRep()
@@ -301,6 +313,16 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
      * Set the subject reference for {@link DiagnosticReport} and {@link Observation}
      */
     public void setPatient(LaboratoryReport report, Bundle bundle) {
+        if (report.getResource()
+            .getSubject()
+            .getResource() == null) {
+            throw new IllegalArgumentException(String.format(
+                "Missing referenced patient resource in report '%s'. Reference is '%s'",
+                report.getId(), report.getResource()
+                    .getSubject()
+                    .getReference()));
+        }
+
         var patientId = ((Patient) report.getResource()
             .getSubject()
             .getResource()).getIdentifierFirstRep()

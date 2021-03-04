@@ -1,10 +1,14 @@
 package de.unimarburg.diz.labtofhir.model;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import de.unimarburg.diz.labtofhir.serializer.DiagnosticReportDeserializer;
+import de.unimarburg.diz.labtofhir.serializer.InstantDeserializer;
+import java.io.Serializable;
 import java.time.Instant;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 
-public class LaboratoryReport {
+public class LaboratoryReport implements Serializable {
 
     private int id;
     private Instant inserted;
@@ -26,6 +30,7 @@ public class LaboratoryReport {
     }
 
     @JsonSetter("inserted_when")
+    @JsonDeserialize(using = InstantDeserializer.class)
     public void setInserted(Instant inserted) {
         this.inserted = inserted;
     }
@@ -35,6 +40,7 @@ public class LaboratoryReport {
     }
 
     @JsonSetter("modified")
+    @JsonDeserialize(using = InstantDeserializer.class)
     public void modified(Instant modified) {
         this.modified = modified;
     }
@@ -44,6 +50,7 @@ public class LaboratoryReport {
     }
 
     @JsonSetter("deleted_when")
+    @JsonDeserialize(using = InstantDeserializer.class)
     public void setDeleted(Instant deleted) {
         this.deleted = deleted;
     }
@@ -53,6 +60,7 @@ public class LaboratoryReport {
     }
 
     @JsonSetter("fhir")
+    @JsonDeserialize(using = DiagnosticReportDeserializer.class)
     public void setResource(DiagnosticReport resource) {
         this.resource = resource;
     }
