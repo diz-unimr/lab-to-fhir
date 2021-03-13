@@ -25,7 +25,6 @@ stages:
   - lint
   - build
   - test
-  - version
   - release
 
 before_script:
