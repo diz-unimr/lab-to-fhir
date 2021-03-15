@@ -41,7 +41,7 @@ check.dependsOn integrationTest
 ext {
     set('springCloudVersion', "2020.0.0-SNAPSHOT")
     set("hapiFhirVersion", "5.1.0")
-    set('testContainersVersion', '1.15.0-rc2')
+    set('testContainersVersion', '1.15.2')
 }
 
 dependencies {
@@ -80,6 +80,7 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     intTestCompile "org.testcontainers:kafka:$testContainersVersion"
+    intTestCompile "org.testcontainers:postgresql:$testContainersVersion"
     intTestImplementation "org.testcontainers:junit-jupiter:$testContainersVersion"
     intTestImplementation 'org.awaitility:awaitility:4.0.3'
     intTestImplementation 'org.assertj:assertj-core:3.17.2'

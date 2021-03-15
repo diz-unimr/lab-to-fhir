@@ -1,0 +1,26 @@
+{
+  "name": "lab",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+    "tasks.max": "1",
+    "poll.interval.ms": "300000",
+    "connection.url": "jdbc:postgresql://aim-db/aim",
+    "connection.user": "aim",
+    "connection.password": "test",
+    "query": "select * from (select dr.id, dr.fhir, dr.effective_date_time, dr.effective_period, dr.fhir_version, gf.status_deleted, gf.inserted_when, tiv.creation_date as modified , gf.deleted_when from diagnostic_report dr left join generic_file gf on dr.generic_file_fk = gf.id left join tbl_item ti on gf.archive_item_name = ti.name left join tbl_item_version tiv on tbl_item_fk = ti.id where dr.fhir -> 'code' -> 'coding' -> 0 ->> 'code' = '11502-2') as lab",
+    "mode": "timestamp+incrementing",
+    "incrementing.column.name": "id",
+    "timestamp.column.name": "modified",
+    "transforms": "createKey,extractInt",
+    "transforms.createKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
+    "transforms.createKey.fields": "id",
+    "transforms.extractInt.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+    "transforms.extractInt.field": "id",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "topic.prefix": "laboratory",
+    "numeric.mapping": "best_fit"
+  }
+}
