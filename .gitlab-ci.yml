@@ -6,6 +6,8 @@ include:
   - project: "marburg/gitlab-ci-templates"
     file: "/gradle-test-template.yml"
   - project: "marburg/gitlab-ci-templates"
+    file: "/gradle-integration-test-template.yml"
+  - project: "marburg/gitlab-ci-templates"
     file: "/semantic-release-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "npm-setup-template.yml"
@@ -15,16 +17,3 @@ stages:
   - build
   - test
   - release
-
-before_script:
-  - mkdir -p ~/.docker
-  - echo "$DOCKER_AUTH" > ~/.docker/config.json
-
-
-integration tests:
-  image: gradle:jdk11
-  stage: test
-  script: ./gradlew integrationTest --no-daemon
-  artifacts:
-    reports:
-      junit: build/test-results/integrationTest/TEST-*.xml
