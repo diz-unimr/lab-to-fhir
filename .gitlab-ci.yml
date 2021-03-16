@@ -10,17 +10,6 @@ include:
   - project: "marburg/gitlab-ci-templates"
     file: "npm-setup-template.yml"
 
-
-
-image: docker:stable
-
-variables:
-  DOCKER_DRIVER: overlay2
-  DOCKER_HOST: "tcp://docker:2375"
-
-services:
-  - docker:dind
-
 stages:
   - lint
   - build
