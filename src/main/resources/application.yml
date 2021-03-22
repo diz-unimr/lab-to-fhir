@@ -32,7 +32,9 @@ fhir:
     laboratorySystem: "https://fhir.diz.uni-marburg.de/CodeSystem/Laboratory"
   generateNarrative: false
 
-
+mapping:
+  loinc:
+    file: "mapping_swl_loinc-v1.2.csv"
 
 management:
   endpoint:

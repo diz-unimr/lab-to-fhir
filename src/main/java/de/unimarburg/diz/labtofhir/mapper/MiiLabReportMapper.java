@@ -8,6 +8,8 @@ import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,15 +41,21 @@ import org.springframework.stereotype.Service;
 public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle> {
 
     private final static Logger log = LoggerFactory.getLogger(MiiLabReportMapper.class);
+    private static final String META_CODE_POCT = "MTYP-POCT";
+    private static final String META_CODE_DIFFART = "DIFFART";
     private final IParser fhirParser;
     private final FhirProperties fhirProperties;
     private final Function<String, String> hasher = i -> Hashing.sha256()
         .hashString(i, StandardCharsets.UTF_8)
         .toString();
     private final Identifier identifierAssigner;
+    private final Set<String> metaCodes = Set.of(META_CODE_DIFFART, META_CODE_POCT);
+    private final LoincMapper loincMapper;
 
     @Autowired
-    public MiiLabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties) {
+    public MiiLabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties,
+        LoincMapper loincMapper) {
+        this.loincMapper = loincMapper;
         this.fhirProperties = fhirProperties;
         fhirParser = fhirContext.newJsonParser();
         identifierAssigner = new Identifier().setSystem(fhirProperties.getSystems()
@@ -79,9 +87,13 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
             bundle.setType(BundleType.TRANSACTION);
 
             // TODO skip service request generation?
-            mapServiceRequest(report.getResource(), bundle);
+            processMetaResults(report)
+                // service request
+                .mapServiceRequest(report.getResource(), bundle)
 
-            mapDiagnosticReport(report.getResource(), bundle)
+                // diagnostic report
+                .mapDiagnosticReport(report.getResource(), bundle)
+
                 // observations
                 .setResult((report.getResource()
                     .getResult()
@@ -91,7 +103,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     .map(Observation.class::cast)
                     // map observations
                     .map(this::mapObservation)
-                    .map(this::mapLoinc)
+                    .map(o -> mapLoinc(o, report))
                     .map(this::convertLoincUcum)
                     // add to bundle
                     .peek(o -> addResourceToBundle(bundle, o))
@@ -120,6 +132,26 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         return bundle;
     }
 
+    private MiiLabReportMapper processMetaResults(
+        LaboratoryReport report) {
+        var metaObs = report.getResource().getResult().stream()
+            .map(BaseReference::getResource).map(Observation.class::cast)
+            .filter(x -> metaCodes.contains(
+                x.getCode().getCoding().stream().findFirst().orElse(new Coding()).getCode()))
+            .collect(Collectors.toList());
+
+        // only one meta code currently supported
+        if (!metaObs.isEmpty()) {
+            report.setMetaCode(metaObs.get(0).getCode().getCoding().get(0).getCode());
+
+            // remove from results
+            report.getResource().getResult()
+                .removeIf(x -> Objects.equals(x.getResource(), metaObs.get(0)));
+        }
+
+        return this;
+    }
+
     private void generateNarratives(Bundle bundle) {
         bundle.getEntry()
             .stream()
@@ -136,8 +168,13 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
     }
 
-    private Observation mapLoinc(Observation source) {
-        return source;
+    private Observation mapLoinc(Observation obs,
+        LaboratoryReport report) {
+
+        obs.getCode().setCoding(
+            loincMapper.mapCoding(obs.getCode().getCoding().get(0), report.getMetaCode()));
+
+        return obs;
     }
 
     private DiagnosticReport mapDiagnosticReport(DiagnosticReport labReport, Bundle bundle) {
@@ -232,7 +269,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         return obs;
     }
 
-    public void mapServiceRequest(DiagnosticReport report, Bundle bundle) {
+    public MiiLabReportMapper mapServiceRequest(DiagnosticReport report, Bundle bundle) {
         var serviceRequest = new ServiceRequest();
 
         // meta data
@@ -278,7 +315,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
         // add to bundle
         addResourceToBundle(bundle, serviceRequest);
-
+        return this;
     }
 
 

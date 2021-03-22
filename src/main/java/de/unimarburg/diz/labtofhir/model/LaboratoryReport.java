@@ -15,6 +15,7 @@ public class LaboratoryReport implements Serializable {
     private Instant modified;
     private Instant deleted;
     private DiagnosticReport resource;
+    private String metaCode;
 
     public int getId() {
         return id;
@@ -68,5 +69,13 @@ public class LaboratoryReport implements Serializable {
     public String getReportIdentifierValue() {
         return resource.getIdentifierFirstRep()
             .getValue();
+    }
+
+    public String getMetaCode() {
+        return this.metaCode;
+    }
+
+    public void setMetaCode(String code) {
+        this.metaCode = code;
     }
 }

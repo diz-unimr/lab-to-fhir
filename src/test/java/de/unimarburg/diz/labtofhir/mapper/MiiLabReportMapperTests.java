@@ -17,7 +17,6 @@ import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Reference;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +24,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.TestPropertySource;
 
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ContextConfiguration(classes = {MiiLabReportMapper.class, FhirConfiguration.class})
+@ContextConfiguration(classes = {MiiLabReportMapper.class, FhirConfiguration.class,
+    LoincMapper.class})
+@TestPropertySource(
+    properties = {
+        "mapping.loinc.file=mapping_swl_loinc-v1.2.csv",
+    })
 public class MiiLabReportMapperTests {
 
     private final static Logger log = LoggerFactory.getLogger(MiiLabReportMapperTests.class);
