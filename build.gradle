@@ -52,6 +52,7 @@ dependencies {
 
     // mapper
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
 
     // hapi fhir
     implementation "ca.uhn.hapi.fhir:org.hl7.fhir.r4:$hapiFhirVersion"
