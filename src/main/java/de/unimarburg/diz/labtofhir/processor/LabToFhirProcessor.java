@@ -1,5 +1,6 @@
 package de.unimarburg.diz.labtofhir.processor;
 
+import de.unimarburg.diz.FhirPseudonymizer;
 import de.unimarburg.diz.labtofhir.mapper.MiiLabReportMapper;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import java.util.function.Function;
@@ -17,10 +18,12 @@ public class LabToFhirProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(LabToFhirProcessor.class);
     private final MiiLabReportMapper fhirMapper;
+    private final FhirPseudonymizer fhirPseudonymizer;
 
     @Autowired
-    public LabToFhirProcessor(MiiLabReportMapper fhirMapper) {
+    public LabToFhirProcessor(MiiLabReportMapper fhirMapper, FhirPseudonymizer fhirPseudonymizer) {
         this.fhirMapper = fhirMapper;
+        this.fhirPseudonymizer = fhirPseudonymizer;
     }
 
     @Bean
