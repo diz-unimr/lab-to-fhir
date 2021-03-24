@@ -41,6 +41,8 @@ public class FhirProperties {
         @NotNull
         private String assignerId;
         @NotNull
+        private String assignerCode;
+        @NotNull
         private String laboratorySystem;
 
         public String getLaboratorySystem() {
@@ -91,20 +93,20 @@ public class FhirProperties {
             this.encounterId = encounterId;
         }
 
-        public String getAssignerIdSystem() {
-            return assignerId;
-        }
-
-        public void setAssignerIdSystem(String assignerId) {
-            this.assignerId = assignerId;
-        }
-
         public String getAssignerId() {
             return assignerId;
         }
 
         public void setAssignerId(String assignerId) {
             this.assignerId = assignerId;
+        }
+
+        public String getAssignerCode() {
+            return assignerCode;
+        }
+
+        public void setAssignerCode(String assignerCode) {
+            this.assignerCode = assignerCode;
         }
     }
 }
