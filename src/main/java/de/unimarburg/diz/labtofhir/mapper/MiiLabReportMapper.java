@@ -5,14 +5,13 @@ import ca.uhn.fhir.parser.IParser;
 import com.google.common.hash.Hashing;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.apache.kafka.streams.kstream.ValueMapper;
 import org.hl7.fhir.r4.model.BaseReference;
 import org.hl7.fhir.r4.model.Bundle;
@@ -31,6 +30,7 @@ import org.hl7.fhir.r4.model.Narrative.NarrativeStatus;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,9 +59,17 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         this.fhirProperties = fhirProperties;
         fhirParser = fhirContext.newJsonParser();
         identifierAssigner = new Identifier().setSystem(fhirProperties.getSystems()
-            .getAssignerIdSystem())
+            .getAssignerId())
             .setValue(fhirProperties.getSystems()
-                .getAssignerId());
+                .getAssignerCode());
+    }
+
+    private <T extends Resource> T createWithId(Class<T> resourceType, String id)
+        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        var resource = resourceType.getConstructor().newInstance();
+        resource.setId(resourceType.getSimpleName() + "/" + id);
+
+        return resource;
     }
 
     private <T extends DomainResource> void setNarrative(T resource) {
@@ -103,7 +111,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     .map(Observation.class::cast)
                     // map observations
                     .map(this::mapObservation)
-                    .map(o -> mapLoinc(o, report))
+                    .map(o -> mapLoincUcum(o, report))
                     .map(this::convertLoincUcum)
                     // add to bundle
                     .peek(o -> addResourceToBundle(bundle, o))
@@ -161,53 +169,52 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
             .forEach(this::setNarrative);
     }
 
-
-    // LOINC mapper
     public Observation convertLoincUcum(Observation observation) {
+        // TODO remove?
         return observation;
 
     }
 
-    private Observation mapLoinc(Observation obs,
+    private Observation mapLoincUcum(Observation obs,
         LaboratoryReport report) {
 
-        obs.getCode().setCoding(
-            loincMapper.mapCoding(obs.getCode().getCoding().get(0), report.getMetaCode()));
-
-        return obs;
+        // map loinc code and ucum (if valueQuantity)
+        return loincMapper.mapCodeAndQuantity(obs, report.getMetaCode());
     }
 
     private DiagnosticReport mapDiagnosticReport(DiagnosticReport labReport, Bundle bundle) {
         var identifierType = new CodeableConcept().addCoding(
             new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
                 .setCode("FILL"));
-        var report = new DiagnosticReport()
+        var identifierValue = labReport.getIdentifierFirstRep().getValue();
 
-            // identifier
-            .setIdentifier(List.of(new Identifier().setType(identifierType)
-                .setSystem(fhirProperties.getSystems()
-                    .getDiagnosticReportId())
-                .setValue(labReport.getIdentifierFirstRep()
-                    .getValue())
-                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+        var report = new DiagnosticReport();
+        // id
+        report.setId(identifierValue);
+        // meta data
+        report.setMeta(new Meta().setProfile(List.of(new CanonicalType(
+            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab"))));
+
+        // identifier
+        report.setIdentifier(List.of(new Identifier().setType(identifierType)
+            .setSystem(fhirProperties.getSystems()
+                .getDiagnosticReportId())
+            .setValue(identifierValue)
+            .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
 
             // basedOn
-            .setBasedOn(List.of(new Reference("ServiceRequest/" + labReport.getIdentifierFirstRep()
-                .getValue())))
+            .setBasedOn(List.of(new Reference("ServiceRequest/" + identifierValue)))
 
             // status
             .setStatus(labReport.getStatus())
 
             // category
-            .setCategory(Stream.of(List.of(new CodeableConcept().addCoding(
-                new Coding().setSystem("http://loinc.org")
-                    .setCode("26436-6")), new CodeableConcept().addCoding(
-                new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0074")
-                    .setCode("LAB"))),
+            .setCategory(List.of(new CodeableConcept()
+                .addCoding(new Coding().setSystem("http://loinc.org").setCode("26436-6")).addCoding(
+                    new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0074").setCode(
+                        "LAB"))
                 // with local category
-                labReport.getCategory())
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList()))
+                .addCoding(labReport.getCategoryFirstRep().getCodingFirstRep())))
 
             // code
             .setCode(labReport.getCode())
@@ -227,42 +234,45 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         return report;
     }
 
-
     private Observation mapObservation(Observation source) {
         var identifierType = new CodeableConcept().addCoding(
             new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
                 .setCode("OBI"));
+        var identifierValue = createIdHash(source.getIdentifierFirstRep());
 
-        var obs = new Observation()
+        var obs = new Observation();
+        // id
+        obs.setId(identifierValue);
+        // meta data
+        obs.setMeta(new Meta().setProfile(List.of(new CanonicalType(
+            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab"))));
 
-            // identifier
-            .setIdentifier(List.of(new Identifier().setType(identifierType)
-                .setSystem(fhirProperties.getSystems()
-                    .getObservationId())
-                .setValue(source.getIdentifierFirstRep()
-                    .getValue())
-                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+        // identifier
+        obs.setIdentifier(List.of(new Identifier().setType(identifierType)
+            .setSystem(fhirProperties.getSystems()
+                .getObservationId())
+            .setValue(identifierValue)
+            .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+
             // status
             .setStatus(source.getStatus())
             // category
-            .setCategory(Stream.of(List.of(new CodeableConcept().addCoding(
+            .setCategory(List.of(new CodeableConcept().addCoding(
                 new Coding().setSystem("http://loinc.org")
-                    .setCode("26436-6")), new CodeableConcept().addCoding(
-                new Coding().setSystem("http://terminology.hl7.org/CodeSystem/observation-category")
-                    .setCode("laboratory"))),
+                    .setCode("26436-6")).addCoding(
+                new Coding()
+                    .setSystem("http://terminology.hl7.org/CodeSystem/observation-category")
+                    .setCode("laboratory"))
                 // with local category
-                source.getCategory())
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList()))
+                .addCoding(source.getCategoryFirstRep().getCodingFirstRep())))
+
             // local coding: set system
-            .setCode(new CodeableConcept().setCoding(source.getCode()
-                .getCoding()
-                .stream()
-                .map(x -> x.setSystem(fhirProperties.getSystems()
-                    .getLaboratorySystem()))
-                .collect(Collectors.toList())))
+            .setCode(new CodeableConcept().addCoding(source.getCode()
+                .getCodingFirstRep().setSystem(fhirProperties.getSystems()
+                    .getLaboratorySystem())))
             .setEffective(source.getEffective())
             .setValue(source.getValue())
+            // TODO set system
             .setInterpretation(source.getInterpretation())
             .setReferenceRange(source.getReferenceRange());
 
@@ -270,48 +280,42 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
     }
 
     public MiiLabReportMapper mapServiceRequest(DiagnosticReport report, Bundle bundle) {
-        var serviceRequest = new ServiceRequest();
-
-        // meta data
-        var meta = new Meta();
-        meta.setProfile(List.of(new CanonicalType(
-            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab")));
-        serviceRequest.setMeta(meta);
-
-        // identifier
         var identifierType = new CodeableConcept(
             new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
                 .setCode("PLAC"));
+        var identifierValue = report.getIdentifierFirstRep().getValue();
 
-        var identifier = new Identifier().setSystem(fhirProperties.getSystems()
+        var serviceRequest = new ServiceRequest();
+        // id
+        serviceRequest.setId(identifierValue);
+        // meta
+        serviceRequest.getMeta().getProfile().add(new CanonicalType(
+            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab"));
+
+        serviceRequest.setIdentifier(List.of(new Identifier().setSystem(fhirProperties.getSystems()
             .getServiceRequestId())
             .setType(identifierType)
-            .setValue(report.getIdentifierFirstRep()
-                .getValue())
-            .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()));
-        serviceRequest.addIdentifier(identifier);
+            .setValue(identifierValue)
+            .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
 
-        // id
-        serviceRequest.setId("ServiceRequest/" + identifier.getValue());
+            // authoredOn
+            // uses report effective (date)
+            .setAuthoredOnElement(report.getEffectiveDateTimeType())
 
-        // authoredOn
-        // uses report effective (date)
-        serviceRequest.setAuthoredOnElement(report.getEffectiveDateTimeType());
+            // status & intent
+            .setStatus(ServiceRequest.ServiceRequestStatus.COMPLETED)
+            .setIntent(ServiceRequest.ServiceRequestIntent.ORDER)
 
-        // status & intent
-        serviceRequest.setStatus(ServiceRequest.ServiceRequestStatus.COMPLETED);
-        serviceRequest.setIntent(ServiceRequest.ServiceRequestIntent.ORDER);
+            // category
+            .setCategory(List.of(new CodeableConcept(
+                new Coding().setSystem("http://terminology.hl7.org/CodeSystem/observation-category")
+                    .setCode("laboratory"))))
 
-        // category
-        serviceRequest.setCategory(List.of(new CodeableConcept(
-            new Coding().setSystem("http://terminology.hl7.org/CodeSystem/observation-category")
-                .setCode("laboratory"))));
-
-        // code
-        serviceRequest.getCode()
-            .addCoding()
-            .setSystem("http://snomed.info/sct")
-            .setCode("59615004");
+            // code
+            .setCode(new CodeableConcept()
+                .setCoding(List.of(new Coding()
+                    .setSystem("http://snomed.info/sct")
+                    .setCode("59615004"))));
 
         // add to bundle
         addResourceToBundle(bundle, serviceRequest);
@@ -392,7 +396,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
     }
 
     private String createIdHash(String idSystem, String id) {
-        return hasher.apply(idSystem + "|" + id);
+        return hasher.apply(idSystem + "|" + id).substring(0, 12);
     }
 
     private void addResourceToBundle(Bundle bundle, DomainResource resource) {

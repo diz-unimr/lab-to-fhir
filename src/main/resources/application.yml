@@ -36,6 +36,10 @@ mapping:
   loinc:
     file: "mapping_swl_loinc-v1.2.csv"
 
+services:
+  pseudonymizer:
+    url: "http://localhost:5000"
+
 management:
   endpoint:
     health:

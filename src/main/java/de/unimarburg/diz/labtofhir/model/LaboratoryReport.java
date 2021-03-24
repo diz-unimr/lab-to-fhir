@@ -6,6 +6,7 @@ import de.unimarburg.diz.labtofhir.serializer.DiagnosticReportDeserializer;
 import de.unimarburg.diz.labtofhir.serializer.InstantDeserializer;
 import java.io.Serializable;
 import java.time.Instant;
+import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 
 public class LaboratoryReport implements Serializable {
@@ -64,6 +65,15 @@ public class LaboratoryReport implements Serializable {
     @JsonDeserialize(using = DiagnosticReportDeserializer.class)
     public void setResource(DiagnosticReport resource) {
         this.resource = resource;
+        sanitizeIdentifierValue(this.resource);
+    }
+
+    private void sanitizeIdentifierValue(DiagnosticReport resource) {
+        var identifierValue = resource.getIdentifierFirstRep().getValue();
+        var idPart = StringUtils.substringAfterLast(identifierValue, "_");
+        if (!idPart.isBlank()) {
+            resource.getIdentifierFirstRep().setValue(idPart);
+        }
     }
 
     public String getReportIdentifierValue() {

@@ -13,6 +13,18 @@ repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/snapshot' }
     maven { url 'https://repo.spring.io/milestone' }
+    maven {
+        url "https://gitlab.diz.uni-marburg.de/api/v4/projects/149/packages/maven"
+        name "gitlab-maven"
+        credentials(HttpHeaderCredentials) {
+            name = 'Deploy-Token'
+            value = 'Cte_Ecvb5QsDGgCznw3S'
+        }
+        authentication {
+            header(HttpHeaderAuthentication)
+        }
+
+    }
 }
 
 sourceSets {
@@ -63,6 +75,7 @@ dependencies {
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation:$hapiFhirVersion"
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation-resources-r4:$hapiFhirVersion"
     implementation 'org.miracum:kafka-fhir-serializer:1.0.0'
+    implementation 'de.unimarburg.diz:fhir-pseudonymizer:1.0'
 
     // unit tests
     testCompile 'org.springframework.cloud:spring-cloud-stream'
