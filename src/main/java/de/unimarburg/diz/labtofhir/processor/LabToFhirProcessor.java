@@ -30,6 +30,7 @@ public class LabToFhirProcessor {
     public Function<KTable<String, LaboratoryReport>, KStream<String, Bundle>> process() {
         return report -> report.
             mapValues(fhirMapper)
+            .mapValues(fhirPseudonymizer::process)
             .toStream()
             .filter((key, value) -> value != null)
             .selectKey((k, v) -> v.getId());

@@ -75,7 +75,7 @@ dependencies {
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation:$hapiFhirVersion"
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation-resources-r4:$hapiFhirVersion"
     implementation 'org.miracum:kafka-fhir-serializer:1.0.0'
-    implementation 'de.unimarburg.diz:fhir-pseudonymizer:1.0'
+    implementation 'de.unimarburg.diz:fhir-pseudonymizer:1.1'
 
     // unit tests
     testCompile 'org.springframework.cloud:spring-cloud-stream'
