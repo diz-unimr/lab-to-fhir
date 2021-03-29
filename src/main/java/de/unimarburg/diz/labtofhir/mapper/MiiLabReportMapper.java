@@ -279,7 +279,9 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                 source.getInterpretation().stream().map(
                     cc -> new CodeableConcept().setCoding(
                         // set system on each coding
-                        cc.getCoding().stream().map(c -> c.setSystem("http://hl7.org/fhir/v2/0078"))
+                        cc.getCoding().stream()
+                            .map(c -> c.setSystem(
+                                "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"))
                             .collect(
                                 Collectors.toList()))).collect(Collectors.toList()))
             // map reference range to simple quantity with value only
