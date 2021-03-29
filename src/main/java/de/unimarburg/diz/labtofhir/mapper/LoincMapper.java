@@ -35,10 +35,8 @@ public class LoincMapper {
 
         if (obs.hasValueQuantity()) {
             // map ucum
-            var valueQuantity = obs.getValueQuantity();
-
-            valueQuantity.setCode(entry.getUcum());
-            valueQuantity.setSystem("http://unitsofmeasure.org");
+            obs.getValueQuantity().setUnit(entry.getUcum())
+                .setCode(entry.getUcum()).setSystem("http://unitsofmeasure.org");
         }
         return obs;
     }

@@ -32,6 +32,7 @@ import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
+import org.hl7.fhir.r4.model.SimpleQuantity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -272,9 +273,21 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     .getLaboratorySystem())))
             .setEffective(source.getEffective())
             .setValue(source.getValue())
-            // TODO set system
-            .setInterpretation(source.getInterpretation())
-            .setReferenceRange(source.getReferenceRange());
+            // interpretation
+            // TODO validate
+            .setInterpretation(
+                source.getInterpretation().stream().map(
+                    cc -> new CodeableConcept().setCoding(
+                        // set system on each coding
+                        cc.getCoding().stream().map(c -> c.setSystem("http://hl7.org/fhir/v2/0078"))
+                            .collect(
+                                Collectors.toList()))).collect(Collectors.toList()))
+            // map reference range to simple quantity with value only
+            .setReferenceRange(
+                source.getReferenceRange().stream()
+                    .map(r -> r.setLow(new SimpleQuantity().setValue(r.getLow().getValue()))
+                        .setHigh(new SimpleQuantity().setValue(r.getHigh().getValue()))).collect(
+                    Collectors.toList()));
 
         return obs;
     }
