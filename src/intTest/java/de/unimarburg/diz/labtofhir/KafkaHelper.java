@@ -1,11 +1,12 @@
 package de.unimarburg.diz.labtofhir;
 
-import static org.awaitility.Awaitility.await;
-
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.awaitility.Durations;
@@ -16,28 +17,23 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 
 public class KafkaHelper {
 
-    public static Map<String, IBaseResource> drain(KafkaConsumer<String, IBaseResource> consumer,
+    public static Map<String, IBaseResource> getAtLeast(String bootstrapServers, String topic,
         int fetchCount) {
-
-        var allRecords = new HashMap<String, IBaseResource>();
-
-        await().atMost(Durations.FIVE_MINUTES)
-            .pollInterval(Durations.ONE_HUNDRED_MILLISECONDS)
-            .until(() -> {
-                consumer.poll(java.time.Duration.ofMillis(50))
-                    .iterator()
-                    .forEachRemaining(r -> allRecords.put(r.key(), r.value()));
-
-                return allRecords.size() >= fetchCount;
-            });
-
-        return allRecords;
+        var consumer = createConsumer(bootstrapServers);
+        consumer.subscribe(Collections.singleton(topic));
+        var records = KafkaTestUtils
+            .getRecords(consumer, Durations.ONE_MINUTE.toMillis(),
+                fetchCount);
+        return StreamSupport
+            .stream(records.spliterator(), false)
+            .collect(Collectors.toMap(ConsumerRecord::key, ConsumerRecord::value));
     }
 
     public static KafkaConsumer<String, IBaseResource> createConsumer(String bootstrapServers) {
         var consumerProps = KafkaTestUtils.consumerProps(bootstrapServers,
             "tc-" + UUID.randomUUID(), "false");
-        consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        consumerProps
+            .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
             KafkaFhirDeserializer.class);
         consumerProps.put(ConsumerConfig.CLIENT_ID_CONFIG, "test");

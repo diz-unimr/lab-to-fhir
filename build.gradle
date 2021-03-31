@@ -58,9 +58,10 @@ ext {
 
 dependencies {
     // spring cloud stream kafka
-    implementation 'org.apache.kafka:kafka-streams'
     implementation 'org.springframework.cloud:spring-cloud-stream'
     implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
+
+    implementation "org.springframework.kafka:spring-kafka"
 
     // mapper
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'

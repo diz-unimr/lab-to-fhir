@@ -11,6 +11,8 @@ spring:
           destination: laboratory
         process-out-0:
           destination: test-fhir-laboratory
+        process-out-1:
+          destination: unmapped-test-fhir-laboratory
       kafka:
         streams:
           binder:
@@ -19,6 +21,17 @@ spring:
               compression.type: gzip
               max.request.size: 5242880
             deserializationExceptionHandler: sendToDlq
+#        bindings:
+#          process-in-0:
+#            consumer:
+#              enableDlq: true
+#              autoCommitOnError: true
+#              autoCommitOffset: true
+#          process:
+#            consumer:
+#              enableDlq: true
+#              autoCommitOnError: true
+#              autoCommitOffset: true
 
 fhir:
   systems:
@@ -34,7 +47,7 @@ fhir:
 
 mapping:
   loinc:
-    file: "mapping_swl_loinc-v1.2.csv"
+    file: "mapping_swl_loinc-v1.1.csv"
 
 services:
   pseudonymizer:

@@ -1,6 +1,7 @@
 package de.unimarburg.diz.labtofhir.mapper;
 
 import de.unimarburg.diz.labtofhir.model.LoincMap;
+import de.unimarburg.diz.labtofhir.model.LoincMappingResult;
 import javax.annotation.PostConstruct;
 import org.hl7.fhir.r4.model.Observation;
 import org.slf4j.Logger;
@@ -20,25 +21,33 @@ public class LoincMapper {
         return new LoincMap().with(mappingFile, '\t');
     }
 
-    public Observation mapCodeAndQuantity(Observation obs, String metaCode) {
-        var coding = obs.getCode().getCoding().get(0);
-        var entry = loincMap.get(coding.getCode(), metaCode);
-        if (entry == null) {
-            throw new IllegalArgumentException(String.format(
-                "LOINC mapping lookup failed. No values found for code: %s and meta code: %s",
-                coding.getCode(), metaCode));
-        }
-
-        // map code
-        coding.setCode(entry.getLoinc())
-            .setSystem("http://loinc.org");
+    public LoincMappingResult mapCodeAndQuantity(Observation obs,
+        String metaCode) {
 
         if (obs.hasValueQuantity()) {
+            // get code and mapping
+            var coding = obs.getCode().getCoding().get(0);
+            var entry = loincMap.get(coding.getCode(), metaCode);
+            if (entry == null) {
+                log.error(
+                    "LOINC mapping lookup failed. No values found for code: {} and meta code: {}",
+                    coding.getCode(), metaCode);
+                return LoincMappingResult.MISSING_CODE_MAPPING;
+            }
+
+            // map code
+            coding.setCode(entry.getLoinc())
+                .setSystem("http://loinc.org");
+
             // map ucum
             obs.getValueQuantity().setUnit(entry.getUcum())
                 .setCode(entry.getUcum()).setSystem("http://unitsofmeasure.org");
+
+            return LoincMappingResult.SUCCESS;
         }
-        return obs;
+
+        // TODO map text values to snomed
+        return LoincMappingResult.MISSING_QUANTITY;
     }
 
     @PostConstruct
