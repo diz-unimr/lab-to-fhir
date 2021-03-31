@@ -108,6 +108,7 @@ services:
       - ../connect/connect-lab.json:/connect/connect-lab.json:ro
     depends_on:
       - kafka-connect
+      - aim-db
 
   fhir-pseudonymizer:
     image: registry.diz.uni-marburg.de/docker/fhir-pseudonymizer:1.6.0
@@ -190,3 +191,15 @@ services:
       http://gpas:8080/gpas/DomainService
     depends_on:
       - gpas
+
+  # synedra AIM
+  aim-db:
+    image: postgres:11
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=aim
+      - POSTGRES_PASSWORD=test
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+

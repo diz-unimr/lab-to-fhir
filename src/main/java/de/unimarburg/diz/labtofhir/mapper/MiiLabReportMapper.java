@@ -5,6 +5,9 @@ import ca.uhn.fhir.parser.IParser;
 import com.google.common.hash.Hashing;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
+import de.unimarburg.diz.labtofhir.model.LoincMappingResult;
+import de.unimarburg.diz.labtofhir.model.MappingContainer;
+import de.unimarburg.diz.labtofhir.model.MappingResult;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -39,7 +42,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle> {
+public class MiiLabReportMapper implements
+    ValueMapper<LaboratoryReport, MappingContainer<LaboratoryReport, Bundle>> {
 
     private final static Logger log = LoggerFactory.getLogger(MiiLabReportMapper.class);
     private static final String META_CODE_POCT = "MTYP-POCT";
@@ -83,13 +87,12 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
     }
 
     @Override
-    public Bundle apply(LaboratoryReport report) {
+    public MappingContainer<LaboratoryReport, Bundle> apply(LaboratoryReport report) {
         log.debug("Mapping LaboratoryReport: {}", report);
-        Bundle bundle;
+        Bundle bundle = new Bundle();
+        var mappingContainer = new MappingContainer<>(report, bundle);
 
         try {
-            // set meta information
-            bundle = new Bundle();
 
             // set meta information
             bundle.setId(report.getReportIdentifierValue());
@@ -112,7 +115,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     .map(Observation.class::cast)
                     // map observations
                     .map(this::mapObservation)
-                    .map(o -> mapLoincUcum(o, report))
+                    .map(o -> mapLoincUcum(o, mappingContainer))
                     .map(this::convertLoincUcum)
                     // add to bundle
                     .peek(o -> addResourceToBundle(bundle, o))
@@ -130,15 +133,15 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         } catch (Exception e) {
             log.error("Mapping failed for LaboratoryReport with id {} and order number {}",
                 report.getId(), report.getReportIdentifierValue(), e);
-            // TODO add metrics and dlq handling
-            // throw e;
-            return null;
+            // TODO add metrics
+            throw e;
+            // return mappingContainer.withException(e);
         }
 
-        log.debug("Mapped successfully, fhir bundle: {}",
+        log.debug("Mapped successfully to FHIR bundle: {}",
             fhirParser.encodeResourceToString(bundle));
 
-        return bundle;
+        return mappingContainer;
     }
 
     private MiiLabReportMapper processMetaResults(
@@ -177,10 +180,16 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
     }
 
     private Observation mapLoincUcum(Observation obs,
-        LaboratoryReport report) {
+        MappingContainer<LaboratoryReport, Bundle> mappingContainer) {
 
         // map loinc code and ucum (if valueQuantity)
-        return loincMapper.mapCodeAndQuantity(obs, report.getMetaCode());
+        var result = loincMapper
+            .mapCodeAndQuantity(obs, mappingContainer.getSource().getMetaCode());
+        if (result != LoincMappingResult.SUCCESS) {
+            mappingContainer.withResultType(MappingResult.MISSING_CODE_MAPPING);
+        }
+
+        return obs;
     }
 
     private DiagnosticReport mapDiagnosticReport(DiagnosticReport labReport, Bundle bundle) {

@@ -2,7 +2,6 @@ package de.unimarburg.diz.labtofhir;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Collections;
 import java.util.stream.Collectors;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
@@ -18,12 +17,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @SpringBootTest(classes = LabToFhirApplication.class)
 public class IntegrationTests extends TestContainerBase {
 
-
     @DynamicPropertySource
     private static void kafkaProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.kafka.bootstrapServers", kafka::getBootstrapServers);
-        registry.add("spring.cloud.stream.kafka.streams.binder.configuration.processing.guarantee",
-            () -> "exactly_once");
         registry.add("services.pseudonymizer.url", () -> "http://" +
             pseudonymizerContainer.getHost() + ":" + pseudonymizerContainer.getFirstMappedPort()
             + "/fhir");
@@ -35,29 +31,9 @@ public class IntegrationTests extends TestContainerBase {
     }
 
     @Test
-    void processorCreatesFhirBundles() {
-        // create consumer
-        var consumer = KafkaHelper.createConsumer(kafka.getBootstrapServers());
-        // subscribe to target topic
-        consumer.subscribe(Collections.singleton("test-fhir-laboratory"));
-
-        var fetchCount = 10;
-
-        var messages = KafkaHelper.drain(consumer, fetchCount);
-
-        assertThat(messages.values()).hasOnlyElementsOfType(Bundle.class);
-    }
-
-    @Test
-    void bundlesArePseudonymized() {
-        // create consumer
-        var consumer = KafkaHelper.createConsumer(kafka.getBootstrapServers());
-        // subscribe to target topic
-        consumer.subscribe(Collections.singleton("test-fhir-laboratory"));
-
-        var fetchCount = 10;
-
-        var messages = KafkaHelper.drain(consumer, fetchCount);
+    public void bundlesArePseudonymized() {
+        var messages = KafkaHelper
+            .getAtLeast(kafka.getBootstrapServers(), "test-fhir-laboratory", 10);
         var resources = messages.values().stream().map(Bundle.class::cast)
             .flatMap(x -> x.getEntry().stream().map(BundleEntryComponent::getResource))
             .collect(Collectors.toList());
@@ -71,6 +47,14 @@ public class IntegrationTests extends TestContainerBase {
             .extracting(r -> r.getMeta().getSecurityFirstRep())
             .allSatisfy(
                 c -> assertThat(c).usingRecursiveComparison().isEqualTo(pseudedCoding));
+    }
+
+    @Test
+    public void messagesAreSentToUnmappedTopic() {
+        var messages = KafkaHelper
+            .getAtLeast(kafka.getBootstrapServers(), "unmapped-test-fhir-laboratory", 1);
+
+        assertThat(messages).isNotEmpty();
     }
 
 

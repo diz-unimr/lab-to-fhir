@@ -32,7 +32,7 @@ import org.springframework.test.context.TestPropertySource;
     LoincMapper.class})
 @TestPropertySource(
     properties = {
-        "mapping.loinc.file=mapping_swl_loinc-v1.2.csv",
+        "mapping.loinc.file=mapping_swl_loinc-v1.1.csv",
     })
 public class MiiLabReportMapperTests {
 
@@ -57,7 +57,7 @@ public class MiiLabReportMapperTests {
 
         var report = getTestReport(testReport2);
 
-        var bundle = mapper.apply(report);
+        var bundle = mapper.apply(report).getValue();
 
         var validations = bundle.getEntry()
             .stream()

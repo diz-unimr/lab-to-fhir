@@ -13,7 +13,7 @@ import org.springframework.test.context.TestPropertySource;
 @ContextConfiguration(classes = {LoincMapper.class})
 @TestPropertySource(
     properties = {
-        "mapping.loinc.file=mapping_swl_loinc-v1.2.csv",
+        "mapping.loinc.file=mapping_swl_loinc-v1.1.csv",
     })
 public class LoincMapperTests {
 
