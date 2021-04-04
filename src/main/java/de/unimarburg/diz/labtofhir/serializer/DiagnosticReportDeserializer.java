@@ -9,7 +9,6 @@ import org.hl7.fhir.r4.model.DiagnosticReport;
 
 public class DiagnosticReportDeserializer extends JsonDeserializer<DiagnosticReport> {
 
-    // TODO inject context
     private final FhirContext fhirContext;
 
     public DiagnosticReportDeserializer() {
@@ -17,7 +16,7 @@ public class DiagnosticReportDeserializer extends JsonDeserializer<DiagnosticRep
     }
 
     @Override
-    public DiagnosticReport deserialize(JsonParser p, DeserializationContext ctxt)
+    public DiagnosticReport deserialize(JsonParser p, DeserializationContext ctx)
         throws IOException {
         return fhirContext.newJsonParser()
             .parseResource(DiagnosticReport.class, p.getValueAsString());

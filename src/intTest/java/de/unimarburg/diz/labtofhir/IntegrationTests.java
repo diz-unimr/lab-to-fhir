@@ -20,6 +20,8 @@ public class IntegrationTests extends TestContainerBase {
     @DynamicPropertySource
     private static void kafkaProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.kafka.bootstrapServers", kafka::getBootstrapServers);
+        registry.add("spring.cloud.stream.kafka.streams.binder.configuration.processing.guarantee",
+            () -> "exactly_once");
         registry.add("services.pseudonymizer.url", () -> "http://" +
             pseudonymizerContainer.getHost() + ":" + pseudonymizerContainer.getFirstMappedPort()
             + "/fhir");
@@ -33,7 +35,10 @@ public class IntegrationTests extends TestContainerBase {
     @Test
     public void bundlesArePseudonymized() {
         var messages = KafkaHelper
-            .getAtLeast(kafka.getBootstrapServers(), "test-fhir-laboratory", 10);
+            .getAtLeast(
+                KafkaHelper.createFhirTopicConsumer(kafka.getBootstrapServers()),
+                "test-fhir-laboratory",
+                10);
         var resources = messages.values().stream().map(Bundle.class::cast)
             .flatMap(x -> x.getEntry().stream().map(BundleEntryComponent::getResource))
             .collect(Collectors.toList());
@@ -52,7 +57,8 @@ public class IntegrationTests extends TestContainerBase {
     @Test
     public void messagesAreSentToUnmappedTopic() {
         var messages = KafkaHelper
-            .getAtLeast(kafka.getBootstrapServers(), "unmapped-test-fhir-laboratory", 1);
+            .getAtLeast(KafkaHelper.createErrorTopicConsumer(kafka.getBootstrapServers()),
+                "test-fhir-laboratory-error", 1);
 
         assertThat(messages).isNotEmpty();
     }

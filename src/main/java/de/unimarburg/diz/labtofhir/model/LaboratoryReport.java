@@ -2,7 +2,9 @@ package de.unimarburg.diz.labtofhir.model;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.unimarburg.diz.labtofhir.serializer.DiagnosticReportDeserializer;
+import de.unimarburg.diz.labtofhir.serializer.DiagnosticReportSerializer;
 import de.unimarburg.diz.labtofhir.serializer.InstantDeserializer;
 import java.io.Serializable;
 import java.time.Instant;
@@ -57,6 +59,7 @@ public class LaboratoryReport implements Serializable {
         this.deleted = deleted;
     }
 
+    @JsonSerialize(using = DiagnosticReportSerializer.class)
     public DiagnosticReport getResource() {
         return resource;
     }
