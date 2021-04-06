@@ -33,8 +33,11 @@ public class IntegrationTests extends TestContainerBase {
     @Test
     public void bundlesArePseudonymized() {
         var messages = KafkaHelper
-            .getAtLeast(kafka.getBootstrapServers(), "test-fhir-laboratory", 10);
-        var resources = messages.values().stream().map(Bundle.class::cast)
+            .getAtLeast(
+                KafkaHelper.createFhirTopicConsumer(kafka.getBootstrapServers()),
+                "test-fhir-laboratory",
+                10);
+        var resources = messages.stream().map(Bundle.class::cast)
             .flatMap(x -> x.getEntry().stream().map(BundleEntryComponent::getResource))
             .collect(Collectors.toList());
 
@@ -52,7 +55,8 @@ public class IntegrationTests extends TestContainerBase {
     @Test
     public void messagesAreSentToUnmappedTopic() {
         var messages = KafkaHelper
-            .getAtLeast(kafka.getBootstrapServers(), "unmapped-test-fhir-laboratory", 1);
+            .getAtLeast(KafkaHelper.createErrorTopicConsumer(kafka.getBootstrapServers()),
+                "test-fhir-laboratory-error", 1);
 
         assertThat(messages).isNotEmpty();
     }

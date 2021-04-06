@@ -98,7 +98,6 @@ public class MiiLabReportMapper implements
             bundle.setId(report.getReportIdentifierValue());
             bundle.setType(BundleType.TRANSACTION);
 
-            // TODO skip service request generation?
             processMetaResults(report)
                 // service request
                 .mapServiceRequest(report.getResource(), bundle)
@@ -134,8 +133,7 @@ public class MiiLabReportMapper implements
             log.error("Mapping failed for LaboratoryReport with id {} and order number {}",
                 report.getId(), report.getReportIdentifierValue(), e);
             // TODO add metrics
-            throw e;
-            // return mappingContainer.withException(e);
+            return mappingContainer.withException(e);
         }
 
         log.debug("Mapped successfully to FHIR bundle: {}",
@@ -302,6 +300,7 @@ public class MiiLabReportMapper implements
 
         return obs;
     }
+
 
     public MiiLabReportMapper mapServiceRequest(DiagnosticReport report, Bundle bundle) {
         var identifierType = new CodeableConcept(

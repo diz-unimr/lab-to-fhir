@@ -42,6 +42,9 @@ public abstract class TestContainerBase {
 
         // setup & start kafka connect
         createKafkaConnectContainer(kafka);
+
+        // kafdrop
+        createKafdropContainer(network);
     }
 
     private static PostgreSQLContainer createAimDbContainer(Network network) {
@@ -148,6 +151,20 @@ public abstract class TestContainerBase {
         }
 
         return container;
+    }
+
+    private static void createKafdropContainer(Network network) {
+        var container = new GenericContainer<>(
+            DockerImageName.parse("obsidiandynamics/kafdrop:3.27.0"))
+            .withNetworkAliases("kafdrop")
+            .withNetwork(network)
+            .withExposedPorts(9000)
+            .withEnv(Map.of("KAFKA_BROKERCONNECT", kafka.getNetworkAliases()
+                    .get(0) + ":9092",
+                "SERVER_SERVLET_CONTEXTPATH", "/"))
+            .waitingFor(Wait.forListeningPort());
+
+        container.start();
     }
 
     private static HttpResponse<String> createDomain(String host, String file) {

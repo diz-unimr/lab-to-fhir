@@ -17,8 +17,6 @@ import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Reference;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,12 +34,16 @@ import org.springframework.test.context.TestPropertySource;
     })
 public class MiiLabReportMapperTests {
 
-    private final static Logger log = LoggerFactory.getLogger(MiiLabReportMapperTests.class);
 
     @Value("classpath:test-report.json")
     Resource testReport;
     @Value("classpath:test-report2.json")
     Resource testReport2;
+    // TODO test Observation.value as CodeableConcept
+    @Value("classpath:text-value-obs-report.json")
+    Resource textValueReport;
+
+
     @Autowired
     private MiiLabReportMapper mapper;
     @Autowired

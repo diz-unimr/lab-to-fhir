@@ -11,8 +11,9 @@ spring:
           destination: laboratory
         process-out-0:
           destination: test-fhir-laboratory
-        process-out-1:
-          destination: unmapped-test-fhir-laboratory
+          error: test-fhir-laboratory-error
+      #        process-out-1:
+      #          destination: test-fhir-laboratory-error
       kafka:
         streams:
           binder:

@@ -18,10 +18,8 @@ public class KafkaConfiguration {
         return factoryBean -> {
             factoryBean.setKafkaStreamsCustomizer(
                 kafkaStreams -> kafkaStreams.setUncaughtExceptionHandler((t, e) -> {
-                    log.error("Uncaught exception occured.", e);
+                    log.error("Uncaught exception occurred.", e);
                 }));
         };
     }
-
-
 }

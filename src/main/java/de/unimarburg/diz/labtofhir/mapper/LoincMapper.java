@@ -29,7 +29,7 @@ public class LoincMapper {
             var coding = obs.getCode().getCoding().get(0);
             var entry = loincMap.get(coding.getCode(), metaCode);
             if (entry == null) {
-                log.error(
+                log.warn(
                     "LOINC mapping lookup failed. No values found for code: {} and meta code: {}",
                     coding.getCode(), metaCode);
                 return LoincMappingResult.MISSING_CODE_MAPPING;
