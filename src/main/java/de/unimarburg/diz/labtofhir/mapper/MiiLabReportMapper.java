@@ -99,6 +99,9 @@ public class MiiLabReportMapper implements
             bundle.setType(BundleType.TRANSACTION);
 
             processMetaResults(report)
+                // service request
+                .mapServiceRequest(report.getResource(), bundle)
+
                 // diagnostic report
                 .mapDiagnosticReport(report.getResource(), bundle)
 
@@ -206,6 +209,9 @@ public class MiiLabReportMapper implements
                 .getDiagnosticReportId())
             .setValue(identifierValue)
             .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+
+            // basedOn
+            .setBasedOn(List.of(new Reference("ServiceRequest/" + identifierValue)))
 
             // status
             .setStatus(labReport.getStatus())
