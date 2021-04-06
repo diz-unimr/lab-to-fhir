@@ -40,7 +40,7 @@ public class MappingContainer<K, V> {
 
     public MappingContainer<K, V> withException(Exception exception) {
         this.exception = exception;
-        withResultType(MappingResult.EXCEPTION);
+        withResultType(MappingResult.ERROR);
         return this;
     }
 

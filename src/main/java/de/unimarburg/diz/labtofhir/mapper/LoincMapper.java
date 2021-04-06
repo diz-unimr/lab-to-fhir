@@ -29,6 +29,7 @@ public class LoincMapper {
             var coding = obs.getCode().getCoding().get(0);
             var entry = loincMap.get(coding.getCode(), metaCode);
             if (entry == null) {
+                // TODO metric
                 log.warn(
                     "LOINC mapping lookup failed. No values found for code: {} and meta code: {}",
                     coding.getCode(), metaCode);
@@ -46,7 +47,8 @@ public class LoincMapper {
             return LoincMappingResult.SUCCESS;
         }
 
-        // TODO map text values to snomed
+        // text value
+        // TODO map to CodeableConcept (i.e. Snomed code)
         return LoincMappingResult.MISSING_QUANTITY;
     }
 
