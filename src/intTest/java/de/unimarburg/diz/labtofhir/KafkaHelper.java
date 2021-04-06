@@ -24,7 +24,7 @@ public class KafkaHelper {
         int fetchCount) {
         consumer.subscribe(Collections.singleton(topic));
         var records = KafkaTestUtils
-            .getRecords(consumer, Durations.FIVE_MINUTES.toMillis(),
+            .getRecords(consumer, Durations.TWO_MINUTES.toMillis(),
                 fetchCount);
         return StreamSupport
             .stream(records.spliterator(), false).map(ConsumerRecord::value)
