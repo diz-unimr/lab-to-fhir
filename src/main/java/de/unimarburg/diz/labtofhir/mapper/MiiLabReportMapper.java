@@ -130,7 +130,6 @@ public class MiiLabReportMapper implements
             log.error("Mapping failed for LaboratoryReport with id {} and order number {}",
                 report.getId(), report.getReportIdentifierValue(), e);
             // TODO add metrics
-//            throw e;
             return mappingContainer.withException(e);
         }
 
@@ -295,6 +294,7 @@ public class MiiLabReportMapper implements
 
         return obs;
     }
+
 
     public MiiLabReportMapper mapServiceRequest(DiagnosticReport report, Bundle bundle) {
         var identifierType = new CodeableConcept(

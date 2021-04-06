@@ -113,8 +113,6 @@ services:
   fhir-pseudonymizer:
     image: registry.diz.uni-marburg.de/docker/fhir-pseudonymizer:1.6.0
     environment:
-      #      JAEGER__HOST: jaeger
-      #      JAEGER__PORT: 6831
       GPAS__URL: ${GPAS_URL:-http://gpas:8080/gpas/gpasService}
     volumes:
       - ./anonymization.yaml:/etc/anonymization.yaml:ro

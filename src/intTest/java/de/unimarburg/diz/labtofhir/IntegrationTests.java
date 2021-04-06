@@ -20,8 +20,6 @@ public class IntegrationTests extends TestContainerBase {
     @DynamicPropertySource
     private static void kafkaProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.kafka.bootstrapServers", kafka::getBootstrapServers);
-        registry.add("spring.cloud.stream.kafka.streams.binder.configuration.processing.guarantee",
-            () -> "exactly_once");
         registry.add("services.pseudonymizer.url", () -> "http://" +
             pseudonymizerContainer.getHost() + ":" + pseudonymizerContainer.getFirstMappedPort()
             + "/fhir");
@@ -39,7 +37,7 @@ public class IntegrationTests extends TestContainerBase {
                 KafkaHelper.createFhirTopicConsumer(kafka.getBootstrapServers()),
                 "test-fhir-laboratory",
                 10);
-        var resources = messages.values().stream().map(Bundle.class::cast)
+        var resources = messages.stream().map(Bundle.class::cast)
             .flatMap(x -> x.getEntry().stream().map(BundleEntryComponent::getResource))
             .collect(Collectors.toList());
 
