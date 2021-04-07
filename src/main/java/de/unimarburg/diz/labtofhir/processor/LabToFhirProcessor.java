@@ -44,9 +44,8 @@ public class LabToFhirProcessor {
 
             var stream = report.
                 mapValues(fhirMapper)
-                .filter((k, v) -> v != null)
-                .mapValues(x -> x.setValue(fhirPseudonymizer.process(x.getValue())))
-                .toStream();
+                .toStream().filter((k, v) -> v != null)
+                .mapValues(x -> x.setValue(fhirPseudonymizer.process(x.getValue())));
 
             return new KafkaStreamBrancher<String, MappingContainer<LaboratoryReport, Bundle>>()
                 // send error message to error topic
