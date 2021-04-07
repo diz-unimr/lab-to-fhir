@@ -12,8 +12,6 @@ import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Predicate;
 import org.apache.kafka.streams.kstream.Produced;
 import org.hl7.fhir.r4.model.Bundle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,12 +22,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class LabToFhirProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(LabToFhirProcessor.class);
     private final MiiLabReportMapper fhirMapper;
     private final FhirPseudonymizer fhirPseudonymizer;
 
     private final Predicate<String, MappingContainer<LaboratoryReport, Bundle>> error = (k, v) ->
-        v.getResultType() == MappingResult.EXCEPTION;
+        v.getResultType() == MappingResult.ERROR;
     private final String errorTopic;
 
     @Autowired
@@ -47,8 +44,8 @@ public class LabToFhirProcessor {
 
             var stream = report.
                 mapValues(fhirMapper)
-                .mapValues(x -> x.setValue(fhirPseudonymizer.process(x.getValue())))
-                .toStream();
+                .toStream().filter((k, v) -> v != null)
+                .mapValues(x -> x.setValue(fhirPseudonymizer.process(x.getValue())));
 
             return new KafkaStreamBrancher<String, MappingContainer<LaboratoryReport, Bundle>>()
                 // send error message to error topic

@@ -7,7 +7,6 @@ import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.model.LoincMappingResult;
 import de.unimarburg.diz.labtofhir.model.MappingContainer;
-import de.unimarburg.diz.labtofhir.model.MappingResult;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -100,10 +99,10 @@ public class MiiLabReportMapper implements
 
             processMetaResults(report)
                 // service request
-                .mapServiceRequest(report.getResource(), bundle)
+                .mapServiceRequest(report.getResource(), bundle);
 
-                // diagnostic report
-                .mapDiagnosticReport(report.getResource(), bundle)
+            // diagnostic report
+            var mappedReport = mapDiagnosticReport(report.getResource(), bundle)
 
                 // observations
                 .setResult((report.getResource()
@@ -114,12 +113,21 @@ public class MiiLabReportMapper implements
                     .map(Observation.class::cast)
                     // map observations
                     .map(this::mapObservation)
-                    .map(o -> mapLoincUcum(o, mappingContainer))
+                    .map(o -> mapLoincUcum(o, mappingContainer.getSource().getMetaCode()))
+                    .filter(Objects::nonNull)
                     .map(this::convertLoincUcum)
                     // add to bundle
                     .peek(o -> addResourceToBundle(bundle, o))
                     // set result references
                     .map(Reference::new)).collect(Collectors.toList()));
+
+            if (mappedReport.getResult().isEmpty()) {
+                // report contains no observations
+                log.info(
+                    "No Observations after mapping for LaboratoryReport with id {} and order number {}. Discarding.",
+                    report.getId(), report.getReportIdentifierValue());
+                return null;
+            }
 
             setPatient(report, bundle);
             setEncounter(report, bundle);
@@ -177,14 +185,13 @@ public class MiiLabReportMapper implements
 
     }
 
-    private Observation mapLoincUcum(Observation obs,
-        MappingContainer<LaboratoryReport, Bundle> mappingContainer) {
+    private Observation mapLoincUcum(Observation obs, String metaCode) {
 
         // map loinc code and ucum (if valueQuantity)
         var result = loincMapper
-            .mapCodeAndQuantity(obs, mappingContainer.getSource().getMetaCode());
+            .mapCodeAndQuantity(obs, metaCode);
         if (result != LoincMappingResult.SUCCESS) {
-            mappingContainer.withResultType(MappingResult.MISSING_CODE_MAPPING);
+            return null;
         }
 
         return obs;
