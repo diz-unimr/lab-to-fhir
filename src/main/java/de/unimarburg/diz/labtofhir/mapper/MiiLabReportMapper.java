@@ -105,12 +105,7 @@ public class MiiLabReportMapper implements
             var mappedReport = mapDiagnosticReport(report.getResource(), bundle)
 
                 // observations
-                .setResult((report.getResource()
-                    .getResult()
-                    .stream()
-                    .map(BaseReference::getResource)
-                    .filter(Observation.class::isInstance)
-                    .map(Observation.class::cast)
+                .setResult((report.getObservations().stream()
                     // map observations
                     .map(this::mapObservation)
                     .map(o -> mapLoincUcum(o, mappingContainer.getSource().getMetaCode()))

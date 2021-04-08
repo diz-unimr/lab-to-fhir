@@ -7,7 +7,7 @@
     "connection.url": "jdbc:postgresql://aim-db/aim",
     "connection.user": "aim",
     "connection.password": "test",
-    "query": "select * from (select dr.id, dr.fhir, dr.effective_date_time, dr.effective_period, dr.fhir_version, gf.status_deleted, gf.inserted_when, tiv.creation_date as modified , gf.deleted_when from diagnostic_report dr left join generic_file gf on dr.generic_file_fk = gf.id left join tbl_item ti on gf.archive_item_name = ti.name left join tbl_item_version tiv on tbl_item_fk = ti.id where dr.fhir -> 'code' -> 'coding' -> 0 ->> 'code' = '11502-2') as lab",
+    "query": "select * from (select dr.id, dr.fhir, jsonb_agg(o.fhir order by o.id) as fhir_obs, dr.effective_date_time, dr.effective_period, dr.fhir_version, gf.status_deleted, gf.inserted_when, tiv.creation_date as modified, tiv.version_number , gf.deleted_when from diagnostic_report dr inner join observation o on dr.id = o.diagnostic_report_fk left join generic_file gf on dr.generic_file_fk = gf.id left join tbl_item ti on gf.archive_item_name = ti.name left join tbl_item_version tiv on tbl_item_fk = ti.id where gf.status_deleted = 0 and dr.fhir -> 'code' -> 'coding' -> 0 ->> 'code' = '11502-2' group by dr.id, gf.status_deleted, dr.fhir, dr.effective_date_time, dr.effective_period, dr.fhir_version, dr.id, gf.inserted_when, tiv.creation_date, gf.deleted_when, tiv.version_number, dr.fhir, dr.effective_date_time, dr.effective_period, dr.fhir_version, gf.status_deleted, gf.inserted_when, tiv.creation_date, dr.id, gf.deleted_when) as lab",
     "mode": "timestamp+incrementing",
     "incrementing.column.name": "id",
     "timestamp.column.name": "modified",

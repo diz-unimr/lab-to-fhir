@@ -1,0 +1,100 @@
+[
+  {
+    "id": "embedded-observation-1",
+    "code": {
+      "text": "Differentialblutbild (Methode)",
+      "coding": [
+        {
+          "code": "DIFFART",
+          "display": "Differentialblutbild (Methode)"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Hämatologie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "20200720_24351797_DIFFART"
+      }
+    ],
+    "valueString": "Automat",
+    "resourceType": "Observation",
+    "effectiveDateTime": "2020-07-20T14:43:00+02:00"
+  },
+  {
+    "id": "embedded-observation-2",
+    "code": {
+      "text": "Neutrophile (abs.)",
+      "coding": [
+        {
+          "code": "NEUTad",
+          "display": "Neutrophile (abs.)"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Hämatologie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "20200720_24351797_NEUTad"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "G/l",
+      "value": 10.00
+    },
+    "interpretation": [
+      {
+        "coding": [
+          {
+            "code": "H"
+          }
+        ]
+      }
+    ],
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "G/l",
+          "value": 1.5
+        },
+        "high": {
+          "unit": "G/l",
+          "value": 7.7
+        }
+      }
+    ],
+    "effectiveDateTime": "2020-07-20T14:43:00+02:00"
+  }
+]
