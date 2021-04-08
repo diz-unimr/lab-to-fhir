@@ -1,0 +1,961 @@
+[
+  {
+    "id": "embedded-observation-1",
+    "code": {
+      "text": "Natrium",
+      "coding": [
+        {
+          "code": "NA",
+          "display": "Natrium"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Klinische Chemie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_NA"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "mmol/l",
+      "value": 135
+    },
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "mmol/l",
+          "value": 134
+        },
+        "high": {
+          "unit": "mmol/l",
+          "value": 143
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-2",
+    "code": {
+      "text": "Kalium",
+      "coding": [
+        {
+          "code": "K",
+          "display": "Kalium"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Klinische Chemie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_K"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "mmol/l",
+      "value": 4.2
+    },
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "mmol/l",
+          "value": 3.3
+        },
+        "high": {
+          "unit": "mmol/l",
+          "value": 4.6
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-3",
+    "code": {
+      "text": "Calcium",
+      "coding": [
+        {
+          "code": "CA",
+          "display": "Calcium"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Klinische Chemie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_CA"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "mmol/l",
+      "value": 2.39
+    },
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "mmol/l",
+          "value": 2.20
+        },
+        "high": {
+          "unit": "mmol/l",
+          "value": 2.66
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-4",
+    "code": {
+      "text": "AST (GOT)",
+      "coding": [
+        {
+          "code": "AST",
+          "display": "AST (GOT)"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Klinische Chemie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_AST"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "U/l",
+      "value": 129
+    },
+    "interpretation": [
+      {
+        "coding": [
+          {
+            "code": "H"
+          }
+        ]
+      }
+    ],
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "U/l",
+          "value": 15
+        },
+        "high": {
+          "unit": "U/l",
+          "value": 41
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-5",
+    "code": {
+      "text": "ALT (GPT)",
+      "coding": [
+        {
+          "code": "ALT",
+          "display": "ALT (GPT)"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Klinische Chemie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_ALT"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "U/l",
+      "value": 104
+    },
+    "interpretation": [
+      {
+        "coding": [
+          {
+            "code": "H"
+          }
+        ]
+      }
+    ],
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "U/l",
+          "value": 8
+        },
+        "high": {
+          "unit": "U/l",
+          "value": 45
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-6",
+    "code": {
+      "text": "Alk. Phosphatase",
+      "coding": [
+        {
+          "code": "AP",
+          "display": "Alk. Phosphatase"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Klinische Chemie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_AP"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "U/l",
+      "value": 225
+    },
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "U/l",
+          "value": 75
+        },
+        "high": {
+          "unit": "U/l",
+          "value": 363
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-7",
+    "code": {
+      "text": "GGT",
+      "coding": [
+        {
+          "code": "GGT",
+          "display": "GGT"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Klinische Chemie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_GGT"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "U/l",
+      "value": 37
+    },
+    "interpretation": [
+      {
+        "coding": [
+          {
+            "code": "H"
+          }
+        ]
+      }
+    ],
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "U/l",
+          "value": 6
+        },
+        "high": {
+          "unit": "U/l",
+          "value": 30
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-8",
+    "code": {
+      "text": "Kreatinin",
+      "coding": [
+        {
+          "code": "KREA",
+          "display": "Kreatinin"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Klinische Chemie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_KREA"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "mg/dl",
+      "value": 0.34
+    },
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "mg/dl",
+          "value": 0.26
+        },
+        "high": {
+          "unit": "mg/dl",
+          "value": 0.77
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-9",
+    "code": {
+      "text": "Leukozyten",
+      "coding": [
+        {
+          "code": "LEU",
+          "display": "Leukozyten"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Hämatologie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_LEU"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "G/l",
+      "value": 25.5
+    },
+    "interpretation": [
+      {
+        "coding": [
+          {
+            "code": "H"
+          }
+        ]
+      }
+    ],
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "G/l",
+          "value": 4.5
+        },
+        "high": {
+          "unit": "G/l",
+          "value": 11.4
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-10",
+    "code": {
+      "text": "Erythrozyten",
+      "coding": [
+        {
+          "code": "ERY",
+          "display": "Erythrozyten"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Hämatologie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_ERY"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "T/l",
+      "value": 2.5
+    },
+    "interpretation": [
+      {
+        "coding": [
+          {
+            "code": "L"
+          }
+        ]
+      }
+    ],
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "T/l",
+          "value": 4.10
+        },
+        "high": {
+          "unit": "T/l",
+          "value": 5.55
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-11",
+    "code": {
+      "text": "Hämoglobin",
+      "coding": [
+        {
+          "code": "HB",
+          "display": "Hämoglobin"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Hämatologie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_HB"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "g/l",
+      "value": 92
+    },
+    "interpretation": [
+      {
+        "coding": [
+          {
+            "code": "L"
+          }
+        ]
+      }
+    ],
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "g/l",
+          "value": 125
+        },
+        "high": {
+          "unit": "g/l",
+          "value": 160
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-12",
+    "code": {
+      "text": "Hämatokrit",
+      "coding": [
+        {
+          "code": "HK",
+          "display": "Hämatokrit"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Hämatologie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_HK"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "l/l",
+      "value": 0.26
+    },
+    "interpretation": [
+      {
+        "coding": [
+          {
+            "code": "L"
+          }
+        ]
+      }
+    ],
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "l/l",
+          "value": 0.37
+        },
+        "high": {
+          "unit": "l/l",
+          "value": 0.48
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-13",
+    "code": {
+      "text": "MCV",
+      "coding": [
+        {
+          "code": "MCV",
+          "display": "MCV"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Hämatologie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_MCV"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "fl",
+      "value": 103
+    },
+    "interpretation": [
+      {
+        "coding": [
+          {
+            "code": "H"
+          }
+        ]
+      }
+    ],
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "fl",
+          "value": 78
+        },
+        "high": {
+          "unit": "fl",
+          "value": 93
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-14",
+    "code": {
+      "text": "MCH",
+      "coding": [
+        {
+          "code": "MCH",
+          "display": "MCH"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Hämatologie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_MCH"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "pg",
+      "value": 37
+    },
+    "interpretation": [
+      {
+        "coding": [
+          {
+            "code": "H"
+          }
+        ]
+      }
+    ],
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "pg",
+          "value": 26.0
+        },
+        "high": {
+          "unit": "pg",
+          "value": 32.5
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-15",
+    "code": {
+      "text": "MCHC",
+      "coding": [
+        {
+          "code": "MCHC",
+          "display": "MCHC"
+        }
+      ]
+    },
+    "status": "final",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Hämatologie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_MCHC"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "g/l Ery",
+      "value": 359
+    },
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "g/l Ery",
+          "value": 315
+        },
+        "high": {
+          "unit": "g/l Ery",
+          "value": 360
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-16",
+    "code": {
+      "text": "Thrombozyten",
+      "coding": [
+        {
+          "code": "THRO",
+          "display": "Thrombozyten"
+        }
+      ]
+    },
+    "status": "preliminary",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Hämatologie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_THRO"
+      }
+    ],
+    "resourceType": "Observation",
+    "valueQuantity": {
+      "unit": "G/l",
+      "value": 891
+    },
+    "interpretation": [
+      {
+        "coding": [
+          {
+            "code": "H"
+          }
+        ]
+      }
+    ],
+    "referenceRange": [
+      {
+        "low": {
+          "unit": "G/l",
+          "value": 170
+        },
+        "high": {
+          "unit": "G/l",
+          "value": 400
+        }
+      }
+    ],
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  },
+  {
+    "id": "embedded-observation-17",
+    "code": {
+      "text": "Normoblasten",
+      "coding": [
+        {
+          "code": "NRBCa",
+          "display": "Normoblasten"
+        }
+      ]
+    },
+    "status": "registered",
+    "subject": {
+      "reference": "#embedded-patient"
+    },
+    "category": [
+      {
+        "text": "Hämatologie"
+      }
+    ],
+    "encounter": {
+      "reference": "#embedded-visit"
+    },
+    "performer": [
+      {
+        "reference": "#embedded-producer"
+      }
+    ],
+    "identifier": [
+      {
+        "value": "24051299_NRBCa"
+      }
+    ],
+    "valueString": "folgt",
+    "resourceType": "Observation",
+    "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+  }
+]

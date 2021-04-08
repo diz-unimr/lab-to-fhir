@@ -1,0 +1,85 @@
+{
+  "code": {
+    "text": "Laborwerte",
+    "coding": [
+      {
+        "code": "11502-2",
+        "system": "http://loinc.org",
+        "display": "Laborwerte"
+      }
+    ]
+  },
+  "text": {
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\"> Laborwerte </div><table class=\"hapiPropertyTable\"><tbody><tr><td>Status</td><td>PARTIAL</td></tr></tbody></table><table class=\"hapiTableOfValues\"><thead><tr><td>Name</td><td>Value</td><td>Interpretation</td><td>Reference Range</td><td>Status</td></tr></thead><tbody><tr class=\"hapiTableOfValuesRowOdd\"><td> Natrium </td><td>135 mmol/l</td><td></td><td> 134 mmol/l - 143 mmol/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Kalium </td><td>4.2 mmol/l</td><td></td><td> 3.3 mmol/l - 4.6 mmol/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> Calcium </td><td>2.39 mmol/l</td><td></td><td> 2.20 mmol/l - 2.66 mmol/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> AST (GOT) </td><td>129 U/l</td><td></td><td> 15 U/l - 41 U/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> ALT (GPT) </td><td>104 U/l</td><td></td><td> 8 U/l - 45 U/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Alk. Phosphatase </td><td>225 U/l</td><td></td><td> 75 U/l - 363 U/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> GGT </td><td>37 U/l</td><td></td><td> 6 U/l - 30 U/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Kreatinin </td><td>0.34 mg/dl</td><td></td><td> 0.26 mg/dl - 0.77 mg/dl </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> Leukozyten </td><td>25.5 G/l</td><td></td><td> 4.5 G/l - 11.4 G/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Erythrozyten </td><td>2.5 T/l</td><td></td><td> 4.10 T/l - 5.55 T/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> Hämoglobin </td><td>92 g/l</td><td></td><td> 125 g/l - 160 g/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Hämatokrit </td><td>0.26 l/l</td><td></td><td> 0.37 l/l - 0.48 l/l </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> MCV </td><td>103 fl</td><td></td><td> 78 fl - 93 fl </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> MCH </td><td>37 pg</td><td></td><td> 26.0 pg - 32.5 pg </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> MCHC </td><td>359 g/l Ery</td><td></td><td> 315 g/l Ery - 360 g/l Ery </td><td>FINAL</td></tr><tr class=\"hapiTableOfValuesRowEven\"><td> Thrombozyten </td><td>891 G/l</td><td></td><td> 170 G/l - 400 G/l </td><td>PRELIMINARY</td></tr><tr class=\"hapiTableOfValuesRowOdd\"><td> Normoblasten </td><td>folgt</td><td></td><td></td><td>REGISTERED</td></tr></tbody></table></div>",
+    "status": "generated"
+  },
+  "status": "partial",
+  "subject": {
+    "reference": "#embedded-patient"
+  },
+  "category": [
+    {
+      "text": "KLIN"
+    }
+  ],
+  "contained": [
+    {
+      "id": "embedded-patient",
+      "name": [
+        {
+          "given": [
+            "Testvorname"
+          ],
+          "family": "Testnachname"
+        }
+      ],
+      "gender": "male",
+      "birthDate": "1990-06-01",
+      "identifier": [
+        {
+          "value": "599999"
+        }
+      ],
+      "resourceType": "Patient"
+    },
+    {
+      "id": "embedded-visit",
+      "class": {
+        "code": "AMB",
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+        "display": "ambulatory"
+      },
+      "status": "unknown",
+      "identifier": [
+        {
+          "value": "psn-90462334"
+        }
+      ],
+      "resourceType": "Encounter"
+    },
+    {
+      "id": "embedded-producer",
+      "identifier": [
+        {
+          "value": "KLIN"
+        }
+      ],
+      "resourceType": "Organization"
+    }
+  ],
+  "encounter": {
+    "reference": "#embedded-visit"
+  },
+  "performer": [
+    {
+      "reference": "#embedded-producer"
+    }
+  ],
+  "identifier": [
+    {
+      "value": "24051299"
+    }
+  ],
+  "resourceType": "DiagnosticReport",
+  "effectiveDateTime": "2019-08-13T23:18:00+02:00"
+}

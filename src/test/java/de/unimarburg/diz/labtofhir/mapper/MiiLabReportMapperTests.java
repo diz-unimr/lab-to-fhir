@@ -4,16 +4,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.validation.ValidationResult;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
-import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
 import java.io.IOException;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Reference;
 import org.junit.jupiter.api.Test;
@@ -24,7 +27,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-//@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ContextConfiguration(classes = {MiiLabReportMapper.class, FhirConfiguration.class,
     LoincMapper.class})
@@ -35,29 +37,21 @@ import org.springframework.test.context.TestPropertySource;
 public class MiiLabReportMapperTests {
 
 
-    @Value("classpath:test-report.json")
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Value("classpath:reports/1-diagnostic-report.json")
     Resource testReport;
-    @Value("classpath:test-report2.json")
-    Resource testReport2;
-    // TODO test Observation.value as CodeableConcept
-    @Value("classpath:text-value-obs-report.json")
-    Resource textValueReport;
-
-
+    @Value("classpath:reports/1-observations.json")
+    Resource testObservations;
     @Autowired
     private MiiLabReportMapper mapper;
     @Autowired
     private FhirContext fhirContext;
 
-    @Autowired
-    private FhirProperties fhirProps;
-
-
     @Test
     public void resourceTypeIsValid() throws IOException {
         var validator = FhirProfileValidator.create(fhirContext);
 
-        var report = getTestReport(testReport2);
+        var report = getTestReport(testReport, testObservations);
 
         var bundle = mapper.apply(report).getValue();
 
@@ -71,12 +65,21 @@ public class MiiLabReportMapperTests {
         assertThat(validations).allMatch(ValidationResult::isSuccessful);
     }
 
-    private LaboratoryReport getTestReport(Resource testResource) throws IOException {
-        var resource = fhirContext.newJsonParser()
-            .parseResource(DiagnosticReport.class, testResource.getInputStream());
+    private LaboratoryReport getTestReport(Resource testReport,
+        Resource testObservations) throws IOException {
+        var parser = fhirContext.newJsonParser();
+        var diagnosticReport = parser
+            .parseResource(DiagnosticReport.class, testReport.getInputStream());
+
+        var node = objectMapper.readTree(testObservations.getInputStream());
+        var observations = StreamSupport.stream(node.spliterator(), false)
+            .map(JsonNode::toString).map(s -> parser.parseResource(Observation.class, s))
+            .collect(Collectors.toList());
+
         var report = new LaboratoryReport();
         report.setId(1);
-        report.setResource(resource);
+        report.setResource(diagnosticReport);
+        report.setObservations(observations);
         return report;
     }
 

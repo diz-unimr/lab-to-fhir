@@ -6,10 +6,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.unimarburg.diz.labtofhir.serializer.DiagnosticReportDeserializer;
 import de.unimarburg.diz.labtofhir.serializer.DiagnosticReportSerializer;
 import de.unimarburg.diz.labtofhir.serializer.InstantDeserializer;
+import de.unimarburg.diz.labtofhir.serializer.ObservationListDeserializer;
+import de.unimarburg.diz.labtofhir.serializer.ObservationListSerializer;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.Observation;
 
 public class LaboratoryReport implements Serializable {
 
@@ -18,7 +22,19 @@ public class LaboratoryReport implements Serializable {
     private Instant modified;
     private Instant deleted;
     private DiagnosticReport resource;
+    private List<Observation> observations;
     private String metaCode;
+
+    @JsonSerialize(using = ObservationListSerializer.class)
+    public List<Observation> getObservations() {
+        return observations;
+    }
+
+    @JsonSetter("fhir_obs")
+    @JsonDeserialize(using = ObservationListDeserializer.class)
+    public void setObservations(List<Observation> observations) {
+        this.observations = observations;
+    }
 
     public int getId() {
         return id;

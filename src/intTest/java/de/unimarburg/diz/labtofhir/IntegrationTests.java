@@ -7,7 +7,6 @@ import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.Coding;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -54,7 +53,6 @@ public class IntegrationTests extends TestContainerBase {
     }
 
     @Test
-    @Disabled("TODO: create erroneous test data")
     public void messagesAreSentToUnmappedTopic() {
         var messages = KafkaHelper
             .getAtLeast(KafkaHelper.createErrorTopicConsumer(kafka.getBootstrapServers()),
