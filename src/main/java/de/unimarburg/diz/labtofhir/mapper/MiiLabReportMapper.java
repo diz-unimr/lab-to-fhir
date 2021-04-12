@@ -308,7 +308,8 @@ public class MiiLabReportMapper implements
         var identifierType = new CodeableConcept(
             new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
                 .setCode("PLAC"));
-        var identifierValue = report.getIdentifierFirstRep().getValue();
+        var identifierValue = createIdHash(fhirProperties.getSystems().getServiceRequestId(),
+            report.getIdentifierFirstRep().getValue());
 
         var serviceRequest = new ServiceRequest();
         // id
