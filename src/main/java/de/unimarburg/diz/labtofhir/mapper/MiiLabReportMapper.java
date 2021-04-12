@@ -298,7 +298,9 @@ public class MiiLabReportMapper implements
                 source.getReferenceRange().stream()
                     .map(r -> r.setLow(new SimpleQuantity().setValue(r.getLow().getValue()))
                         .setHigh(new SimpleQuantity().setValue(r.getHigh().getValue()))).collect(
-                    Collectors.toList()));
+                    Collectors.toList()))
+            // note
+            .setNote(source.getNote());
 
         return obs;
     }
