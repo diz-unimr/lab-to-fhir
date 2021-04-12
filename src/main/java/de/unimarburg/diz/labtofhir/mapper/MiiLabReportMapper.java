@@ -298,7 +298,9 @@ public class MiiLabReportMapper implements
                 source.getReferenceRange().stream()
                     .map(r -> r.setLow(new SimpleQuantity().setValue(r.getLow().getValue()))
                         .setHigh(new SimpleQuantity().setValue(r.getHigh().getValue()))).collect(
-                    Collectors.toList()));
+                    Collectors.toList()))
+            // note
+            .setNote(source.getNote());
 
         return obs;
     }
@@ -308,7 +310,8 @@ public class MiiLabReportMapper implements
         var identifierType = new CodeableConcept(
             new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
                 .setCode("PLAC"));
-        var identifierValue = report.getIdentifierFirstRep().getValue();
+        var identifierValue = createIdHash(fhirProperties.getSystems().getServiceRequestId(),
+            report.getIdentifierFirstRep().getValue());
 
         var serviceRequest = new ServiceRequest();
         // id
