@@ -198,6 +198,12 @@ public abstract class TestContainerBase {
         if (response.statusCode() != 200) {
             fail("Error setting up gpas encounter domain: " + response);
         }
+
+        //order domain
+        response = createDomain(host, "gpas/createOrderDomain.xml");
+        if (response.statusCode() != 200) {
+            fail("Error setting up gpas order domain: " + response);
+        }
     }
 }
 
