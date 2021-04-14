@@ -2,6 +2,9 @@ package de.unimarburg.diz.labtofhir.mapper;
 
 import de.unimarburg.diz.labtofhir.model.LoincMap;
 import de.unimarburg.diz.labtofhir.model.LoincMappingResult;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Metrics;
+import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import org.hl7.fhir.r4.model.Observation;
 import org.slf4j.Logger;
@@ -11,6 +14,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LoincMapper {
+
+    private static final String MAPPING_ERROR_METRIC_NAME =
+        "labtofhir.loinc.mapping.errors.total";
+    private static final HashMap<String, Counter> metricsLookup = new HashMap<>();
 
     private final static Logger log = LoggerFactory.getLogger(LoincMapper.class);
     @Value("${mapping.loinc.file}")
@@ -33,6 +40,18 @@ public class LoincMapper {
                 log.warn(
                     "LOINC mapping lookup failed. No values found for code: {} and meta code: {}",
                     coding.getCode(), metaCode);
+
+                var codesDesc = coding.getCode();
+                if (metaCode != null) {
+                    codesDesc += "#" + metaCode;
+                }
+
+                metricsLookup.putIfAbsent(
+                    codesDesc,
+                    Metrics.globalRegistry
+                        .counter(MAPPING_ERROR_METRIC_NAME, "code", codesDesc));
+                metricsLookup.get(codesDesc).increment();
+
                 return LoincMappingResult.MISSING_CODE_MAPPING;
             }
 
