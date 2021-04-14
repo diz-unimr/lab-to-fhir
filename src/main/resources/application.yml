@@ -44,6 +44,8 @@ services:
     url: "http://localhost:5000/fhir"
 
 management:
+  server:
+    port: 8090
   endpoints:
     web:
       exposure:
