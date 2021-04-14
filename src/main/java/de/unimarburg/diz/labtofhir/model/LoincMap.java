@@ -24,7 +24,6 @@ public class LoincMap {
     private final Map<String, Set<LoincMapEntry>> internalMap = new HashMap<>();
     private final Logger log = LoggerFactory.getLogger(LoincMap.class);
 
-
     public LoincMap with(String mappingFile, char delimiter) {
         var entries = loadObjectList(LoincMapEntry.class, mappingFile, delimiter);
         entries.stream().filter(i -> i.isValidated() && !StringUtils.isBlank(i.getLoinc())

@@ -60,8 +60,13 @@ dependencies {
     // spring cloud stream kafka
     implementation 'org.springframework.cloud:spring-cloud-stream'
     implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
-
     implementation "org.springframework.kafka:spring-kafka"
+
+    // metrics
+    implementation "org.springframework.boot:spring-boot-starter-web:2.4.3"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:2.4.3"
+    implementation "io.micrometer:micrometer-registry-prometheus:1.6.5"
+    implementation "io.micrometer:micrometer-core:1.6.5"
 
     // mapper
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'

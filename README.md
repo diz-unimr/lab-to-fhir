@@ -54,11 +54,12 @@ The following environment variables can be set:
 
 | Variable  | Default  | Description  |
 |---|---|---|
-| KAFKA_BROKERS | localhost:9092,kafka1:19092 | Kafka broker hosts |
+| KAFKA_BROKERS |  | Kafka broker hosts |
 | INPUT_TOPIC | aim-lab | Topic to read from |
 | OUTPUT_TOPIC | lab-fhir | Topic to store result bundles |
 | ERROR_TOPIC | lab-fhir-error | Topic to store result bundles |
-| PSEUDONYMIZER_URL |  | FHIR endpoint of the FHIR pseudonymizer service  |
+| PSEUDONYMIZER_URL | | FHIR endpoint of the FHIR pseudonymizer service  |
+| WEB_PORT | 8090 | Port of web endpoints (health, prometheus, info, metric)  |
 
 ## Development
 
@@ -113,7 +114,7 @@ npm i
 
 #### Integration tests
 
-Those tests use [Testcontainers}(https://www.testcontainers.org) to provide a real-world test
+These tests use [Testcontainers](https://www.testcontainers.org) to provide a real-world test
 environment. This is similar to the external development environment (with the
 [compose file](dev/docker-compose.yml) under `dev`). However, it deploys docker containers by using
 the underlying [docker-java](https://github.com/docker-java/docker-java) API and has the benefit of
@@ -124,4 +125,5 @@ well as providing better means to determine container "readyness" with
 ### Builds
 
 You can build a docker image for this processor by using the provided [Dockerfile](Dockerfile).
-Note: FHIR profiles must be installed for the build step to run successfully. 
+
+⚠ FHIR profiles must be installed for the build step to run successfully. 
