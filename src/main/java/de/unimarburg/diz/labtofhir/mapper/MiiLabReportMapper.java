@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.kafka.streams.kstream.ValueMapper;
 import org.hl7.fhir.r4.model.BaseReference;
 import org.hl7.fhir.r4.model.Bundle;
@@ -31,10 +32,13 @@ import org.hl7.fhir.r4.model.Meta;
 import org.hl7.fhir.r4.model.Narrative.NarrativeStatus;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Quantity;
+import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.SimpleQuantity;
+import org.hl7.fhir.r4.model.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -281,7 +285,7 @@ public class MiiLabReportMapper implements
                 .getCodingFirstRep().setSystem(fhirProperties.getSystems()
                     .getLaboratorySystem())))
             .setEffective(source.getEffective())
-            .setValue(source.getValue())
+            .setValue(parseValue(source))
             // interpretation
             // TODO validate
             .setInterpretation(
@@ -305,8 +309,29 @@ public class MiiLabReportMapper implements
         return obs;
     }
 
+    private Type parseValue(Observation obs) {
+        if (obs.hasValueStringType()) {
+            // fix numeric value with comparator in "valueString"
+            var valueString = obs.getValueStringType().getValue();
+
+            // check first character for comparator value
+            var comp = valueString.charAt(0);
+            var valuePart = valueString.substring(1)
+                .trim();
+
+            if ((comp == '<' || comp == '>') && NumberUtils.isCreatable(valuePart)) {
+                return new Quantity(NumberUtils.createDouble(valuePart))
+                    .setComparator(QuantityComparator.fromCode(String.valueOf(comp)));
+            }
+        }
+
+        return obs.getValue();
+
+    }
+
 
     public MiiLabReportMapper mapServiceRequest(DiagnosticReport report, Bundle bundle) {
+        // TODO indicate wrapper resource, used to be conform to MII profile
         var identifierType = new CodeableConcept(
             new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
                 .setCode("PLAC"));

@@ -10,15 +10,22 @@ import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Quantity;
+import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.StringType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,6 +72,27 @@ public class MiiLabReportMapperTests {
         assertThat(validations).allMatch(ValidationResult::isSuccessful);
     }
 
+    @Test
+    public void parseValueConvertsNumericWithComparator() {
+        // arrange
+        var report = createDummyReport();
+        report.setObservations(List.of(new Observation().setValue(new StringType("<42"))
+            .setCode(new CodeableConcept().addCoding(new Coding().setCode("LEU")))));
+
+        // act
+        var result = mapper.apply(report);
+
+        // assert
+        var obs = result.getValue().getEntry().stream().map(BundleEntryComponent::getResource)
+            .filter(Observation.class::isInstance).map(Observation.class::cast).findFirst()
+            .orElseThrow();
+
+        assertThat(obs.getValueQuantity())
+            .usingRecursiveComparison().ignoringExpectedNullFields()
+            .isEqualTo(new Quantity(42.0).setComparator(
+                QuantityComparator.fromCode("<")));
+    }
+
     private LaboratoryReport getTestReport(Resource testReport,
         Resource testObservations) throws IOException {
         var parser = fhirContext.newJsonParser();
@@ -92,6 +120,7 @@ public class MiiLabReportMapperTests {
                 .setEncounter(new Reference(
                     new Encounter().addIdentifier(new Identifier().setValue("encounterId"))))
                 .setEffective(DateTimeType.now()));
+        report.setObservations(List.of());
         return report;
     }
 }
