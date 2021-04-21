@@ -59,7 +59,8 @@ The following environment variables can be set:
 | OUTPUT_TOPIC | lab-fhir | Topic to store result bundles |
 | ERROR_TOPIC | lab-fhir-error | Topic to store result bundles |
 | PSEUDONYMIZER_URL | | FHIR endpoint of the FHIR pseudonymizer service  |
-| WEB_PORT | 8090 | Port of web endpoints (health, prometheus, info, metric)  |
+| WEB_PORT |  | Port to map the web endpoints (health, prometheus, info, metric) |
+| LOG_LEVEL | info | Log level (error, warn, info, debug) |
 
 ## Development
 
