@@ -146,7 +146,7 @@ services:
                     <name>PATIENT</name>
                     <checkDigitClass>org.emau.icmvc.ganimed.ttp.psn.generator.ReedSolomonLagrange</checkDigitClass>
                     <alphabet>org.emau.icmvc.ganimed.ttp.psn.alphabets.Symbol31</alphabet>
-                    <properties>PSN_LENGTH=31;PSN_PREFIX=p;INCLUDE_PREFIX_IN_CHECK_DIGIT_CALCULATION=false;PSNS_DELETABLE=true;MAX_DETECTED_ERRORS=2;</properties>
+                    <properties>PSN_LENGTH=31;PSN_PREFIX=PSN-PID-;INCLUDE_PREFIX_IN_CHECK_DIGIT_CALCULATION=false;PSNS_DELETABLE=true;MAX_DETECTED_ERRORS=2;</properties>
                     <comment>PATIENT Domain</comment>
                   </domainDTO>
                 </psn:addDomain>
@@ -175,7 +175,7 @@ services:
                     <name>ENCOUNTER</name>
                     <checkDigitClass>org.emau.icmvc.ganimed.ttp.psn.generator.ReedSolomonLagrange</checkDigitClass>
                     <alphabet>org.emau.icmvc.ganimed.ttp.psn.alphabets.Symbol31</alphabet>
-                    <properties>PSN_LENGTH=31;PSN_PREFIX=f;INCLUDE_PREFIX_IN_CHECK_DIGIT_CALCULATION=false;PSNS_DELETABLE=true;MAX_DETECTED_ERRORS=2;</properties>
+                    <properties>PSN_LENGTH=31;PSN_PREFIX=PSN-ENC-;INCLUDE_PREFIX_IN_CHECK_DIGIT_CALCULATION=false;PSNS_DELETABLE=true;MAX_DETECTED_ERRORS=2;</properties>
                     <comment>ENCOUNTER Domain</comment>
                   </domainDTO>
                 </psn:addDomain>
@@ -204,7 +204,7 @@ services:
                     <name>ORDER</name>
                     <checkDigitClass>org.emau.icmvc.ganimed.ttp.psn.generator.ReedSolomonLagrange</checkDigitClass>
                     <alphabet>org.emau.icmvc.ganimed.ttp.psn.alphabets.Symbol31</alphabet>
-                    <properties>PSN_LENGTH=31;PSN_PREFIX=f;INCLUDE_PREFIX_IN_CHECK_DIGIT_CALCULATION=false;PSNS_DELETABLE=true;MAX_DETECTED_ERRORS=2;</properties>
+                    <properties>PSN_LENGTH=31;PSN_PREFIX=PSN-REP-;INCLUDE_PREFIX_IN_CHECK_DIGIT_CALCULATION=false;PSNS_DELETABLE=true;MAX_DETECTED_ERRORS=2;</properties>
                     <comment>ORDER Domain</comment>
                   </domainDTO>
                 </psn:addDomain>
