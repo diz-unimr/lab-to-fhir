@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.r4.model.Bundle.HTTPVerb;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DateTimeType;
@@ -37,10 +38,7 @@ import org.springframework.test.context.TestPropertySource;
 @SpringBootTest
 @ContextConfiguration(classes = {MiiLabReportMapper.class, FhirConfiguration.class,
     LoincMapper.class})
-@TestPropertySource(
-    properties = {
-        "mapping.loinc.file=mapping_swl_loinc-v1.1.csv",
-    })
+@TestPropertySource(properties = {"mapping.loinc.file=mapping_swl_loinc-v1.1.csv",})
 public class MiiLabReportMapperTests {
 
 
@@ -60,7 +58,8 @@ public class MiiLabReportMapperTests {
 
         var report = getTestReport(testReport, testObservations);
 
-        var bundle = mapper.apply(report).getValue();
+        var bundle = mapper.apply(report)
+            .getValue();
 
         var validations = bundle.getEntry()
             .stream()
@@ -83,25 +82,30 @@ public class MiiLabReportMapperTests {
         var result = mapper.apply(report);
 
         // assert
-        var obs = result.getValue().getEntry().stream().map(BundleEntryComponent::getResource)
-            .filter(Observation.class::isInstance).map(Observation.class::cast).findFirst()
+        var obs = result.getValue()
+            .getEntry()
+            .stream()
+            .map(BundleEntryComponent::getResource)
+            .filter(Observation.class::isInstance)
+            .map(Observation.class::cast)
+            .findFirst()
             .orElseThrow();
 
-        assertThat(obs.getValueQuantity())
-            .usingRecursiveComparison().ignoringExpectedNullFields()
-            .isEqualTo(new Quantity(42.0).setComparator(
-                QuantityComparator.fromCode("<")));
+        assertThat(obs.getValueQuantity()).usingRecursiveComparison()
+            .ignoringExpectedNullFields()
+            .isEqualTo(new Quantity(42.0).setComparator(QuantityComparator.fromCode("<")));
     }
 
-    private LaboratoryReport getTestReport(Resource testReport,
-        Resource testObservations) throws IOException {
+    private LaboratoryReport getTestReport(Resource testReport, Resource testObservations)
+        throws IOException {
         var parser = fhirContext.newJsonParser();
-        var diagnosticReport = parser
-            .parseResource(DiagnosticReport.class, testReport.getInputStream());
+        var diagnosticReport = parser.parseResource(DiagnosticReport.class,
+            testReport.getInputStream());
 
         var node = objectMapper.readTree(testObservations.getInputStream());
         var observations = StreamSupport.stream(node.spliterator(), false)
-            .map(JsonNode::toString).map(s -> parser.parseResource(Observation.class, s))
+            .map(JsonNode::toString)
+            .map(s -> parser.parseResource(Observation.class, s))
             .collect(Collectors.toList());
 
         var report = new LaboratoryReport();
@@ -109,6 +113,22 @@ public class MiiLabReportMapperTests {
         report.setResource(diagnosticReport);
         report.setObservations(observations);
         return report;
+    }
+
+    @Test
+    public void BundleEntriesHaveRequestParameters() throws IOException {
+        // arrange
+        var report = getTestReport(testReport, testObservations);
+
+        // act
+        var result = mapper.apply(report);
+
+        // assert entries
+        assertThat(result.getValue()
+            .getEntry()).extracting(BundleEntryComponent::getRequest)
+            .allSatisfy(
+                x -> assertThat(x).satisfies(y -> assertThat(y.getMethod()).isEqualTo(HTTPVerb.PUT))
+                    .satisfies(z -> assertThat(z.getUrl()).isNotBlank()));
     }
 
     private LaboratoryReport createDummyReport() {

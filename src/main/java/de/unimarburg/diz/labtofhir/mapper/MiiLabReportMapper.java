@@ -20,7 +20,9 @@ import org.apache.kafka.streams.kstream.ValueMapper;
 import org.hl7.fhir.r4.model.BaseReference;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.r4.model.Bundle.BundleEntryRequestComponent;
 import org.hl7.fhir.r4.model.Bundle.BundleType;
+import org.hl7.fhir.r4.model.Bundle.HTTPVerb;
 import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
@@ -490,7 +492,10 @@ public class MiiLabReportMapper implements
         bundle.addEntry()
             .setFullUrl(resource.getResourceType()
                 .name() + "/" + idElement)
-            .setResource(resource);
+            .setResource(resource)
+            .setRequest(new BundleEntryRequestComponent().setMethod(HTTPVerb.PUT)
+                .setUrl(resource.getResourceType()
+                    .name() + "/" + idElement));
     }
 
 }
