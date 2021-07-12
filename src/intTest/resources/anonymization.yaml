@@ -7,6 +7,9 @@ fhirPathRules:
   - path: Encounter.id
     method: pseudonymize
     domain: ENCOUNTER
+  - path: DiagnosticReport.id
+    method: pseudonymize
+    domain: ORDER
   - path: nodesByType('Reference').where(reference.startsWith('Encounter/')).reference
     method: pseudonymize
     domain: ENCOUNTER
