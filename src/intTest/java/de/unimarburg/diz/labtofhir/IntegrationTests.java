@@ -2,6 +2,7 @@ package de.unimarburg.diz.labtofhir;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.unimarburg.diz.labtofhir.mapper.LoincMapper;
 import java.util.stream.Collectors;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
@@ -11,10 +12,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
-@SpringBootTest(classes = LabToFhirApplication.class)
+@SpringBootTest(classes = {LabToFhirApplication.class, LoincMapper.class})
+@TestPropertySource(properties = {
+    "mapping.loinc.version=''", "mapping.loinc.credentials.user=''",
+    "mapping.loinc.credentials.password=''",
+    "mapping.loinc.local=mapping-swl-loinc.zip"})
 public class IntegrationTests extends TestContainerBase {
 
     @DynamicPropertySource

@@ -2,19 +2,15 @@ package de.unimarburg.diz.labtofhir.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 
 
 @SpringBootTest
-@ContextConfiguration(classes = {LoincMapper.class})
-@TestPropertySource(
-    properties = {
-        "mapping.loinc.file=mapping_swl_loinc-v1.1.csv",
-    })
+@ContextConfiguration(classes = {LoincMapper.class, MappingConfiguration.class})
 public class LoincMapperTests {
 
     @Autowired
@@ -22,7 +18,7 @@ public class LoincMapperTests {
 
     @Test
     public void loincMapIsInitialized() {
+
         assertThat(loincMapper.hasMappings()).isTrue();
     }
-
 }
