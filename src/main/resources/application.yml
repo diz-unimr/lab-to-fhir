@@ -42,7 +42,12 @@ fhir:
 
 mapping:
   loinc:
-    file: "mapping_swl_loinc-v1.1.csv"
+    version: "33a55846"
+    credentials:
+      user:
+      password:
+    local:
+
 
 services:
   pseudonymizer:

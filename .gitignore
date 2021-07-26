@@ -38,3 +38,5 @@ out/
 
 ### NPM ###
 node_modules/
+
+application-dev.yml

@@ -10,16 +10,6 @@ public class LoincMapEntry {
     private String ucum;
     private boolean groupCode;
     private String source;
-    private boolean validated;
-
-    public boolean isValidated() {
-        return validated;
-    }
-
-    @JsonSetter("Validiert")
-    public void setValidated(String validated) {
-        this.validated = StringUtils.equalsIgnoreCase("X", validated);
-    }
 
     public String getSwl() {
         return this.swl;
@@ -34,7 +24,7 @@ public class LoincMapEntry {
         return source;
     }
 
-    @JsonSetter("SOURCE")
+    @JsonSetter("QUELLE")
     public void setSource(String source) {
         if ("".equals(source)) {
             source = null;

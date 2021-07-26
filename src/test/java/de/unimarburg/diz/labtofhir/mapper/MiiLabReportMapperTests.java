@@ -7,6 +7,7 @@ import ca.uhn.fhir.validation.ValidationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
+import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
 import java.io.IOException;
@@ -37,8 +38,8 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @ContextConfiguration(classes = {MiiLabReportMapper.class, FhirConfiguration.class,
-    LoincMapper.class})
-@TestPropertySource(properties = {"mapping.loinc.file=mapping_swl_loinc-v1.1.csv",})
+    MappingConfiguration.class, LoincMapper.class})
+@TestPropertySource(properties = {"mapping.loinc.local=mapping-swl-loinc.zip"})
 public class MiiLabReportMapperTests {
 
 

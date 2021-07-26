@@ -4,13 +4,17 @@ import de.unimarburg.diz.labtofhir.model.LoincMap;
 import de.unimarburg.diz.labtofhir.model.LoincMappingResult;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
+import java.io.IOException;
 import java.util.HashMap;
 import javax.annotation.PostConstruct;
 import org.hl7.fhir.r4.model.Observation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class LoincMapper {
@@ -20,12 +24,18 @@ public class LoincMapper {
     private static final HashMap<String, Counter> metricsLookup = new HashMap<>();
 
     private final static Logger log = LoggerFactory.getLogger(LoincMapper.class);
-    @Value("${mapping.loinc.file}")
-    private String mappingFile;
+    private final Resource mappingPackage;
     private LoincMap loincMap;
 
-    private LoincMap getSwlLoincMapping(String mappingFile) {
-        return new LoincMap().with(mappingFile, '\t');
+    @Autowired
+    public LoincMapper(
+        @Qualifier("mappingPackage")
+            Resource mappingPackage) {
+        this.mappingPackage = mappingPackage;
+    }
+
+    private LoincMap getSwlLoincMapping(Resource mappingPackage) throws IOException {
+        return new LoincMap().with(mappingPackage, ',');
     }
 
     public LoincMappingResult mapCodeAndQuantity(Observation obs,
@@ -72,8 +82,8 @@ public class LoincMapper {
     }
 
     @PostConstruct
-    private void initializeMap() {
-        this.loincMap = getSwlLoincMapping(mappingFile);
+    private void initializeMap() throws Exception {
+        this.loincMap = getSwlLoincMapping(mappingPackage);
     }
 
     public boolean hasMappings() {
