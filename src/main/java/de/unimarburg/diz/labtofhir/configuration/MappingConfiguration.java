@@ -9,6 +9,8 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,7 @@ import org.springframework.util.StreamUtils;
 @Configuration
 public class MappingConfiguration {
 
+    private static final Logger log = LoggerFactory.getLogger(MappingConfiguration.class);
 
     @Bean("mappingPackage")
     public Resource getMappingFile(@Value("${mapping.loinc.version}") String version,
@@ -31,6 +34,7 @@ public class MappingConfiguration {
 
         if (StringUtils.isBlank(localPkg)) {
             // load from remote location
+            log.info("Using LOINC mapping package from remote location");
 
             var provider = new BasicCredentialsProvider();
             var credentials
@@ -55,6 +59,7 @@ public class MappingConfiguration {
         } else {
 
             // load local file from classpath
+            log.info("Using local LOINC mapping package from: {}", localPkg);
             return new FileSystemResource(new ClassPathResource(localPkg).getFile());
         }
     }
