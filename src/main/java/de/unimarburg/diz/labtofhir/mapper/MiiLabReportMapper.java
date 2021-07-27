@@ -226,7 +226,8 @@ public class MiiLabReportMapper implements
         report.setId(identifierValue);
         // meta data
         report.setMeta(new Meta().setProfile(List.of(new CanonicalType(
-            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab"))));
+            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab")))
+            .setSource("#swisslab"));
 
         // identifier
         report.setIdentifier(List.of(new Identifier().setType(identifierType)
@@ -284,7 +285,8 @@ public class MiiLabReportMapper implements
         obs.setId(identifierValue);
         // meta data
         obs.setMeta(new Meta().setProfile(List.of(new CanonicalType(
-            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab"))));
+            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab")))
+            .setSource("#swisslab"));
 
         // identifier
         obs.setIdentifier(List.of(new Identifier().setType(identifierType)
@@ -374,10 +376,9 @@ public class MiiLabReportMapper implements
         // id
         serviceRequest.setId(identifierValue);
         // meta
-        serviceRequest.getMeta()
-            .getProfile()
-            .add(new CanonicalType(
-                "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab"));
+        serviceRequest.setMeta(new Meta().addProfile(
+            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab")
+            .setSource("#swisslab"));
 
         serviceRequest.setIdentifier(List.of(new Identifier().setSystem(fhirProperties.getSystems()
             .getServiceRequestId())
