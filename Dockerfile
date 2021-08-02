@@ -12,6 +12,20 @@ RUN gradle build -x integrationTest --info && \
     java -Djarmode=layertools -jar build/libs/*.jar extract
 
 FROM gcr.io/distroless/java:11
+COPY cert/RKA_Root_CA_2.cer /tmp/RKA_Root_CA_2.cer
+RUN [\
+ "/usr/lib/jvm/java-11-openjdk-amd64/bin/keytool",\
+ "-import",\
+ "-trustcacerts",\
+ "-cacerts",\
+ "-noprompt",\
+ "-storepass",\
+ "changeit",\
+ "-alias",\
+ "rka_root_ca_2",\
+ "-file",\
+ "/tmp/RKA_Root_CA_2.cer"\
+]
 WORKDIR /opt/lab-to-fhir
 COPY --from=build /home/gradle/src/dependencies/ ./
 COPY --from=build /home/gradle/src/spring-boot-loader/ ./
