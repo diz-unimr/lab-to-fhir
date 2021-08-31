@@ -3,12 +3,6 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     [
-      "@semantic-release/exec",
-      {
-        "verifyReleaseCmd": "echo ${nextRelease.version} > .VERSION"
-      }
-    ],
-    [
       "@semantic-release/gitlab",
       {
         "gitlabUrl": "https://gitlab.diz.uni-marburg.de"
