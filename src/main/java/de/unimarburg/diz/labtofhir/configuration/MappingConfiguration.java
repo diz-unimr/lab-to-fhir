@@ -44,7 +44,7 @@ public class MappingConfiguration {
 
             var client = HttpClientBuilder.create()
                 .setDefaultCredentialsProvider(provider)
-                .setProxy(new HttpHost("194.25.45.45",8080,"https"))
+                .setProxy(new HttpHost("194.25.45.45",8080,"http"))
                 .build();
 
             var response = client.execute(
