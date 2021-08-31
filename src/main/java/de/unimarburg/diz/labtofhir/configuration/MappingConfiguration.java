@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
@@ -43,6 +44,7 @@ public class MappingConfiguration {
 
             var client = HttpClientBuilder.create()
                 .setDefaultCredentialsProvider(provider)
+                .setProxy(new HttpHost("194.25.45.45",8080,"https"))
                 .build();
 
             var response = client.execute(
