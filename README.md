@@ -1,3 +1,6 @@
+
+[![pipeline status](https://gitlab.diz.uni-marburg.de/etl/gecco-to-server/badges/master/pipeline.svg)](https://gitlab.diz.uni-marburg.de/etl/gecco-to-server/-/commits/master)
+
 # lab-to-fhir
 
 > Kafka Stream Processor, transforming laboratory data to FHIR
