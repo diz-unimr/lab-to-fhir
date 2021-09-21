@@ -1,5 +1,5 @@
 
-[![pipeline status](https://gitlab.diz.uni-marburg.de/etl/gecco-to-server/badges/master/pipeline.svg)](https://gitlab.diz.uni-marburg.de/etl/gecco-to-server/-/commits/master)
+[![pipeline status](https://gitlab.diz.uni-marburg.de/etl/lab-to-fhir/badges/master/pipeline.svg)](https://gitlab.diz.uni-marburg.de/etl/lab-to-fhir/-/commits/master)
 
 # lab-to-fhir
 
