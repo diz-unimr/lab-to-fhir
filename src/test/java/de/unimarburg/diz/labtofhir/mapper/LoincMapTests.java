@@ -21,6 +21,6 @@ public class LoincMapTests {
 
         // assert
         assertThat(loincMap.metadata()).hasNoNullFieldsOrProperties();
-        assertThat(loincMap.size()).isEqualTo(474);
+        assertThat(loincMap.size()).isEqualTo(671);
     }
 }

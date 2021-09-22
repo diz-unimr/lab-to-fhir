@@ -7,9 +7,11 @@ import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.model.LoincMappingResult;
 import de.unimarburg.diz.labtofhir.model.MappingContainer;
+import de.unimarburg.diz.labtofhir.model.MetaCode;
 import de.unimarburg.diz.labtofhir.util.TimestampPrefixedId;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -52,16 +54,16 @@ import org.springframework.stereotype.Service;
 public class MiiLabReportMapper implements
     ValueMapper<LaboratoryReport, MappingContainer<LaboratoryReport, Bundle>> {
 
+    public static final Set<String> metaCodes = EnumSet.allOf(MetaCode.class).stream().map(
+        Enum::toString).collect(
+        Collectors.toSet());
     private final static Logger log = LoggerFactory.getLogger(MiiLabReportMapper.class);
-    private static final String META_CODE_POCT = "MTYP-POCT";
-    private static final String META_CODE_DIFFART = "DIFFART";
     private final IParser fhirParser;
     private final FhirProperties fhirProperties;
     private final Function<String, String> hasher = i -> Hashing.sha256()
         .hashString(i, StandardCharsets.UTF_8)
         .toString();
     private final Identifier identifierAssigner;
-    private final Set<String> metaCodes = Set.of(META_CODE_DIFFART, META_CODE_POCT);
     private final LoincMapper loincMapper;
 
     @Autowired
@@ -71,7 +73,7 @@ public class MiiLabReportMapper implements
         this.fhirProperties = fhirProperties;
         fhirParser = fhirContext.newJsonParser();
         identifierAssigner = new Identifier().setSystem(fhirProperties.getSystems()
-            .getAssignerId())
+                .getAssignerId())
             .setValue(fhirProperties.getSystems()
                 .getAssignerCode());
     }
@@ -171,18 +173,16 @@ public class MiiLabReportMapper implements
                 .getCode()))
             .collect(Collectors.toList());
 
-        // only one meta code currently supported
         if (!metaObs.isEmpty()) {
+            // only one meta code currently supported
+            var firstMetaObs = metaObs.get(0);
             report.setMetaCode(metaObs.get(0)
-                .getCode()
-                .getCoding()
-                .get(0)
-                .getCode());
+                .getValueStringType().getValue());
 
-            // remove from results
+            // remove from DiagnosticReport
             report.getResource()
                 .getResult()
-                .removeIf(x -> Objects.equals(x.getResource(), metaObs.get(0)));
+                .removeIf(x -> Objects.equals(x.getResource(), firstMetaObs));
         }
 
         return this;
@@ -226,15 +226,15 @@ public class MiiLabReportMapper implements
         report.setId(identifierValue);
         // meta data
         report.setMeta(new Meta().setProfile(List.of(new CanonicalType(
-            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab")))
+                "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab")))
             .setSource("#swisslab"));
 
         // identifier
         report.setIdentifier(List.of(new Identifier().setType(identifierType)
-            .setSystem(fhirProperties.getSystems()
-                .getDiagnosticReportId())
-            .setValue(identifierValue)
-            .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+                .setSystem(fhirProperties.getSystems()
+                    .getDiagnosticReportId())
+                .setValue(identifierValue)
+                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
 
             // basedOn
             .setBasedOn(List.of(new Reference("ServiceRequest/" + createId(
@@ -247,8 +247,8 @@ public class MiiLabReportMapper implements
 
             // category
             .setCategory(List.of(new CodeableConcept().addCoding(
-                new Coding().setSystem("http://loinc.org")
-                    .setCode("26436-6"))
+                    new Coding().setSystem("http://loinc.org")
+                        .setCode("26436-6"))
                 .addCoding(new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0074")
                     .setCode("LAB"))
                 // with local category
@@ -285,24 +285,24 @@ public class MiiLabReportMapper implements
         obs.setId(identifierValue);
         // meta data
         obs.setMeta(new Meta().setProfile(List.of(new CanonicalType(
-            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab")))
+                "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab")))
             .setSource("#swisslab"));
 
         // identifier
         obs.setIdentifier(List.of(new Identifier().setType(identifierType)
-            .setSystem(fhirProperties.getSystems()
-                .getObservationId())
-            .setValue(identifierValue)
-            .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+                .setSystem(fhirProperties.getSystems()
+                    .getObservationId())
+                .setValue(identifierValue)
+                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
 
             // status
             .setStatus(source.getStatus())
             // category
             .setCategory(List.of(new CodeableConcept().addCoding(
-                new Coding().setSystem("http://loinc.org")
-                    .setCode("26436-6"))
+                    new Coding().setSystem("http://loinc.org")
+                        .setCode("26436-6"))
                 .addCoding(new Coding().setSystem(
-                    "http://terminology.hl7.org/CodeSystem/observation-category")
+                        "http://terminology.hl7.org/CodeSystem/observation-category")
                     .setCode("laboratory"))
                 // with local category
                 .addCoding(source.getCategoryFirstRep()
@@ -331,7 +331,7 @@ public class MiiLabReportMapper implements
             .setReferenceRange(source.getReferenceRange()
                 .stream()
                 .map(r -> r.setLow(new SimpleQuantity().setValue(r.getLow()
-                    .getValue()))
+                        .getValue()))
                     .setHigh(new SimpleQuantity().setValue(r.getHigh()
                         .getValue())))
                 .collect(Collectors.toList()))
@@ -377,14 +377,14 @@ public class MiiLabReportMapper implements
         serviceRequest.setId(identifierValue);
         // meta
         serviceRequest.setMeta(new Meta().addProfile(
-            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab")
+                "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab")
             .setSource("#swisslab"));
 
         serviceRequest.setIdentifier(List.of(new Identifier().setSystem(fhirProperties.getSystems()
-            .getServiceRequestId())
-            .setType(identifierType)
-            .setValue(identifierValue)
-            .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+                    .getServiceRequestId())
+                .setType(identifierType)
+                .setValue(identifierValue)
+                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
 
             // authoredOn
             // uses report effective (date)
