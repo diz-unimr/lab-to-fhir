@@ -69,9 +69,9 @@ The following environment variables can be set:
 | MAPPING_LOINC_VERSION | 33a55846 | LOINC mapping package version |
 | MAPPING_LOINC_CREDENTIALS_USER | | LOINC mapping package registry user |
 | MAPPING_LOINC_CREDENTIALS_PASSWORD | | LOINC mapping package registry password |
+| MAPPING_LOINC_PROXY | | Proxy server to use when pulling the package |
 | MAPPING_LOINC_LOCAL | |Name of the local LOINC mapping package file to use (see [application resources](src/main/resources)) <br /> **NOTE**: This option does not pull the file from the registry and credentials and version are fixed by the local package |
 
-      MAPPING_LOINC_PROXY: ${PROXY_SERVER}
 
 ## Development
 
