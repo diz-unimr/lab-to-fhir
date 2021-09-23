@@ -13,6 +13,7 @@ import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.Bundle.HTTPVerb;
@@ -29,6 +30,9 @@ import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.StringType;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -52,6 +56,10 @@ public class MiiLabReportMapperTests {
     private MiiLabReportMapper mapper;
     @Autowired
     private FhirContext fhirContext;
+
+    private static Stream<Arguments> metaCodesAreSetAndFilteredArgs() {
+        return MiiLabReportMapper.metaCodes.stream().map(Arguments::of);
+    }
 
     @Test
     public void resourceTypeIsValid() throws IOException {
@@ -95,6 +103,23 @@ public class MiiLabReportMapperTests {
         assertThat(obs.getValueQuantity()).usingRecursiveComparison()
             .ignoringExpectedNullFields()
             .isEqualTo(new Quantity(42.0).setComparator(QuantityComparator.fromCode("<")));
+    }
+
+    @ParameterizedTest
+    @MethodSource("metaCodesAreSetAndFilteredArgs")
+    public void metaCodesAreSetAndFiltered(String code) {
+        var report = createDummyReport();
+        report.setObservations(List.of(new Observation().setCode(
+                new CodeableConcept().addCoding(new Coding().setCode(code)))
+            .setValue(new StringType("metaCode"))));
+        setReportResult(report);
+
+        // act
+        mapper.apply(report);
+
+        // assert
+        assertThat(report.getMetaCode()).isEqualTo("metaCode");
+        assertThat(report.getResource().getResult()).isEmpty();
     }
 
     private LaboratoryReport getTestReport(Resource testReport, Resource testObservations)
@@ -143,5 +168,11 @@ public class MiiLabReportMapperTests {
                 .setEffective(DateTimeType.now()));
         report.setObservations(List.of());
         return report;
+    }
+
+    private void setReportResult(LaboratoryReport report) {
+        report.getResource()
+            .setResult(report.getObservations().stream().map(Reference::new).collect(
+                Collectors.toList()));
     }
 }

@@ -46,6 +46,7 @@ mapping:
     credentials:
       user:
       password:
+    proxy:
     local:
 
 

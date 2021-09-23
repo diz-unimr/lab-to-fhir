@@ -30,6 +30,7 @@ WORKDIR /opt/lab-to-fhir
 COPY --from=build /home/gradle/src/dependencies/ ./
 COPY --from=build /home/gradle/src/spring-boot-loader/ ./
 COPY --from=build /home/gradle/src/application/ ./
+COPY HealthCheck.java .
 
 USER nonroot
 ARG GIT_REF=""
@@ -40,6 +41,7 @@ ENV APP_VERSION=${VERSION} \
     SPRING_PROFILES_ACTIVE="prod"
 ENTRYPOINT ["java", "-XX:MaxRAMPercentage=90", "org.springframework.boot.loader.JarLauncher"]
 
+HEALTHCHECK --interval=25s --timeout=3s --retries=2 CMD ["java", "HealthCheck.java", "||", "exit", "1"]
 
 LABEL org.opencontainers.image.created=${BUILD_TIME} \
     org.opencontainers.image.authors="Sebastian Stöcker" \

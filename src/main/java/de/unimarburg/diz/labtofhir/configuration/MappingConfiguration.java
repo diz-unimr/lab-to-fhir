@@ -29,6 +29,7 @@ public class MappingConfiguration {
     public Resource getMappingFile(@Value("${mapping.loinc.version}") String version,
         @Value("${mapping.loinc.credentials.user}") String user,
         @Value("${mapping.loinc.credentials.password}") String password,
+        @Value("${mapping.loinc.proxy}") String proxyServer,
         @Value("${mapping.loinc.local}") String localPkg
     )
         throws IOException {
@@ -42,16 +43,20 @@ public class MappingConfiguration {
                 = new UsernamePasswordCredentials(user, password);
             provider.setCredentials(AuthScope.ANY, credentials);
 
-            var client = HttpClientBuilder.create()
-                .setDefaultCredentialsProvider(provider)
-                .setProxy(new HttpHost("194.25.45.45",8080,"http"))
-                .build();
+            var clientBuilder = HttpClientBuilder.create()
+                .setDefaultCredentialsProvider(provider);
 
-            var response = client.execute(
+            if (!StringUtils.isBlank(proxyServer)) {
+                clientBuilder.setProxy(HttpHost.create(proxyServer));
+            }
+
+            var response = clientBuilder.build().execute(
                 new HttpGet(
                     String.format(
                         "https://gitlab.diz.uni-marburg.de/api/v4/projects/63/packages/generic/mapping-swl-loinc/%s/mapping-swl-loinc.zip",
                         version)));
+
+            log.info("Package registry responded with: " + response.getStatusLine().toString());
 
             var tmpFile = File.createTempFile("download", ".zip");
             StreamUtils.copy(response.getEntity().getContent(), new FileOutputStream(tmpFile));
