@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "de.medizininformatikinitiative.kerndatensatz.laborbefund": "^1.0.2",
-    "de.medizininformatikinitiative.kerndatensatz.meta": "^1.0.2"
+    "de.medizininformatikinitiative.kerndatensatz.laborbefund": "^1.0.6",
+    "de.medizininformatikinitiative.kerndatensatz.meta": "^1.0.3"
   }
 }
