@@ -1,9 +1,8 @@
-FROM gradle:6.6-jdk11 AS build
+FROM gradle:7.2-jdk11 AS build
 WORKDIR /home/gradle/src
 ENV GRADLE_USER_HOME /gradle
 
 COPY build.gradle settings.gradle ./
-RUN gradle build || true
 
 COPY --chown=gradle:gradle . .
 RUN gradle build -x integrationTest --info && \
@@ -39,6 +38,8 @@ ARG BUILD_TIME=""
 ARG VERSION=0.0.0
 ENV APP_VERSION=${VERSION} \
     SPRING_PROFILES_ACTIVE="prod"
+EXPOSE 8080
+
 ENTRYPOINT ["java", "-XX:MaxRAMPercentage=90", "org.springframework.boot.loader.JarLauncher"]
 
 HEALTHCHECK --interval=25s --timeout=3s --retries=2 CMD ["java", "HealthCheck.java", "||", "exit", "1"]

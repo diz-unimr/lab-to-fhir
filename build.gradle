@@ -1,9 +1,10 @@
 plugins {
-    id 'org.springframework.boot' version '2.4.0'
-    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'java'
-    id "jacoco"
+    id 'jacoco'
+    id 'org.springframework.boot' version '2.5.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
+
 
 group = 'de.unimarburg.diz'
 version = '0.0.1-SNAPSHOT'
@@ -51,9 +52,10 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 
 ext {
-    set('springCloudVersion', "2020.0.0-SNAPSHOT")
-    set("hapiFhirVersion", "5.1.0")
-    set('testContainersVersion', '1.15.2')
+    set('springBootVersion', "2.5.5")
+    set('springCloudVersion', "2020.0.4")
+    set("hapiFhirVersion", "5.5.1")
+    set('testContainersVersion', '1.16.0')
 }
 
 dependencies {
@@ -63,10 +65,10 @@ dependencies {
     implementation "org.springframework.kafka:spring-kafka"
 
     // metrics
-    implementation "org.springframework.boot:spring-boot-starter-web:2.4.3"
-    implementation "org.springframework.boot:spring-boot-starter-actuator:2.4.3"
-    implementation "io.micrometer:micrometer-registry-prometheus:1.6.5"
-    implementation "io.micrometer:micrometer-core:1.6.5"
+    implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    implementation "io.micrometer:micrometer-registry-prometheus:1.7.4"
+    implementation "io.micrometer:micrometer-core:1.7.4"
 
     // mapper
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
@@ -80,29 +82,29 @@ dependencies {
     implementation "ca.uhn.hapi.fhir:hapi-fhir-structures-r5:$hapiFhirVersion"
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation:$hapiFhirVersion"
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation-resources-r4:$hapiFhirVersion"
-    implementation 'org.miracum:kafka-fhir-serializer:1.0.0'
+    implementation 'org.miracum:kafka-fhir-serializer:1.0.1'
     implementation 'de.unimarburg.diz:fhir-pseudonymizer:1.1'
 
     // unit tests
-    testCompile 'org.springframework.cloud:spring-cloud-stream'
-    testCompile 'org.apache.kafka:kafka-streams-test-utils:2.2.0'
+    testImplementation 'org.springframework.cloud:spring-cloud-stream'
+    testImplementation 'org.apache.kafka:kafka-streams-test-utils:2.8.0'
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.kafka:spring-kafka-test:2.6.2'
-    testImplementation 'org.assertj:assertj-core:3.17.2'
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    testImplementation 'org.assertj:assertj-core:3.20.2'
 
     // integration tests
     intTestImplementation 'org.springframework.kafka:spring-kafka-test:2.6.2'
     intTestImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    intTestCompile "org.testcontainers:kafka:$testContainersVersion"
-    intTestCompile "org.testcontainers:postgresql:$testContainersVersion"
+    intTestImplementation "org.testcontainers:kafka:$testContainersVersion"
+    intTestImplementation "org.testcontainers:postgresql:$testContainersVersion"
     intTestImplementation "org.testcontainers:junit-jupiter:$testContainersVersion"
-    intTestImplementation 'org.awaitility:awaitility:4.0.3'
+    intTestImplementation 'org.awaitility:awaitility'
     intTestImplementation 'org.assertj:assertj-core:3.17.2'
 
 }
@@ -122,20 +124,23 @@ integrationTest {
 }
 
 jacoco {
-    toolVersion = "0.8.5"
-    reportsDir = file("$buildDir/jacoco-reports")
+    toolVersion = "0.8.7"
+    reportsDirectory = layout.buildDirectory.dir('jacoco-reports')
 }
 
 jacocoTestReport {
     reports {
-        xml.enabled true
-        csv.enabled true
-        csv.destination file("${buildDir}/jacoco/coverage.csv")
-        html.destination file("${buildDir}/jacoco/html")
+        xml.required = true
+        csv.required = true
+        csv.outputLocation = layout.buildDirectory.file('jacoco/coverage.csv')
+        html.outputLocation = layout.buildDirectory.dir('jacoco/html')
     }
 }
 
+jar {
+    enabled = false
+}
+
 bootJar {
-    mainClassName = 'de.unimarburg.diz.labtofhir.LabToFhirApplication'
-    layered()
+    mainClass.set('de.unimarburg.diz.labtofhir.LabToFhirApplication')
 }
