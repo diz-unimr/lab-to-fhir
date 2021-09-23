@@ -3,7 +3,6 @@ WORKDIR /home/gradle/src
 ENV GRADLE_USER_HOME /gradle
 
 COPY build.gradle settings.gradle ./
-RUN gradle build || true
 
 COPY --chown=gradle:gradle . .
 RUN gradle build -x integrationTest --info && \

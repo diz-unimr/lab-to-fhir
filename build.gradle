@@ -137,6 +137,10 @@ jacocoTestReport {
     }
 }
 
+jar {
+    enabled = false
+}
+
 bootJar {
     mainClass.set('de.unimarburg.diz.labtofhir.LabToFhirApplication')
 }
