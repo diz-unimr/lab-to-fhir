@@ -26,8 +26,7 @@ public class FhirObjectMapperTests {
         var report = mapper.readValue(inputString, LaboratoryReport.class);
 
         assertThat(report).extracting(LaboratoryReport::getId, LaboratoryReport::getResource,
-            LaboratoryReport::getInserted, LaboratoryReport::getModified)
+                LaboratoryReport::getInserted, LaboratoryReport::getModified)
             .doesNotContainNull();
     }
-
 }

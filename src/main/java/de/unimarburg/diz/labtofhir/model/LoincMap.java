@@ -2,7 +2,7 @@ package de.unimarburg.diz.labtofhir.model;
 
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.naturalOrder;
-import static java.util.Comparator.nullsLast;
+import static java.util.Comparator.nullsFirst;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MappingIterator;
@@ -88,7 +88,7 @@ public class LoincMap {
         // 1. source: entries are ordered with null values being last
         // 2. group code: entries are ordered with group codes being last
         var entries = internalMap.computeIfAbsent(code, s -> new TreeSet<>(
-            comparing(LoincMapEntry::getSource, nullsLast(naturalOrder())).thenComparing(
+            comparing(LoincMapEntry::getSource, nullsFirst(naturalOrder())).thenComparing(
                 LoincMapEntry::getGroupCode, Boolean::compare)));
         entries.add(entry);
     }
@@ -102,7 +102,9 @@ public class LoincMap {
         return entries.stream()
             .filter(e -> StringUtils.equals(e.getSource(), source))
             .findFirst()
+            // fallback to null source
             .orElseGet(() -> entries.stream()
+                .filter(e -> StringUtils.equals(e.getSource(), null))
                 .findFirst()
                 .orElse(null));
 

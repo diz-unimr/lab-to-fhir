@@ -19,7 +19,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.kafka.streams.kstream.ValueMapper;
-import org.hl7.fhir.r4.model.BaseReference;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryRequestComponent;
@@ -160,11 +159,8 @@ public class MiiLabReportMapper implements
     }
 
     private MiiLabReportMapper processMetaResults(LaboratoryReport report) {
-        var metaObs = report.getResource()
-            .getResult()
+        var metaObs = report.getObservations()
             .stream()
-            .map(BaseReference::getResource)
-            .map(Observation.class::cast)
             .filter(x -> metaCodes.contains(x.getCode()
                 .getCoding()
                 .stream()
