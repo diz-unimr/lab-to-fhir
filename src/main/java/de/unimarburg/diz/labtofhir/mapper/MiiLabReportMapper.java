@@ -36,13 +36,13 @@ import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.Meta;
 import org.hl7.fhir.r4.model.Narrative.NarrativeStatus;
 import org.hl7.fhir.r4.model.Observation;
+import org.hl7.fhir.r4.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ServiceRequest;
-import org.hl7.fhir.r4.model.SimpleQuantity;
 import org.hl7.fhir.r4.model.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +122,6 @@ public class MiiLabReportMapper implements
                     .map(o -> mapLoincUcum(o, mappingContainer.getSource()
                         .getMetaCode()))
                     .filter(Objects::nonNull)
-                    .map(this::convertLoincUcum)
                     // add to bundle
                     .peek(o -> addResourceToBundle(bundle, o))
                     // set result references
@@ -191,12 +190,6 @@ public class MiiLabReportMapper implements
             .filter(DomainResource.class::isInstance)
             .map(DomainResource.class::cast)
             .forEach(this::setNarrative);
-    }
-
-    public Observation convertLoincUcum(Observation observation) {
-        // TODO remove?
-        return observation;
-
     }
 
     private Observation mapLoincUcum(Observation obs, String metaCode) {
@@ -312,7 +305,6 @@ public class MiiLabReportMapper implements
             .setEffective(source.getEffective())
             .setValue(parseValue(source))
             // interpretation
-            // TODO validate
             .setInterpretation(source.getInterpretation()
                 .stream()
                 .map(cc -> new CodeableConcept().setCoding(
@@ -326,15 +318,23 @@ public class MiiLabReportMapper implements
             // map reference range to simple quantity with value only
             .setReferenceRange(source.getReferenceRange()
                 .stream()
-                .map(r -> r.setLow(new SimpleQuantity().setValue(r.getLow()
-                        .getValue()))
-                    .setHigh(new SimpleQuantity().setValue(r.getHigh()
-                        .getValue())))
+                .map(this::harmonizeRangeQuantities)
                 .collect(Collectors.toList()))
             // note
             .setNote(source.getNote());
 
         return obs;
+    }
+
+    private ObservationReferenceRangeComponent harmonizeRangeQuantities(
+        ObservationReferenceRangeComponent rangeComponent) {
+        if (rangeComponent.hasLow()) {
+            ensureCodeIsSet(rangeComponent.getLow());
+        }
+        if (rangeComponent.hasHigh()) {
+            ensureCodeIsSet(rangeComponent.getHigh());
+        }
+        return rangeComponent;
     }
 
     private Type parseValue(Observation obs) {
@@ -352,15 +352,28 @@ public class MiiLabReportMapper implements
                 return new Quantity(NumberUtils.createDouble(valuePart)).setComparator(
                     QuantityComparator.fromCode(String.valueOf(comp)));
             }
+        } else if (obs.hasValueQuantity()) {
+            ensureCodeIsSet(obs.getValueQuantity());
         }
 
         return obs.getValue();
 
     }
 
+    /**
+     * Ensures Quantity.code is set if unit is provided.
+     */
+    private void ensureCodeIsSet(Quantity quantity) {
+        if (quantity.hasUnit() && !quantity.hasCode()) {
+            // every code needs a system :)
+            quantity.setCode(quantity.getUnit()).setSystem(fhirProperties.getSystems()
+                .getLaboratoryUnitSystem());
+        }
+    }
+
 
     public MiiLabReportMapper mapServiceRequest(DiagnosticReport report, Bundle bundle) {
-        // TODO indicate wrapper resource, used to be conform to MII profile
+        // TODO clarify intention: using this as a wrapper resource in order to be conform to MII profiles
         var identifierType = new CodeableConcept(
             new Coding().setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
                 .setCode("PLAC"));
