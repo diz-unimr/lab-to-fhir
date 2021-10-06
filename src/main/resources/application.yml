@@ -38,6 +38,7 @@ fhir:
     assignerId: "https://www.medizininformatik-initiative.de/fhir/core/NamingSystem/org-identifier"
     assignerCode: "UKMR"
     laboratorySystem: "https://fhir.diz.uni-marburg.de/CodeSystem/Laboratory"
+    laboratoryUnitSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/LaboratoryUnit"
   generateNarrative: false
 
 mapping:

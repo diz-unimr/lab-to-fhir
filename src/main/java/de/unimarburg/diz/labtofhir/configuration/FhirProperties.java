@@ -44,6 +44,8 @@ public class FhirProperties {
         private String assignerCode;
         @NotNull
         private String laboratorySystem;
+        @NotNull
+        private String laboratoryUnitSystem;
 
         public String getLaboratorySystem() {
             return laboratorySystem;
@@ -107,6 +109,14 @@ public class FhirProperties {
 
         public void setAssignerCode(String assignerCode) {
             this.assignerCode = assignerCode;
+        }
+
+        public String getLaboratoryUnitSystem() {
+            return this.laboratoryUnitSystem;
+        }
+
+        public void setLaboratoryUnitSystem(String laboratoryUnitSystem) {
+            this.laboratoryUnitSystem = laboratoryUnitSystem;
         }
     }
 }

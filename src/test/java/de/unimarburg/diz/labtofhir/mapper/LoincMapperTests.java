@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Observation;
+import org.hl7.fhir.r4.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.r4.model.Quantity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -66,5 +67,27 @@ public class LoincMapperTests {
 
         // no fallback (i.e. no null source mapping)
         assertThat(mappingResult).isEqualTo(LoincMappingResult.MISSING_CODE_MAPPING);
+    }
+
+    @Test
+    public void ucumUnitsAreMapped() {
+        // arrange
+        var oldUnitQuantity = new Quantity().setUnit("old unit");
+        var obs = new Observation().setCode(
+                new CodeableConcept().addCoding(new Coding().setCode("TEST")))
+            .setValue(oldUnitQuantity)
+            .addReferenceRange(new ObservationReferenceRangeComponent().setLow(oldUnitQuantity)
+                .setHigh(oldUnitQuantity));
+
+        // act
+        loincMapper.mapCodeAndQuantity(obs, null);
+
+        // assert value has new unit and code
+        assertThat(obs.getValueQuantity()).extracting(Quantity::getUnit, Quantity::getUnit)
+            .containsOnly("mmol/L");
+        // .. as well as reference range unit and code
+        assertThat(obs.getReferenceRange()).flatExtracting(x -> x.getLow().getUnit(),
+                x -> x.getHigh().getUnit(), x -> x.getLow().getCode(), x -> x.getHigh().getCode())
+            .containsOnly("mmol/L");
     }
 }

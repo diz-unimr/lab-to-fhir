@@ -69,9 +69,19 @@ public class LoincMapper {
             coding.setCode(entry.getLoinc())
                 .setSystem("http://loinc.org");
 
-            // map ucum
+            // map ucum in value and referenceRange(s)
             obs.getValueQuantity().setUnit(entry.getUcum())
                 .setCode(entry.getUcum()).setSystem("http://unitsofmeasure.org");
+            obs.getReferenceRange().forEach(quantity -> {
+                if (quantity.hasLow()) {
+                    quantity.getLow().setUnit(entry.getUcum())
+                        .setCode(entry.getUcum()).setSystem("http://unitsofmeasure.org");
+                }
+                if (quantity.hasHigh()) {
+                    quantity.getHigh().setUnit(entry.getUcum())
+                        .setCode(entry.getUcum()).setSystem("http://unitsofmeasure.org");
+                }
+            });
 
             return LoincMappingResult.SUCCESS;
         }
