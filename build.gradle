@@ -130,7 +130,6 @@ jacoco {
 
 jacocoTestReport {
     reports {
-        xml.required = true
         csv.required = true
         csv.outputLocation = layout.buildDirectory.file('jacoco/coverage.csv')
         html.outputLocation = layout.buildDirectory.dir('jacoco/html')
