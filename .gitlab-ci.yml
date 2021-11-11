@@ -12,6 +12,8 @@ include:
     file: "/semantic-release-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "npm-setup-template.yml"
+  - project: "marburg/gitlab-ci-templates"
+    file: "badges/badges-template.yml"
 
 unit tests:
   image: adoptopenjdk/openjdk11:alpine-slim
