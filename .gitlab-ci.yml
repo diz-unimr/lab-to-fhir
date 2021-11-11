@@ -21,7 +21,7 @@ unit tests:
     - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' build/jacoco/coverage.csv
   artifacts:
     paths:
-      - build/jacoco/jacoco.xml
+      - build/jacoco/coverage.xml
     reports:
       junit: build/test-results/test/TEST-*.xml
 
@@ -33,7 +33,7 @@ test coverage:
   image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
   script:
     # convert report from jacoco to cobertura, using relative project path
-    - python /opt/cover2cover.py build/jacoco/jacoco.xml $CI_PROJECT_DIR/src/main/java/ > build/cobertura.xml
+    - python /opt/cover2cover.py build/jacoco/coverage.xml $CI_PROJECT_DIR/src/main/java/ > build/cobertura.xml
   needs: ["unit tests"]
   artifacts:
     reports:
