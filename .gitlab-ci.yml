@@ -3,14 +3,26 @@ include:
     file: "/linting-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "/build-docker-image-template.yml"
-  - project: "marburg/gitlab-ci-templates"
-    file: "/gradle-test-template.yml"
+  #  - project: "marburg/gitlab-ci-templates"
+  #    file: "/gradle-test-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "/gradle-integration-test-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "/semantic-release-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "npm-setup-template.yml"
+
+unit tests:
+  image: adoptopenjdk/openjdk11:alpine-slim
+  stage: test
+  script:
+    - ./gradlew test
+  artifacts:
+    paths:
+      - build/reports/tests/test/index.html
+      - build/test-results/test/TEST-*.xml
+    reports:
+      junit: build/test-results/test/TEST-*.xml
 
 stages:
   - lint
