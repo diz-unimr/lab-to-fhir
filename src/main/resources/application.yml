@@ -55,9 +55,9 @@ services:
   pseudonymizer:
     url: "http://localhost:5000/fhir"
 
+server:
+  port: 8080
 management:
-  server:
-    port: 8080
   endpoints:
     web:
       exposure:
