@@ -3,8 +3,8 @@ include:
     file: "/linting-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "/build-docker-image-template.yml"
-  - project: "marburg/gitlab-ci-templates"
-    file: "/gradle-test-template.yml"
+  # - project: "marburg/gitlab-ci-templates"
+  #   file: "/gradle-test-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "/gradle-integration-test-template.yml"
   - project: "marburg/gitlab-ci-templates"
@@ -12,12 +12,16 @@ include:
   - project: "marburg/gitlab-ci-templates"
     file: "npm-setup-template.yml"
 
-tests and report:
-  extends: unit tests
+unit tests:
+  image: adoptopenjdk/openjdk11:alpine-slim
+  stage: test
   script:
     - ./gradlew test
     - ./gradlew jacocoTestReport
     - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' build/jacoco/coverage.csv
+  artifacts:
+    reports:
+      junit: build/test-results/test/TEST-*.xml
 
 stages:
   - lint
