@@ -31,3 +31,4 @@ stages:
   - build
   - test
   - release
+  - badges
