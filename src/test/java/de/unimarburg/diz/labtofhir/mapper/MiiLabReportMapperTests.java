@@ -24,6 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,7 +48,8 @@ public class MiiLabReportMapperTests {
   @Value("classpath:reports/1-diagnostic-report.json")
   Resource testReport;
 
-  @Value("classpath:obs-value-null.json")
+  //  @Value("classpath:obs-value-null.json")
+  @Value("classpath:reports/1-observations.json")
   Resource testObservations;
 
   @Autowired private MiiLabReportMapper mapper;
@@ -108,18 +110,19 @@ public class MiiLabReportMapperTests {
   public void metaCodesAreSetAndFiltered(String code) {
     var report = createDummyReport();
     report.setObservations(
-        List.of(
-            new Observation()
-                .setCode(new CodeableConcept().addCoding(new Coding().setCode(code)))
-                .setValue(new StringType("metaCode"))));
-    setReportResult(report);
+        new ArrayList<>(
+            List.of(
+                new Observation()
+                    .setCode(new CodeableConcept().addCoding(new Coding().setCode(code)))
+                    .setValue(new StringType("metaCode")))));
 
     // act
-    mapper.apply(report);
+    var result = mapper.apply(report);
 
     // assert
     assertThat(report.getMetaCode()).isEqualTo("metaCode");
-    assertThat(report.getResource().getResult()).isEmpty();
+    assertThat(report.getObservations()).isEmpty();
+    assertThat(result).isNull();
   }
 
   private LaboratoryReport getTestReport(Resource testReport, Resource testObservations)
@@ -173,12 +176,5 @@ public class MiiLabReportMapperTests {
             .setEffective(DateTimeType.now()));
     report.setObservations(List.of());
     return report;
-  }
-
-  private void setReportResult(LaboratoryReport report) {
-    report
-        .getResource()
-        .setResult(
-            report.getObservations().stream().map(Reference::new).collect(Collectors.toList()));
   }
 }
