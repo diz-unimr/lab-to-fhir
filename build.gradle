@@ -143,3 +143,5 @@ jar {
 bootJar {
     mainClass.set('de.unimarburg.diz.labtofhir.LabToFhirApplication')
 }
+
+ext['log4j2.version'] = '2.16.0'

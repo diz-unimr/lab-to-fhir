@@ -4,8 +4,6 @@ include:
     file: "/linting-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "/build-docker-image-template.yml"
-  # - project: "marburg/gitlab-ci-templates"
-  #   file: "/gradle-test-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "/gradle-integration-test-template.yml"
   - project: "marburg/gitlab-ci-templates"
@@ -14,6 +12,9 @@ include:
     file: "npm-setup-template.yml"
   - project: "marburg/gitlab-ci-templates"
     file: "badges/badges-template.yml"
+  - project: "marburg/gitlab-ci-templates"
+    file: "/security/trivy-template.yml"
+
 
 unit tests:
   image: adoptopenjdk/openjdk11:alpine-slim
