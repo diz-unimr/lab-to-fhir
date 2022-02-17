@@ -1,31 +1,18 @@
 include:
-  - template: 'Workflows/Branch-Pipelines.gitlab-ci.yml'
-  - project: "marburg/gitlab-ci-templates"
-    file: "/linting-template.yml"
-  - project: "marburg/gitlab-ci-templates"
-    file: "/build-docker-image-template.yml"
-  - project: "marburg/gitlab-ci-templates"
-    file: "/gradle-integration-test-template.yml"
-  - project: "marburg/gitlab-ci-templates"
-    file: "/semantic-release-template.yml"
-  - project: "marburg/gitlab-ci-templates"
-    file: "npm-setup-template.yml"
-  - project: "marburg/gitlab-ci-templates"
+  - project: "ci/templates"
+    file: "linting-template.yml"
+  - project: "ci/templates"
+    file: "docker/build-image-template.yml"
+  - project: "ci/templates"
+    file: "test/gradle-test-template.yml"
+  - project: "ci/templates"
+    file: "test/gradle-integration-test-template.yml"
+  - project: "ci/templates"
+    file: "semantic-release-template.yml"
+  - project: "ci/templates"
     file: "badges/badges-template.yml"
-  - project: "marburg/gitlab-ci-templates"
-    file: "/security/trivy-template.yml"
-
-
-unit tests:
-  image: adoptopenjdk/openjdk11:alpine-slim
-  stage: test
-  script:
-    - ./gradlew test
-    - ./gradlew jacocoTestReport
-    - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' build/jacoco/coverage.csv
-  artifacts:
-    reports:
-      junit: build/test-results/test/TEST-*.xml
+  - project: "ci/templates"
+    file: "security/trivy-template.yml"
 
 stages:
   - lint
