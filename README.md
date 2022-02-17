@@ -51,24 +51,23 @@ tags can be found at the [Container Registry](container_registry/) or under [Rel
 
 The following environment variables can be set:
 
-| Variable  | Default  | Description  |
-|---|---|---|
-| KAFKA_BROKERS |  | Kafka broker hosts |
-| SECURITY_PROTOCOL | PLAINTEXT | Kafka communication protocol |
-| SSL_KEY_STORE_PASSWORD | | Keystore password (if using `SECURITY_PROTOCOL=SSL`) |
-| SSL_TRUST_STORE_PASSWORD | | Truststore password (if using `SECURITY_PROTOCOL=SSL`) |
-| INPUT_TOPIC | aim-lab | Topic to read from |
-| OUTPUT_TOPIC | lab-fhir | Topic to store result bundles |
-| ERROR_TOPIC | lab-fhir-error | Topic to store result bundles |
-| PSEUDONYMIZER_URL | | FHIR endpoint of the FHIR pseudonymizer service  |
-| WEB_PORT |  | Port to map the web endpoints (health, prometheus, info, metric) |
-| LOG_LEVEL | info | Log level (error, warn, info, debug) |
-| MAPPING_LOINC_VERSION | 33a55846 | LOINC mapping package version |
-| MAPPING_LOINC_CREDENTIALS_USER | | LOINC mapping package registry user |
-| MAPPING_LOINC_CREDENTIALS_PASSWORD | | LOINC mapping package registry password |
-| MAPPING_LOINC_PROXY | | Proxy server to use when pulling the package |
-| MAPPING_LOINC_LOCAL | |Name of the local LOINC mapping package file to use (see [application resources](src/main/resources)) <br /> **
-NOTE**: This option does not pull the file from the registry and credentials and version are fixed by the local package |
+| Variable                           | Default        | Description                                                                                                                                                                                                                                  |
+|------------------------------------|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| KAFKA_BROKERS                      |                | Kafka broker hosts                                                                                                                                                                                                                           |
+| SECURITY_PROTOCOL                  | PLAINTEXT      | Kafka communication protocol                                                                                                                                                                                                                 |
+| SSL_KEY_STORE_PASSWORD             |                | Keystore password (if using `SECURITY_PROTOCOL=SSL`)                                                                                                                                                                                         |
+| SSL_TRUST_STORE_PASSWORD           |                | Truststore password (if using `SECURITY_PROTOCOL=SSL`)                                                                                                                                                                                       |
+| INPUT_TOPIC                        | aim-lab        | Topic to read from                                                                                                                                                                                                                           |
+| OUTPUT_TOPIC                       | lab-fhir       | Topic to store result bundles                                                                                                                                                                                                                |
+| ERROR_TOPIC                        | lab-fhir-error | Topic to store result bundles                                                                                                                                                                                                                |
+| PSEUDONYMIZER_URL                  |                | FHIR endpoint of the FHIR pseudonymizer service                                                                                                                                                                                              |
+| WEB_PORT                           |                | Port to map the web endpoints (health, prometheus, info, metric)                                                                                                                                                                             |
+| LOG_LEVEL                          | info           | Log level (error, warn, info, debug)                                                                                                                                                                                                         |
+| MAPPING_LOINC_VERSION              | 9fa7de13       | LOINC mapping package version: [Package Registry · mapping / loinc-mapping](https://gitlab.diz.uni-marburg.de/mapping/loinc-mapping/-/packages/))                                                                                            |
+| MAPPING_LOINC_CREDENTIALS_USER     |                | LOINC mapping package registry user                                                                                                                                                                                                          |
+| MAPPING_LOINC_CREDENTIALS_PASSWORD |                | LOINC mapping package registry password                                                                                                                                                                                                      |
+| MAPPING_LOINC_PROXY                |                | Proxy server to use when pulling the package                                                                                                                                                                                                 |
+| MAPPING_LOINC_LOCAL                |                | Name of the local LOINC mapping package file to use (see [application resources](src/main/resources)) <br /><br /> **NOTE**: This option does not pull the file from the registry and credentials and version are fixed by the local package |
 
 ## Development
 

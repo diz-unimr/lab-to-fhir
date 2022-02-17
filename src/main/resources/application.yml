@@ -43,7 +43,7 @@ fhir:
 
 mapping:
   loinc:
-    version: "33a55846"
+    version: "9fa7de13"
     credentials:
       user:
       password:
