@@ -1,4 +1,7 @@
 include:
+include:
+  - project: "ci/templates"
+    file: "npm/npm-setup-template.yml"
   - project: "ci/templates"
     file: "linting-template.yml"
   - project: "ci/templates"
