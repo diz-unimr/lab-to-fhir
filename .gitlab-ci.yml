@@ -1,5 +1,4 @@
 include:
-include:
   - project: "ci/templates"
     file: "npm/npm-setup-template.yml"
   - project: "ci/templates"

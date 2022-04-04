@@ -1,6 +1,7 @@
 package de.unimarburg.diz.labtofhir.configuration;
 
 import org.apache.kafka.common.serialization.Serde;
+import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.miracum.kafka.serializers.KafkaFhirSerde;
 import org.slf4j.Logger;
@@ -20,8 +21,10 @@ public class KafkaConfiguration {
     public StreamsBuilderFactoryBeanConfigurer streamsBuilderFactoryBeanCustomizer() {
         return factoryBean -> {
             factoryBean.setKafkaStreamsCustomizer(
-                kafkaStreams -> kafkaStreams.setUncaughtExceptionHandler((t, e) -> {
+                kafkaStreams -> kafkaStreams.setUncaughtExceptionHandler(e -> {
                     log.error("Uncaught exception occurred.", e);
+                    // default handler response
+                    return StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.SHUTDOWN_CLIENT;
                 }));
         };
     }
