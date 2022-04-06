@@ -1,6 +1,5 @@
 package de.unimarburg.diz.labtofhir.processor;
 
-import de.unimarburg.diz.FhirPseudonymizer;
 import de.unimarburg.diz.labtofhir.mapper.MiiLabReportMapper;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.model.MappingContainer;
@@ -23,7 +22,6 @@ import java.util.function.Function;
 public class LabToFhirProcessor {
 
     private final MiiLabReportMapper fhirMapper;
-    private final FhirPseudonymizer fhirPseudonymizer;
 
     private final Predicate<String, MappingContainer<LaboratoryReport, Bundle>> error =
         (k, v) -> v.getResultType() == MappingResult.ERROR;
@@ -32,34 +30,25 @@ public class LabToFhirProcessor {
     @Autowired
     public LabToFhirProcessor(
         MiiLabReportMapper fhirMapper,
-        FhirPseudonymizer fhirPseudonymizer,
         @Value("${spring.cloud.stream.bindings.process-out-0.error}") String errorTopic) {
         this.fhirMapper = fhirMapper;
-        this.fhirPseudonymizer = fhirPseudonymizer;
         this.errorTopic = errorTopic;
     }
 
     @Bean
     public Function<KStream<String, LaboratoryReport>, KStream<String, Bundle>> process() {
 
-        return report -> {
-            var stream =
-                report.mapValues(fhirMapper)
-                    .filter((k, v) -> v != null)
-                    .filter((k, v) -> v != null)
-                    .mapValues(x -> x.setValue(fhirPseudonymizer.process(x.getValue())));
-
-            return new KafkaStreamBrancher<String, MappingContainer<LaboratoryReport, Bundle>>()
+        return report ->
+            new KafkaStreamBrancher<String, MappingContainer<LaboratoryReport, Bundle>>()
                 // send error message to error topic
                 .branch(
                     error,
                     ks ->
                         ks.map((k, v) -> new KeyValue<>(v.getSource().getId(), v.getSource()))
                             .to(errorTopic, Produced.with(new JsonSerde<>(), new JsonSerde<>())))
-                .onTopOf(stream)
+                .onTopOf(report.mapValues(fhirMapper).filter((k, v) -> v != null))
                 // filter non errors and send to configured output topic
                 .filterNot(error)
                 .map((k, v) -> new KeyValue<>(v.getValue().getId(), v.getValue()));
-        };
     }
 }
