@@ -3,7 +3,6 @@ package de.unimarburg.diz.labtofhir;
 import de.unimarburg.diz.labtofhir.mapper.LoincMapper;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
-import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.PrimitiveType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,9 +27,6 @@ public class IntegrationTests extends TestContainerBase {
     @DynamicPropertySource
     private static void kafkaProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.kafka.bootstrapServers", kafka::getBootstrapServers);
-        registry.add("services.pseudonymizer.url", () -> "http://" +
-            pseudonymizerContainer.getHost() + ":" + pseudonymizerContainer.getFirstMappedPort()
-            + "/fhir");
     }
 
     @BeforeAll
@@ -48,11 +44,6 @@ public class IntegrationTests extends TestContainerBase {
         var resources = messages.stream().map(Bundle.class::cast)
             .flatMap(x -> x.getEntry().stream().map(BundleEntryComponent::getResource))
             .collect(Collectors.toList());
-
-        var pseudedCoding = new Coding(
-            "http://terminology.hl7.org/CodeSystem/v3-ObservationValue",
-            "PSEUDED",
-            "part of the resource is pseudonymized");
 
         assertThat(resources)
             .flatExtracting(r -> r.getMeta().getProfile()).extracting(PrimitiveType::getValue)

@@ -3,9 +3,10 @@ WORKDIR /home/gradle/src
 ENV GRADLE_USER_HOME /gradle
 
 COPY build.gradle settings.gradle ./
+RUN gradle clean build --no-daemon > /dev/null 2>&1 || true
 
 COPY --chown=gradle:gradle . .
-RUN gradle build -x integrationTest --info && \
+RUN gradle build -x integrationTest -x test --info && \
     gradle jacocoTestReport && \
     awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' build/jacoco/coverage.csv && \
     java -Djarmode=layertools -jar build/libs/*.jar extract
