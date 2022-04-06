@@ -1,12 +1,10 @@
 package de.unimarburg.diz.labtofhir;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import de.unimarburg.diz.labtofhir.mapper.LoincMapper;
-import java.util.stream.Collectors;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.PrimitiveType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +12,10 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
 @SpringBootTest(classes = {LabToFhirApplication.class, LoincMapper.class})
@@ -37,7 +39,7 @@ public class IntegrationTests extends TestContainerBase {
     }
 
     @Test
-    public void bundlesArePseudonymized() {
+    public void bundlesAreMapped() {
         var messages = KafkaHelper
             .getAtLeast(
                 KafkaHelper.createFhirTopicConsumer(kafka.getBootstrapServers()),
@@ -53,9 +55,12 @@ public class IntegrationTests extends TestContainerBase {
             "part of the resource is pseudonymized");
 
         assertThat(resources)
-            .extracting(r -> r.getMeta().getSecurityFirstRep())
-            .allSatisfy(
-                c -> assertThat(c).usingRecursiveComparison().isEqualTo(pseudedCoding));
+            .flatExtracting(r -> r.getMeta().getProfile()).extracting(PrimitiveType::getValue)
+            .containsOnly(
+                "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab",
+                "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab",
+                "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab"
+            ).usingRecursiveComparison();
     }
 
     @Test
