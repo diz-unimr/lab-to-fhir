@@ -11,7 +11,7 @@ RUN gradle build -x integrationTest --info && \
     awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' build/jacoco/coverage.csv && \
     java -Djarmode=layertools -jar build/libs/*.jar extract
 
-FROM gcr.io/distroless/java17:nonroot
+FROM gcr.io/distroless/java17
 COPY cert/RKA_Root_CA_2.cer /tmp/RKA_Root_CA_2.cer
 RUN [\
  "/usr/lib/jvm/java-17-openjdk-amd64/bin/keytool",\
