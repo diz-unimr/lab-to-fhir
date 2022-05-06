@@ -8,7 +8,8 @@ plugins {
 
 group = 'de.unimarburg.diz'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = "17"
+targetCompatibility = "17"
 
 repositories {
     mavenCentral()
@@ -40,10 +41,10 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 
 ext {
-    set('springBootVersion', "2.6.6")
-    set('springCloudVersion', "2020.0.4")
-    set("hapiFhirVersion", "5.7.1")
-    set('testContainersVersion', '1.16.3')
+    set('springBootVersion', "2.6.7")
+    set('springCloudVersion', "2021.0.2")
+    set("hapiFhirVersion", "5.7.2")
+    set('testContainersVersion', '1.17.1')
 }
 
 dependencies {
@@ -55,8 +56,8 @@ dependencies {
     // metrics
     implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
-    implementation 'io.micrometer:micrometer-registry-prometheus:1.8.4'
-    implementation 'io.micrometer:micrometer-core:1.8.4'
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.8.5'
+    implementation 'io.micrometer:micrometer-core:1.8.5'
 
     // mapper
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
@@ -72,7 +73,7 @@ dependencies {
 
     // unit tests
     testImplementation 'org.springframework.cloud:spring-cloud-stream'
-    testImplementation 'org.apache.kafka:kafka-streams-test-utils:2.8.0'
+    testImplementation 'org.apache.kafka:kafka-streams-test-utils:3.1.0'
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

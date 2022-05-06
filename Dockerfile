@@ -1,4 +1,4 @@
-FROM gradle:7.2-jdk11 AS build
+FROM gradle:7.3-jdk17 AS build
 WORKDIR /home/gradle/src
 ENV GRADLE_USER_HOME /gradle
 
@@ -11,10 +11,10 @@ RUN gradle build -x integrationTest --info && \
     awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' build/jacoco/coverage.csv && \
     java -Djarmode=layertools -jar build/libs/*.jar extract
 
-FROM gcr.io/distroless/java:11
+FROM gcr.io/distroless/java17:nonroot
 COPY cert/RKA_Root_CA_2.cer /tmp/RKA_Root_CA_2.cer
 RUN [\
- "/usr/lib/jvm/java-11-openjdk-amd64/bin/keytool",\
+ "/usr/lib/jvm/java-17-openjdk-amd64/bin/keytool",\
  "-import",\
  "-trustcacerts",\
  "-cacerts",\
