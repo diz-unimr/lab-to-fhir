@@ -11,7 +11,8 @@ RUN gradle build -x integrationTest --info && \
     awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' build/jacoco/coverage.csv && \
     java -Djarmode=layertools -jar build/libs/*.jar extract
 
-FROM gcr.io/distroless/java17:latest
+FROM gcr.io/distroless/java17:nonroot
+USER root
 COPY cert/RKA_Root_CA_2.cer /tmp/RKA_Root_CA_2.cer
 RUN [\
  "/usr/lib/jvm/java-17-openjdk-amd64/bin/keytool",\
@@ -26,13 +27,13 @@ RUN [\
  "-file",\
  "/tmp/RKA_Root_CA_2.cer"\
 ]
+USER nonroot
 WORKDIR /opt/lab-to-fhir
 COPY --from=build /home/gradle/src/dependencies/ ./
 COPY --from=build /home/gradle/src/spring-boot-loader/ ./
 COPY --from=build /home/gradle/src/application/ ./
 COPY HealthCheck.java .
 
-USER nonroot
 ARG GIT_REF=""
 ARG GIT_URL=""
 ARG BUILD_TIME=""
