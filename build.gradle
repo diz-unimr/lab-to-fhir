@@ -1,15 +1,14 @@
 plugins {
     id 'java'
     id 'jacoco'
-    id 'org.springframework.boot' version '2.6.6'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '2.7.2'
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
 }
 
 
 group = 'de.unimarburg.diz'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = "17"
-targetCompatibility = "17"
 
 repositories {
     mavenCentral()
@@ -41,8 +40,8 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 
 ext {
-    set('springBootVersion', "2.6.7")
-    set('springCloudVersion', "2021.0.2")
+    set('springBootVersion', "2.7.2")
+    set('springCloudVersion', "2021.0.3")
     set("hapiFhirVersion", "5.7.2")
     set('testContainersVersion', '1.17.1')
 }
@@ -56,8 +55,8 @@ dependencies {
     // metrics
     implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
-    implementation 'io.micrometer:micrometer-registry-prometheus:1.8.5'
-    implementation 'io.micrometer:micrometer-core:1.8.5'
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.9.2'
+    implementation 'io.micrometer:micrometer-core:1.9.2'
 
     // mapper
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
@@ -69,7 +68,6 @@ dependencies {
     implementation "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:$hapiFhirVersion"
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation:$hapiFhirVersion"
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation-resources-r4:$hapiFhirVersion"
-    implementation 'org.miracum:kafka-fhir-serializer:1.0.2'
 
     // unit tests
     testImplementation 'org.springframework.cloud:spring-cloud-stream'
@@ -80,7 +78,7 @@ dependencies {
     }
     testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
     testImplementation 'org.springframework.kafka:spring-kafka-test'
-    testImplementation 'org.assertj:assertj-core:3.22.0'
+    testImplementation 'org.assertj:assertj-core:3.23.1'
 
     // integration tests
     intTestImplementation 'org.springframework.kafka:spring-kafka-test:2.6.2'
@@ -91,7 +89,7 @@ dependencies {
     intTestImplementation "org.testcontainers:postgresql:$testContainersVersion"
     intTestImplementation "org.testcontainers:junit-jupiter:$testContainersVersion"
     intTestImplementation 'org.awaitility:awaitility'
-    intTestImplementation 'org.assertj:assertj-core:3.22.0'
+    intTestImplementation 'org.assertj:assertj-core:3.23.1'
 
 }
 
@@ -110,7 +108,7 @@ integrationTest {
 }
 
 jacoco {
-    toolVersion = "0.8.7"
+    toolVersion = "0.8.8"
     reportsDirectory = layout.buildDirectory.dir('jacoco-reports')
 }
 
