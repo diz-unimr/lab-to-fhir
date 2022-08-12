@@ -4,6 +4,8 @@ import de.unimarburg.diz.labtofhir.mapper.MiiLabReportMapper;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.model.MappingContainer;
 import de.unimarburg.diz.labtofhir.model.MappingResult;
+import java.util.function.Function;
+import org.apache.kafka.common.serialization.Serdes.IntegerSerde;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Predicate;
@@ -16,20 +18,17 @@ import org.springframework.kafka.support.KafkaStreamBrancher;
 import org.springframework.kafka.support.serializer.JsonSerde;
 import org.springframework.stereotype.Service;
 
-import java.util.function.Function;
-
 @Service
 public class LabToFhirProcessor {
 
     private final MiiLabReportMapper fhirMapper;
 
-    private final Predicate<String, MappingContainer<LaboratoryReport, Bundle>> error =
-        (k, v) -> v.getResultType() == MappingResult.ERROR;
+    private final Predicate<String, MappingContainer<LaboratoryReport, Bundle>> error = (k, v) ->
+        v.getResultType() == MappingResult.ERROR;
     private final String errorTopic;
 
     @Autowired
-    public LabToFhirProcessor(
-        MiiLabReportMapper fhirMapper,
+    public LabToFhirProcessor(MiiLabReportMapper fhirMapper,
         @Value("${spring.cloud.stream.bindings.process-out-0.error}") String errorTopic) {
         this.fhirMapper = fhirMapper;
         this.errorTopic = errorTopic;
@@ -38,17 +37,21 @@ public class LabToFhirProcessor {
     @Bean
     public Function<KStream<String, LaboratoryReport>, KStream<String, Bundle>> process() {
 
-        return report ->
-            new KafkaStreamBrancher<String, MappingContainer<LaboratoryReport, Bundle>>()
-                // send error message to error topic
-                .branch(
-                    error,
-                    ks ->
-                        ks.map((k, v) -> new KeyValue<>(v.getSource().getId(), v.getSource()))
-                            .to(errorTopic, Produced.with(new JsonSerde<>(), new JsonSerde<>())))
-                .onTopOf(report.mapValues(fhirMapper).filter((k, v) -> v != null))
-                // filter non errors and send to configured output topic
-                .filterNot(error)
-                .map((k, v) -> new KeyValue<>(v.getValue().getId(), v.getValue()));
+        return report -> new KafkaStreamBrancher<String, MappingContainer<LaboratoryReport, Bundle>>()
+            // send error message to error topic
+            .branch(error, ks -> ks
+                .map((k, v) -> new KeyValue<>(v
+                    .getSource()
+                    .getId(), v.getSource()))
+                .to(errorTopic,
+                    Produced.with(new IntegerSerde(), new JsonSerde<>(LaboratoryReport.class))))
+            .onTopOf(report
+                .mapValues(fhirMapper)
+                .filter((k, v) -> v != null))
+            // filter non errors and send to configured output topic
+            .filterNot(error)
+            .map((k, v) -> new KeyValue<>(v
+                .getValue()
+                .getId(), v.getValue()));
     }
 }

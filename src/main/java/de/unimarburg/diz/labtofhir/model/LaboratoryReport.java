@@ -88,15 +88,20 @@ public class LaboratoryReport implements Serializable {
     }
 
     private void sanitizeIdentifierValue(DiagnosticReport resource) {
-        var identifierValue = resource.getIdentifierFirstRep().getValue();
+        var identifierValue = resource
+            .getIdentifierFirstRep()
+            .getValue();
         var idPart = StringUtils.substringAfterLast(identifierValue, "_");
-        if (!idPart.isBlank()) {
-            resource.getIdentifierFirstRep().setValue(idPart);
+        if (StringUtils.isNotBlank(idPart)) {
+            resource
+                .getIdentifierFirstRep()
+                .setValue(idPart);
         }
     }
 
     public String getReportIdentifierValue() {
-        return resource.getIdentifierFirstRep()
+        return resource
+            .getIdentifierFirstRep()
             .getValue();
     }
 

@@ -1,9 +1,9 @@
 package de.unimarburg.diz.labtofhir.configuration;
 
+import de.unimarburg.diz.labtofhir.serializer.FhirSerde;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler;
-import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.miracum.kafka.serializers.KafkaFhirSerde;
+import org.hl7.fhir.r4.model.Bundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +30,7 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public Serde<IBaseResource> fhirSerde() {
-        return new KafkaFhirSerde();
+    public Serde<Bundle> bundleSerde() {
+        return new FhirSerde<>(Bundle.class);
     }
 }

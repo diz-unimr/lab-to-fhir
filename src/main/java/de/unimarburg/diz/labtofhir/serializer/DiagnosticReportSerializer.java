@@ -1,25 +1,26 @@
 package de.unimarburg.diz.labtofhir.serializer;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.parser.IParser;
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 
-public class DiagnosticReportSerializer extends JsonSerializer<DiagnosticReport> {
+public class DiagnosticReportSerializer extends StdSerializer<DiagnosticReport> {
 
-    private final IParser jsonParser;
+    private static final FhirContext fhirContext = FhirContext.forR4();
 
     public DiagnosticReportSerializer() {
-        jsonParser = FhirContext.forR4().newJsonParser();
+        super(DiagnosticReport.class);
     }
 
     @Override
-    public void serialize(DiagnosticReport value, JsonGenerator gen,
-        SerializerProvider serializers) throws IOException {
-        var valueString = jsonParser.encodeResourceToString(value);
+    public void serialize(DiagnosticReport value, JsonGenerator gen, SerializerProvider serializers)
+        throws IOException {
+        var valueString = fhirContext
+            .newJsonParser()
+            .encodeResourceToString(value);
         gen.writeString(valueString);
     }
 }
