@@ -1,9 +1,10 @@
-package de.unimarburg.diz.labtofhir.mapper;
+package de.unimarburg.diz.labtofhir.stream;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import com.google.common.hash.Hashing;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
+import de.unimarburg.diz.labtofhir.mapper.MiiLabReportMapper;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.model.MappingContainer;
 import de.unimarburg.diz.labtofhir.model.MetaCode;
@@ -45,12 +46,10 @@ import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
-public class MiiLabReportMapper implements
-    ValueMapper<LaboratoryReport, MappingContainer<LaboratoryReport, Bundle>> {
+public class LabReportMapper
+
+    implements ValueMapper<LaboratoryReport, MappingContainer<LaboratoryReport, Bundle>> {
 
     public static final Set<String> metaCodes = EnumSet
         .allOf(MetaCode.class)
@@ -67,8 +66,7 @@ public class MiiLabReportMapper implements
     private final Identifier identifierAssigner;
     //    private final LoincMapper loincMapper;
 
-    @Autowired
-    public MiiLabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties
+    public LabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties
         //        ,LoincMapper loincMapper
     ) {
         //        this.loincMapper = loincMapper;
@@ -134,7 +132,7 @@ public class MiiLabReportMapper implements
                     //                        .getSource()
                     //                        .getMetaCode()))
                     //                    .filter(Objects::nonNull)
-                    
+
                     // add meta code as identifier
                     .map(o -> o.addIdentifier(new Identifier()
                         .setSystem("https://fhir.diz.uni-marbrug.de/CodeSystem/LabReportMetaCode")
@@ -175,7 +173,7 @@ public class MiiLabReportMapper implements
         return mappingContainer;
     }
 
-    private MiiLabReportMapper processMetaResults(LaboratoryReport report) {
+    private LabReportMapper processMetaResults(LaboratoryReport report) {
         var metaObs = report
             .getObservations()
             .stream()
@@ -186,7 +184,7 @@ public class MiiLabReportMapper implements
                 .findFirst()
                 .orElse(new Coding())
                 .getCode()))
-            .collect(Collectors.toList());
+            .toList();
 
         if (!metaObs.isEmpty()) {
             // only one meta code currently supported
@@ -309,13 +307,13 @@ public class MiiLabReportMapper implements
             .setSource("#swisslab"));
 
         // identifier
-        obs.setIdentifier(List.of(new Identifier()
+        obs.addIdentifier(new Identifier()
                 .setType(identifierType)
                 .setSystem(fhirProperties
                     .getSystems()
                     .getObservationId())
                 .setValue(identifierValue)
-                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner())))
 
             // status
             .setStatus(source.getStatus())
@@ -417,7 +415,7 @@ public class MiiLabReportMapper implements
     }
 
 
-    public MiiLabReportMapper mapServiceRequest(DiagnosticReport report, Bundle bundle) {
+    public LabReportMapper mapServiceRequest(DiagnosticReport report, Bundle bundle) {
         // TODO clarify intention: using this as a wrapper resource in order to be conform to MII profiles
         var identifierType = new CodeableConcept(new Coding()
             .setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
@@ -579,4 +577,3 @@ public class MiiLabReportMapper implements
     }
 
 }
-

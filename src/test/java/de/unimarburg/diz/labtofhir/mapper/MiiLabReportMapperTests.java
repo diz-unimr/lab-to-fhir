@@ -183,9 +183,4 @@ public class MiiLabReportMapperTests {
         report.setObservations(List.of());
         return report;
     }
-
-    @Test
-    public void Bla() {
-        var validator = FhirProfileValidator.create(fhirContext);
-    }
 }
