@@ -1,7 +1,7 @@
 package de.unimarburg.diz.labtofhir.serde;
 
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
-import de.unimarburg.diz.labtofhir.model.LoincMapEntry;
+import de.unimarburg.diz.labtofhir.stream.LoincMap;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 public class Serializers {
@@ -10,7 +10,7 @@ public class Serializers {
 
     }
 
-    public static class LoincMapEntrySerializer extends JsonSerializer<LoincMapEntry> {
+    public static class LoincMapSerializer extends JsonSerializer<LoincMap> {
 
     }
 

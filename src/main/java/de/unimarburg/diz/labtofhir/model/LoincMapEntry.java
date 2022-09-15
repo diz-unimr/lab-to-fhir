@@ -11,6 +11,7 @@ public class LoincMapEntry {
     private boolean groupCode;
     private String source;
 
+
     public String getSwl() {
         return this.swl;
     }

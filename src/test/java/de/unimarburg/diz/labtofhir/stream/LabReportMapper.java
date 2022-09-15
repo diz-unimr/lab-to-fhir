@@ -133,9 +133,11 @@ public class LabReportMapper
                     //                        .getMetaCode()))
                     //                    .filter(Objects::nonNull)
 
-                    // add meta code as identifier
+                    // add meta code as additional coding
                     .map(o -> o.addIdentifier(new Identifier()
-                        .setSystem("https://fhir.diz.uni-marbrug.de/CodeSystem/LabReportMetaCode")
+                        // TODO get from FhirProperties
+                        .setSystem(
+                            "https://fhir.diz.uni-marbrug.de/CodeSystem/lab-report-meta-code")
                         .setValue(report.getMetaCode())))
                     // add to bundle
                     .peek(o -> addResourceToBundle(bundle, o))

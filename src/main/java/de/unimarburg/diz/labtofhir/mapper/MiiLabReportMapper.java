@@ -134,7 +134,7 @@ public class MiiLabReportMapper implements
                     //                        .getSource()
                     //                        .getMetaCode()))
                     //                    .filter(Objects::nonNull)
-                    
+
                     // add meta code as identifier
                     .map(o -> o.addIdentifier(new Identifier()
                         .setSystem("https://fhir.diz.uni-marbrug.de/CodeSystem/LabReportMetaCode")
@@ -186,7 +186,7 @@ public class MiiLabReportMapper implements
                 .findFirst()
                 .orElse(new Coding())
                 .getCode()))
-            .collect(Collectors.toList());
+            .toList();
 
         if (!metaObs.isEmpty()) {
             // only one meta code currently supported

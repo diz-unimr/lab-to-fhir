@@ -3,14 +3,11 @@ package de.unimarburg.diz.labtofhir.stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
-import de.unimarburg.diz.labtofhir.model.LoincMapEntry;
 import de.unimarburg.diz.labtofhir.serde.Serializers.LaboratoryReportSerializer;
-import de.unimarburg.diz.labtofhir.serde.Serializers.LoincMapEntrySerializer;
+import de.unimarburg.diz.labtofhir.serde.Serializers.LoincMapSerializer;
 import de.unimarburg.diz.labtofhir.serializer.FhirDeserializer;
-import java.io.IOException;
 import java.util.List;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -30,24 +27,30 @@ import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.ClassPathResource;
 
 public class LabLoincStreamTests {
 
     @Test
     public void observationIsLoincMapped() {
-        var builder = LabLoincStream.createStream(new StreamsBuilder());
+
+        // TODO inject properties
+        var fhirProperties = new FhirProperties();
+        fhirProperties.setGenerateNarrative(false);
+        fhirProperties
+            .getSystems()
+            .setLaboratorySystem("https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code");
+
+        var builder = LabLoincStream.createStream(new StreamsBuilder(), fhirProperties);
 
         try (var driver = new TopologyTestDriver(builder.build())) {
 
             var labTopic = driver.createInputTopic("lab", new IntegerSerializer(),
                 new LaboratoryReportSerializer());
             var loincTopic = driver.createInputTopic("loinc", new StringSerializer(),
-                new LoincMapEntrySerializer());
+                new LoincMapSerializer());
             var outputTopic = driver.createOutputTopic("lab-mapped", new StringDeserializer(),
                 new FhirDeserializer<>(Bundle.class));
 
-            //            var labReport = getTestReport();
             var labReport = new LaboratoryReport();
             labReport.setId(42);
             labReport.setResource(new DiagnosticReport()
@@ -58,15 +61,16 @@ public class LabLoincStreamTests {
             labReport.setObservations(List.of(new Observation()
                 .setCode(new CodeableConcept().setCoding(List.of(new Coding().setCode("NA"))))
                 .setValue(new Quantity(1))));
-            var loincMapEntry = new LoincMapEntry();
-            loincMapEntry.setSwl("NA");
-            loincMapEntry.setLoinc("2951-2");
-            loincMapEntry.setUcum("mmol/L");
+            var loincMap = new LoincMap()
+                .setSwl("NA")
+                .setEntries(List.of(new LoincMapEntry()
+                    .setLoinc("2951-2")
+                    .setUcum("mmol/L")));
 
-            loincTopic.pipeInput(loincMapEntry.getSwl(), loincMapEntry);
+            loincTopic.pipeInput(loincMap.getSwl(), loincMap);
             labTopic.pipeInput(labReport.getId(), labReport);
 
-            var produced = driver.producedTopicNames();
+            // driver.producedTopicNames();
 
             var outputRecords = outputTopic.readKeyValuesToList();
 
@@ -78,43 +82,22 @@ public class LabLoincStreamTests {
                     .getResourceType() == ResourceType.Observation)
                 .findAny()
                 .orElseThrow().value;
-            var obsCoding = mappedBundle
+
+            var obsCodes = mappedBundle
                 .getEntry()
                 .stream()
                 .map(BundleEntryComponent::getResource)
                 .filter(Observation.class::isInstance)
                 .map(Observation.class::cast)
-                .flatMap(c -> c
-                    .getCode()
-                    .getCoding()
-                    .stream())
-                .toList();
+                .map(Observation::getCode)
+                .findAny()
+                .orElseThrow();
 
-            // assert
-            //            assertThat(outputTopic.isEmpty()).isFalse();
-            assertThat(obsCoding
-                .stream()
-                .filter(x -> x
-                    .getCode()
-                    .equals(loincMapEntry.getLoinc()))
-                .findAny()).isNotEmpty();
+            // assert both codings exist
+            assertThat(obsCodes.hasCoding("http://loinc.org", "2951-2")).isTrue();
+            assertThat(obsCodes.hasCoding(fhirProperties
+                .getSystems()
+                .getLaboratorySystem(), "NA")).isTrue();
         }
     }
-
-    private LaboratoryReport getTestReport() {
-
-        var resource = new ClassPathResource("reports/test-input.json");
-
-        LaboratoryReport report;
-        try {
-            var objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            report = objectMapper.readValue(resource.getInputStream(), LaboratoryReport.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return report;
-    }
-
-
 }
