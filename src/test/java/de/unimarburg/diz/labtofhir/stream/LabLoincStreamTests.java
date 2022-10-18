@@ -5,9 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
+import de.unimarburg.diz.labtofhir.model.LoincMap;
+import de.unimarburg.diz.labtofhir.model.LoincMapEntry;
 import de.unimarburg.diz.labtofhir.serde.Serializers.LaboratoryReportSerializer;
 import de.unimarburg.diz.labtofhir.serde.Serializers.LoincMapSerializer;
 import de.unimarburg.diz.labtofhir.serializer.FhirDeserializer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -30,6 +34,7 @@ import org.junit.jupiter.api.Test;
 
 public class LabLoincStreamTests {
 
+    //    @Disabled("TODO remove")
     @Test
     public void observationIsLoincMapped() {
 
@@ -39,6 +44,10 @@ public class LabLoincStreamTests {
         fhirProperties
             .getSystems()
             .setLaboratorySystem("https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code");
+        fhirProperties
+            .getSystems()
+            .setLabReportMetaSystem(
+                "https://fhir.diz.uni-marbrug.de/CodeSystem/lab-report-meta-code");
 
         var builder = LabLoincStream.createStream(new StreamsBuilder(), fhirProperties);
 
@@ -54,23 +63,27 @@ public class LabLoincStreamTests {
             var labReport = new LaboratoryReport();
             labReport.setId(42);
             labReport.setResource(new DiagnosticReport()
+                .addIdentifier(new Identifier().setValue("report-id"))
                 .setSubject(
                     new Reference(new Patient().addIdentifier(new Identifier().setValue("1"))))
                 .setEncounter(
                     new Reference(new Encounter().addIdentifier(new Identifier().setValue("1")))));
-            labReport.setObservations(List.of(new Observation()
-                .setCode(new CodeableConcept().setCoding(List.of(new Coding().setCode("NA"))))
-                .setValue(new Quantity(1))));
+            var obsList = new ArrayList<Observation>();
+            obsList.add(new Observation()
+                .addIdentifier(new Identifier().setValue("obs-id"))
+                .setCode(new CodeableConcept().setCoding(Arrays.asList(new Coding().setCode("NA"))))
+                .setValue(new Quantity(1)));
+            labReport.setObservations(obsList);
             var loincMap = new LoincMap()
                 .setSwl("NA")
                 .setEntries(List.of(new LoincMapEntry()
                     .setLoinc("2951-2")
                     .setUcum("mmol/L")));
 
-            loincTopic.pipeInput(loincMap.getSwl(), loincMap);
             labTopic.pipeInput(labReport.getId(), labReport);
+            loincTopic.pipeInput(loincMap.getSwl(), loincMap);
 
-            // driver.producedTopicNames();
+            var bla = driver.producedTopicNames();
 
             var outputRecords = outputTopic.readKeyValuesToList();
 

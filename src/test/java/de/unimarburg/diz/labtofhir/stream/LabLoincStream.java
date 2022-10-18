@@ -2,7 +2,10 @@ package de.unimarburg.diz.labtofhir.stream;
 
 import ca.uhn.fhir.context.FhirContext;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
+import de.unimarburg.diz.labtofhir.mapper.LoincMapper;
+import de.unimarburg.diz.labtofhir.mapper.MiiLabReportMapper;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
+import de.unimarburg.diz.labtofhir.model.LoincMap;
 import de.unimarburg.diz.labtofhir.serde.JsonSerdes;
 import de.unimarburg.diz.labtofhir.serializer.FhirSerde;
 import java.util.List;
@@ -33,18 +36,15 @@ public class LabLoincStream {
             Consumed.with(Serdes.String(), JsonSerdes.LoincMapEntry()));
 
         labTable
-            .mapValues(new LabReportMapper(FhirContext.forR4(), fhirProperties))
+            .mapValues(new MiiLabReportMapper(FhirContext.forR4(), fhirProperties))
             .filter((k, v) -> v != null)
-            .map((k, v) -> new KeyValue<>(v
-                .getValue()
-                .getId(), v.getValue()))
-            //            .toTable(Named.as("aim-lab-mapped"))
+            .map((k, bundle) -> new KeyValue<>(bundle.getId(), bundle))
             // TODO remap key?
-            .flatMap(LabLoincStream::splitEntries)
+            //                    .flatMap(LabLoincStream::splitEntries)
             .toTable(Named.as("entries"),
                 Materialized.with(Serdes.String(), new FhirSerde<>(Bundle.class)))
             .leftJoin(loincTable, LabLoincStream.swlCodeExtractor(fhirProperties),
-                new LoincJoiner(fhirProperties))
+                new LoincMapper(fhirProperties))
             .toStream()
 
             .to("lab-mapped", Produced.with(Serdes.String(), new FhirSerde<>(Bundle.class)));
@@ -57,8 +57,6 @@ public class LabLoincStream {
             .getEntry()
             .stream()
             .map(e -> new KeyValue<>(e
-                .getResource()
-                .getResourceType() + e
                 .getResource()
                 .getId(), new Bundle()
                 .setType(BundleType.BATCH)
@@ -91,5 +89,4 @@ public class LabLoincStream {
                 .toString();
         };
     }
-
 }

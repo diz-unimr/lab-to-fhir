@@ -5,7 +5,6 @@ import ca.uhn.fhir.parser.IParser;
 import com.google.common.hash.Hashing;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
-import de.unimarburg.diz.labtofhir.model.MappingContainer;
 import de.unimarburg.diz.labtofhir.model.MetaCode;
 import de.unimarburg.diz.labtofhir.util.TimestampPrefixedId;
 import java.lang.reflect.InvocationTargetException;
@@ -41,16 +40,15 @@ import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MiiLabReportMapper implements
-    ValueMapper<LaboratoryReport, MappingContainer<LaboratoryReport, Bundle>> {
+public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle> {
 
     public static final Set<String> metaCodes = EnumSet
         .allOf(MetaCode.class)
@@ -65,13 +63,8 @@ public class MiiLabReportMapper implements
         .hashString(i, StandardCharsets.UTF_8)
         .toString();
     private final Identifier identifierAssigner;
-    //    private final LoincMapper loincMapper;
 
-    @Autowired
-    public MiiLabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties
-        //        ,LoincMapper loincMapper
-    ) {
-        //        this.loincMapper = loincMapper;
+    public MiiLabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties) {
         this.fhirProperties = fhirProperties;
         fhirParser = fhirContext.newJsonParser();
         identifierAssigner = new Identifier()
@@ -106,11 +99,9 @@ public class MiiLabReportMapper implements
     }
 
     @Override
-    public MappingContainer<LaboratoryReport, Bundle> apply(LaboratoryReport report) {
+    public Bundle apply(LaboratoryReport report) {
         log.debug("Mapping LaboratoryReport: {}", report);
         Bundle bundle = new Bundle();
-        var mappingContainer = new MappingContainer<>(report, bundle);
-
         try {
 
             // set meta information
@@ -130,14 +121,12 @@ public class MiiLabReportMapper implements
                     .stream()
                     // map observations
                     .map(this::mapObservation)
-                    //                    .map(o -> mapLoincUcum(o, mappingContainer
-                    //                        .getSource()
-                    //                        .getMetaCode()))
-                    //                    .filter(Objects::nonNull)
 
-                    // add meta code as identifier
+                    // add meta code as additional coding
                     .map(o -> o.addIdentifier(new Identifier()
-                        .setSystem("https://fhir.diz.uni-marbrug.de/CodeSystem/LabReportMetaCode")
+                        .setSystem(fhirProperties
+                            .getSystems()
+                            .getLabReportMetaSystem())
                         .setValue(report.getMetaCode())))
                     // add to bundle
                     .peek(o -> addResourceToBundle(bundle, o))
@@ -166,13 +155,13 @@ public class MiiLabReportMapper implements
             log.error("Mapping failed for LaboratoryReport with id {} and order number {}",
                 report.getId(), report.getReportIdentifierValue(), e);
             // TODO add metrics
-            return mappingContainer.withException(e);
+            return null;
         }
 
         log.debug("Mapped successfully to FHIR bundle: {}",
             fhirParser.encodeResourceToString(bundle));
 
-        return mappingContainer;
+        return bundle;
     }
 
     private MiiLabReportMapper processMetaResults(LaboratoryReport report) {
@@ -216,16 +205,6 @@ public class MiiLabReportMapper implements
             .forEach(this::setNarrative);
     }
 
-    private Observation mapLoincUcum(Observation obs, String metaCode) {
-
-        //        // map loinc code and ucum (if valueQuantity)
-        //        var result = loincMapper.mapCodeAndQuantity(obs, metaCode);
-        //        if (result != LoincMappingResult.SUCCESS) {
-        //            return null;
-        //        }
-
-        return obs;
-    }
 
     private DiagnosticReport mapDiagnosticReport(DiagnosticReport labReport, Bundle bundle) {
         var identifierType = new CodeableConcept().addCoding(new Coding()
@@ -309,13 +288,13 @@ public class MiiLabReportMapper implements
             .setSource("#swisslab"));
 
         // identifier
-        obs.setIdentifier(List.of(new Identifier()
+        obs.addIdentifier(new Identifier()
                 .setType(identifierType)
                 .setSystem(fhirProperties
                     .getSystems()
                     .getObservationId())
                 .setValue(identifierValue)
-                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner())))
 
             // status
             .setStatus(source.getStatus())
@@ -494,13 +473,39 @@ public class MiiLabReportMapper implements
 
         getBundleEntryResources(bundle, ServiceRequest.class).forEach(r -> r
             .getEncounter()
-            .setReference("Encounter/" + encounterId));
+            .setReference(getConditionalReference(ResourceType.Encounter, encounterId)));
         getBundleEntryResources(bundle, DiagnosticReport.class).forEach(r -> r
             .getEncounter()
-            .setReference("Encounter/" + encounterId));
+            .setReference(getConditionalReference(ResourceType.Encounter, encounterId)));
         getBundleEntryResources(bundle, Observation.class).forEach(o -> o
             .getEncounter()
-            .setReference("Encounter/" + encounterId));
+            .setReference(getConditionalReference(ResourceType.Encounter, encounterId)));
+    }
+
+    private String getConditionalReference(ResourceType resourceType, String id) {
+
+        String idSystem;
+        switch (resourceType) {
+            case Patient -> idSystem = fhirProperties
+                .getSystems()
+                .getPatientId();
+            case Encounter -> idSystem = fhirProperties
+                .getSystems()
+                .getEncounterId();
+            case ServiceRequest -> idSystem = fhirProperties
+                .getSystems()
+                .getServiceRequestId();
+            case DiagnosticReport -> idSystem = fhirProperties
+                .getSystems()
+                .getDiagnosticReportId();
+            case Observation -> idSystem = fhirProperties
+                .getSystems()
+                .getObservationId();
+            default -> throw new IllegalArgumentException(
+                "Unsupported resource type when building conditional reference");
+        }
+
+        return String.format("%s?identifier=%s|%s", resourceType, idSystem, id);
     }
 
     /**
@@ -528,13 +533,13 @@ public class MiiLabReportMapper implements
 
         getBundleEntryResources(bundle, ServiceRequest.class).forEach(r -> r
             .getSubject()
-            .setReference("Patient/" + patientId));
+            .setReference(getConditionalReference(ResourceType.Patient, patientId)));
         getBundleEntryResources(bundle, DiagnosticReport.class).forEach(r -> r
             .getSubject()
-            .setReference("Patient/" + patientId));
+            .setReference(getConditionalReference(ResourceType.Patient, patientId)));
         getBundleEntryResources(bundle, Observation.class).forEach(o -> o
             .getSubject()
-            .setReference("Patient/" + patientId));
+            .setReference(getConditionalReference(ResourceType.Patient, patientId)));
 
     }
 
@@ -573,9 +578,7 @@ public class MiiLabReportMapper implements
             .setResource(resource)
             .setRequest(new BundleEntryRequestComponent()
                 .setMethod(HTTPVerb.PUT)
-                .setUrl(resource
-                    .getResourceType()
-                    .name() + "/" + idElement));
+                .setUrl(getConditionalReference(resource.getResourceType(), idElement)));
     }
 
 }

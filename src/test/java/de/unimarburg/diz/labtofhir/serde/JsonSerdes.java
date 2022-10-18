@@ -1,7 +1,7 @@
 package de.unimarburg.diz.labtofhir.serde;
 
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
-import de.unimarburg.diz.labtofhir.stream.LoincMap;
+import de.unimarburg.diz.labtofhir.model.LoincMap;
 import org.springframework.kafka.support.serializer.JsonSerde;
 
 public class JsonSerdes {

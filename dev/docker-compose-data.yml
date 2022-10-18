@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+
+  lab-data-loader:
+    image: confluentinc/cp-kafkacat:7.0.1
+    entrypoint: ["/bin/bash", "-c"]
+    command: >
+      "kafkacat -b localhost:9092 -K: -t laboratory -P -l /data/lab-data.ndjson"
+    volumes:
+      - ./lab-data-single.ndjson:/data/lab-data.ndjson:ro
+    network_mode: host
+
+  loinc-data-loader:
+    image: confluentinc/cp-kafkacat:7.0.1
+    entrypoint: ["/bin/bash", "-c"]
+    command: >
+      "kafkacat -b localhost:9092 -K: -t loinc -P -l /data/loinc-data.ndjson"
+    volumes:
+      - ./loinc-data.ndjson:/data/loinc-data.ndjson:ro
+    network_mode: host

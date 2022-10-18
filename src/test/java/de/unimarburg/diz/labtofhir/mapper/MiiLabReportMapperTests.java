@@ -7,7 +7,6 @@ import ca.uhn.fhir.validation.ValidationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
-import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
 import java.io.IOException;
@@ -30,6 +29,7 @@ import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.StringType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -43,7 +43,7 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @ContextConfiguration(classes = {MiiLabReportMapper.class, FhirConfiguration.class,
-    MappingConfiguration.class, LoincMapper.class})
+    LoincMapper.class})
 @TestPropertySource(properties = {"mapping.loinc.local=mapping-swl-loinc.zip"})
 public class MiiLabReportMapperTests {
 
@@ -67,15 +67,14 @@ public class MiiLabReportMapperTests {
             .map(Arguments::of);
     }
 
+    @Disabled("TODO move validation to processor tests")
     @Test
     public void resourceTypeIsValid() throws IOException {
         var validator = FhirProfileValidator.create(fhirContext);
 
         var report = getTestReport(testReport, testObservations);
 
-        var bundle = mapper
-            .apply(report)
-            .getValue();
+        var bundle = mapper.apply(report);
 
         var validations = bundle
             .getEntry()
@@ -101,7 +100,6 @@ public class MiiLabReportMapperTests {
 
         // assert
         var obs = result
-            .getValue()
             .getEntry()
             .stream()
             .map(BundleEntryComponent::getResource)
@@ -162,9 +160,7 @@ public class MiiLabReportMapperTests {
         var result = mapper.apply(report);
 
         // assert entries
-        assertThat(result
-            .getValue()
-            .getEntry())
+        assertThat(result.getEntry())
             .extracting(BundleEntryComponent::getRequest)
             .allSatisfy(x -> assertThat(x)
                 .satisfies(y -> assertThat(y.getMethod()).isEqualTo(HTTPVerb.PUT))

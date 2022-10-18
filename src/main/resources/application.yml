@@ -16,9 +16,10 @@ spring:
       bindings:
         process-in-0:
           destination: laboratory
+        process-in-1:
+          destination: loinc
         process-out-0:
           destination: test-fhir-laboratory
-          error: test-fhir-laboratory-error
       kafka:
         streams:
           binder:
@@ -41,6 +42,7 @@ fhir:
     assignerCode: "UKMR"
     laboratorySystem: "https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code"
     laboratoryUnitSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-unit"
+    labReportMetaSystem: "https://fhir.diz.uni-marbrug.de/CodeSystem/lab-report-meta-code"
   generateNarrative: false
 
 mapping:

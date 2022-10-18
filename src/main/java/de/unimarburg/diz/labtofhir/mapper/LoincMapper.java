@@ -1,102 +1,102 @@
 package de.unimarburg.diz.labtofhir.mapper;
 
+import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LoincMap;
-import de.unimarburg.diz.labtofhir.model.LoincMappingResult;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Metrics;
-import java.io.IOException;
-import java.util.HashMap;
-import javax.annotation.PostConstruct;
+import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.streams.kstream.ValueJoiner;
+import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Observation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-
 @Service
-public class LoincMapper {
+public class LoincMapper implements ValueJoiner<Bundle, LoincMap, Bundle> {
 
-    private static final String MAPPING_ERROR_METRIC_NAME =
-        "labtofhir.loinc.mapping.errors.total";
-    private static final HashMap<String, Counter> metricsLookup = new HashMap<>();
+    private final FhirProperties fhirProperties;
 
-    private final static Logger log = LoggerFactory.getLogger(LoincMapper.class);
-    private final Resource mappingPackage;
-    private LoincMap loincMap;
-
-    @Autowired
-    public LoincMapper(
-        @Qualifier("mappingPackage")
-            Resource mappingPackage) {
-        this.mappingPackage = mappingPackage;
+    public LoincMapper(FhirProperties fhirProperties) {
+        this.fhirProperties = fhirProperties;
     }
 
-    private LoincMap getSwlLoincMapping(Resource mappingPackage) throws IOException {
-        return new LoincMap().with(mappingPackage, ',');
-    }
-
-    public LoincMappingResult mapCodeAndQuantity(Observation obs,
-        String metaCode) {
-
-        if (obs.hasValueQuantity()) {
-            // get code and mapping
-            var coding = obs.getCode().getCoding().get(0);
-            var entry = loincMap.get(coding.getCode(), metaCode);
-            if (entry == null) {
-                // TODO metric
-                log.warn(
-                    "LOINC mapping lookup failed. No values found for code: {} and meta code: {}",
-                    coding.getCode(), metaCode);
-
-                var codesDesc = coding.getCode();
-                if (metaCode != null) {
-                    codesDesc += "#" + metaCode;
-                }
-
-                metricsLookup.putIfAbsent(
-                    codesDesc,
-                    Metrics.globalRegistry
-                        .counter(MAPPING_ERROR_METRIC_NAME, "code", codesDesc));
-                metricsLookup.get(codesDesc).increment();
-
-                return LoincMappingResult.MISSING_CODE_MAPPING;
-            }
-
-            // map code
-            coding.setCode(entry.getLoinc())
-                .setSystem("http://loinc.org");
-
-            // map ucum in value and referenceRange(s)
-            obs.getValueQuantity().setUnit(entry.getUcum())
-                .setCode(entry.getUcum()).setSystem("http://unitsofmeasure.org");
-            obs.getReferenceRange().forEach(quantity -> {
-                if (quantity.hasLow()) {
-                    quantity.getLow().setUnit(entry.getUcum())
-                        .setCode(entry.getUcum()).setSystem("http://unitsofmeasure.org");
-                }
-                if (quantity.hasHigh()) {
-                    quantity.getHigh().setUnit(entry.getUcum())
-                        .setCode(entry.getUcum()).setSystem("http://unitsofmeasure.org");
-                }
-            });
-
-            return LoincMappingResult.SUCCESS;
+    @Override
+    public Bundle apply(Bundle bundle, LoincMap loincMap) {
+        if (loincMap == null) {
+            return bundle;
         }
 
-        // text value
-        // TODO map to CodeableConcept (i.e. Snomed code)
-        return LoincMappingResult.MISSING_QUANTITY;
+        bundle
+            .getEntry()
+            .stream()
+            .map(BundleEntryComponent::getResource)
+            .filter(Observation.class::isInstance)
+            .map(Observation.class::cast)
+            .filter(o -> o
+                .getCode()
+                .hasCoding(fhirProperties
+                    .getSystems()
+                    .getLaboratorySystem(), loincMap.getSwl()))
+            .forEach(o -> mapCodeAndQuantity(o, loincMap));
+        return bundle;
     }
 
-    @PostConstruct
-    private void initializeMap() throws Exception {
-        this.loincMap = getSwlLoincMapping(mappingPackage);
-    }
+    private void mapCodeAndQuantity(Observation obs, LoincMap loincMap) {
 
-    public boolean hasMappings() {
-        return loincMap.size() > 0;
+        if (!obs
+            .getCode()
+            .hasCoding(fhirProperties
+                .getSystems()
+                .getLaboratorySystem(), loincMap.getSwl()) || !obs.hasValueQuantity()) {
+            return;
+        }
+        // check if meta code exists
+        var meta = obs
+            .getCode()
+            .getCoding()
+            .stream()
+            .filter(c -> StringUtils.equals(c.getSystem(), fhirProperties
+                .getSystems()
+                .getLabReportMetaSystem()))
+            .map(Coding::getCode)
+            .filter(Objects::nonNull)
+            .findAny()
+            .orElse(null);
+        // get mapping
+        var entry = loincMap.entry(meta);
+
+        // add loinc coding
+        var loincCoding = new Coding()
+            .setSystem("http://loinc.org")
+            .setCode(entry.getLoinc());
+        obs
+            .getCode()
+            .getCoding()
+            .add(0, loincCoding);
+
+        // map ucum in value and referenceRange(s)
+        obs
+            .getValueQuantity()
+            .setUnit(entry.getUcum())
+            .setCode(entry.getUcum())
+            .setSystem("http://unitsofmeasure.org");
+        obs
+            .getReferenceRange()
+            .forEach(quantity -> {
+                if (quantity.hasLow()) {
+                    quantity
+                        .getLow()
+                        .setUnit(entry.getUcum())
+                        .setCode(entry.getUcum())
+                        .setSystem("http://unitsofmeasure.org");
+                }
+                if (quantity.hasHigh()) {
+                    quantity
+                        .getHigh()
+                        .setUnit(entry.getUcum())
+                        .setCode(entry.getUcum())
+                        .setSystem("http://unitsofmeasure.org");
+                }
+            });
     }
 }

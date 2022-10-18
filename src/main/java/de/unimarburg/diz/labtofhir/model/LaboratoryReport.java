@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import de.unimarburg.diz.labtofhir.serializer.DiagnosticReportDeserializer;
-import de.unimarburg.diz.labtofhir.serializer.DiagnosticReportSerializer;
+import de.unimarburg.diz.labtofhir.serializer.FhirSerializer;
 import de.unimarburg.diz.labtofhir.serializer.InstantDeserializer;
-import de.unimarburg.diz.labtofhir.serializer.ObservationStringConverter;
-import de.unimarburg.diz.labtofhir.serializer.StringObservationConverter;
+import de.unimarburg.diz.labtofhir.serializer.ObservationListDeserializer;
+import de.unimarburg.diz.labtofhir.serializer.ObservationListSerializer;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
@@ -25,14 +25,15 @@ public class LaboratoryReport implements Serializable {
     private List<Observation> observations;
     private String metaCode;
 
-    @JsonSerialize(contentConverter = ObservationStringConverter.class)
-    //    @JsonSerialize(using = ObservationListSerializer.class)
+    //    @JsonSerialize(contentUsing = FhirSerializer.class)
+    @JsonSerialize(using = ObservationListSerializer.class)
     public List<Observation> getObservations() {
         return observations;
     }
 
     @JsonSetter("fhir_obs")
-    @JsonDeserialize(contentConverter = StringObservationConverter.class)
+    @JsonDeserialize(using = ObservationListDeserializer.class)
+    //    @JsonDeserialize(using = ObservationListDeserializer.class)
     public void setObservations(List<Observation> observations) {
         this.observations = observations;
     }
@@ -76,7 +77,7 @@ public class LaboratoryReport implements Serializable {
         this.deleted = deleted;
     }
 
-    @JsonSerialize(using = DiagnosticReportSerializer.class)
+    @JsonSerialize(using = FhirSerializer.class)
     public DiagnosticReport getResource() {
         return resource;
     }
