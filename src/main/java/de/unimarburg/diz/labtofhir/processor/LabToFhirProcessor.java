@@ -7,6 +7,7 @@ import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.model.LoincMap;
 import de.unimarburg.diz.labtofhir.serializer.FhirSerde;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
@@ -79,16 +80,13 @@ public class LabToFhirProcessor {
                         .getLaboratorySystem(), x.getSystem()))
                     .findAny()
                     .map(Coding::getCode)
-                    .orElse(obs.getId()
-                        //                        UUID
-                        //                        .randomUUID()
-                        //                        .toString()
-                    );
+                    .orElse(UUID
+                        .randomUUID()
+                        .toString());
             }
-            return bundle.getId();
-            //                            UUID
-            //                            .randomUUID()
-            //                            .toString();
+            return UUID
+                .randomUUID()
+                .toString();
         };
     }
 }
