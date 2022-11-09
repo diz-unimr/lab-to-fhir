@@ -7,8 +7,8 @@ import org.hl7.fhir.r4.model.Resource;
 
 public class FhirSerde<T extends Resource> implements Serde<T> {
 
-    private Serializer<T> serializer;
-    private Deserializer<T> deserializer;
+    private final Serializer<T> serializer;
+    private final Deserializer<T> deserializer;
 
     public FhirSerde(Class<T> classType) {
         this.serializer = new FhirSerializer<T>();

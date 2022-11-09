@@ -8,8 +8,6 @@ include:
   - project: "ci/templates"
     file: "test/gradle-test-template.yml"
   - project: "ci/templates"
-    file: "test/gradle-integration-test-template.yml"
-  - project: "ci/templates"
     file: "semantic-release-template.yml"
   - project: "ci/templates"
     file: "badges/badges-template.yml"

@@ -1,61 +1,47 @@
 package de.unimarburg.diz.labtofhir.model;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
-import org.apache.commons.lang3.StringUtils;
-
 public class LoincMapEntry {
 
-    private String swl;
     private String loinc;
     private String ucum;
-    private boolean groupCode;
-    private String source;
+    private String meta;
 
-    public String getSwl() {
-        return this.swl;
+    private String version;
+
+    public String getVersion() {
+        return version;
     }
 
-    @JsonSetter("CODE")
-    public void setSwl(String swl) {
-        this.swl = swl;
+    public LoincMapEntry setVersion(String version) {
+        this.version = version;
+        return this;
     }
 
-    public String getSource() {
-        return source;
+    public String getMeta() {
+        return meta;
     }
 
-    @JsonSetter("QUELLE")
-    public void setSource(String source) {
-        if ("".equals(source)) {
-            source = null;
-        }
-        this.source = source;
+    public LoincMapEntry setMeta(String meta) {
+        this.meta = meta;
+        return this;
     }
 
     public String getLoinc() {
         return this.loinc;
     }
 
-    @JsonSetter("LOINC")
-    public void setLoinc(String loinc) {
+    public LoincMapEntry setLoinc(String loinc) {
         this.loinc = loinc;
+        return this;
     }
 
     public String getUcum() {
         return this.ucum;
     }
 
-    @JsonSetter("UCUM_WERT")
-    public void setUcum(String ucum) {
+    public LoincMapEntry setUcum(String ucum) {
         this.ucum = ucum;
+        return this;
     }
 
-    public boolean getGroupCode() {
-        return groupCode;
-    }
-
-    @JsonSetter("ETL_Staging")
-    public void setGroupCode(String groupCode) {
-        this.groupCode = StringUtils.equalsIgnoreCase("X", groupCode);
-    }
 }

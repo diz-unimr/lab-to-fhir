@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.hl7.fhir.r4.model.Observation;
 
 public class ObservationListSerializer extends JsonSerializer<List<Observation>> {
@@ -18,8 +19,10 @@ public class ObservationListSerializer extends JsonSerializer<List<Observation>>
 
         var jsonParser = fhirContext.newJsonParser();
 
-        var serialized = value.stream().map(jsonParser::encodeResourceToString)
-            .toArray(String[]::new);
-        gen.writeArray(serialized, 0, serialized.length);
+        var serialized = value
+            .stream()
+            .map(jsonParser::encodeResourceToString)
+            .collect(Collectors.joining(","));
+        gen.writeString("[" + serialized + "]");
     }
 }

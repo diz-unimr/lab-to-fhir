@@ -47,6 +47,17 @@ public class FhirProperties {
         @NotNull
         private String laboratoryUnitSystem;
 
+        @NotNull
+        private String labReportMetaSystem;
+
+        public String getLabReportMetaSystem() {
+            return labReportMetaSystem;
+        }
+
+        public void setLabReportMetaSystem(String labReportMetaSystem) {
+            this.labReportMetaSystem = labReportMetaSystem;
+        }
+
         public String getLaboratorySystem() {
             return laboratorySystem;
         }

@@ -13,7 +13,7 @@ services:
       ZOO_SERVERS: server.1=zoo:2888:3888;2181
 
   kafka:
-    image: confluentinc/cp-kafka:5.5.0
+    image: confluentinc/cp-kafka:7.2.1
     ports:
       - "9092:9092"
     environment:
@@ -30,98 +30,17 @@ services:
     depends_on:
       - zoo
 
-  kafka-schema-registry:
-    image: confluentinc/cp-schema-registry:5.5.0
-    ports:
-      - "8081:8081"
+
+  akhq:
+    image: tchiotludo/akhq:0.19.0
     environment:
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:19092
-      SCHEMA_REGISTRY_HOST_NAME: kafka-schema-registry
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            docker-kafka-server:
+              properties:
+                bootstrap.servers: "kafka:19092"
+    ports:
+      - "9000:8080"
     depends_on:
-      - zoo
       - kafka
-
-  kafka-rest-proxy:
-    image: confluentinc/cp-kafka-rest:5.5.0
-    ports:
-      - "8082:8082"
-    environment:
-      KAFKA_REST_LISTENERS: http://0.0.0.0:8082/
-      KAFKA_REST_SCHEMA_REGISTRY_URL: http://kafka-schema-registry:8081/
-      KAFKA_REST_HOST_NAME: kafka-rest-proxy
-      KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:19092
-      KAFKA_REST_CONSUMER_REQUEST_TIMEOUT_MS: 30000
-    depends_on:
-      - zoo
-      - kafka
-
-  kafka-connect:
-    image: confluentinc/cp-kafka-connect:5.5.0
-    ports:
-      - "8083:8083"
-    environment:
-      CONNECT_BOOTSTRAP_SERVERS: kafka:19092
-      CONNECT_REST_PORT: 8083
-      CONNECT_GROUP_ID: compose-connect-group
-      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
-      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
-      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
-      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
-      CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
-      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
-      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_PLUGIN_PATH: /usr/share/java
-    depends_on:
-      - zoo
-      - kafka
-      - kafka-rest-proxy
-
-  kafdrop:
-    image: obsidiandynamics/kafdrop:3.27.0
-    ports:
-      - "9000:9000"
-    environment:
-      KAFKA_BROKERCONNECT: "kafka:19092"
-      JVM_OPTS: "-Xms32M -Xmx64M"
-      SERVER_SERVLET_CONTEXTPATH: "/"
-
-  connect-lab:
-    image: byrnedo/alpine-curl:0.1.8
-    command: -i -X POST -H "Accept:application/json"
-      -H "Content-Type:application/json"
-      -d @/connect/connect-lab.json
-      --retry-connrefused
-      --connect-timeout 10
-      --max-time 100
-      --retry 10
-      --retry-delay 10
-      http://kafka-connect:8083/connectors/
-    volumes:
-      - ../connect/connect-lab.json:/connect/connect-lab.json:ro
-    depends_on:
-      - kafka-connect
-      - aim-db
-
-  # synedra AIM
-  aim-db:
-    image: postgres:11
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=aim
-      - POSTGRES_PASSWORD=test
-    volumes:
-      - ./initdb:/docker-entrypoint-initdb.d:ro
-
-  prometheus:
-    image: prom/prometheus:v2.25.0
-    network_mode: host
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
