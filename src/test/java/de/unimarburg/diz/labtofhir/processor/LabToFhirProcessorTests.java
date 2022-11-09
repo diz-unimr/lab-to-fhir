@@ -88,22 +88,22 @@ public class LabToFhirProcessorTests {
                 .setEncounter(
                     new Reference(new Encounter().addIdentifier(new Identifier().setValue("1")))));
 
-            labReport.setObservations(List.of(new Observation()
+            var obs = new Observation()
                 .addIdentifier(new Identifier().setValue("obs-id"))
                 .setCode(new CodeableConcept().setCoding(List.of(new Coding(fhirProperties
                     .getSystems()
                     .getLaboratorySystem(), "NA", null))))
-                .setValue(new Quantity(1))));
+                .setValue(new Quantity(1));
+            obs.setId("obs-id");
+            labReport.setObservations(List.of(obs));
             var loincMap = new LoincMap()
                 .setSwl("NA")
                 .setEntries(List.of(new LoincMapEntry()
                     .setLoinc("2951-2")
                     .setUcum("mmol/L")));
 
-            labTopic.pipeInput(labReport.getId(), labReport);
             loincTopic.pipeInput(loincMap.getSwl(), loincMap);
-
-            var bla = driver.producedTopicNames();
+            labTopic.pipeInput(labReport.getId(), labReport);
 
             // get record from output topic
             var outputRecords = outputTopic.readRecordsToList();
