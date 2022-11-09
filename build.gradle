@@ -16,40 +16,21 @@ repositories {
     maven { url 'https://repo.spring.io/milestone' }
 }
 
-sourceSets {
-    intTest {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-    }
-}
-
-configurations {
-    intTestImplementation.extendsFrom implementation
-    intTestRuntimeOnly.extendsFrom runtimeOnly
-}
-
-task integrationTest(type: Test) {
-    description = 'Runs integration tests.'
-    group = 'verification'
-
-    testClassesDirs = sourceSets.intTest.output.classesDirs
-    classpath = sourceSets.intTest.runtimeClasspath
-    shouldRunAfter test
-}
-
-check.dependsOn integrationTest
-
 ext {
     set('springBootVersion', "2.7.2")
     set('springCloudVersion', "2021.0.3")
     set("hapiFhirVersion", "5.7.2")
-    set('testContainersVersion', '1.17.1')
 }
 
 dependencies {
     // spring cloud stream kafka
     implementation 'org.springframework.cloud:spring-cloud-stream'
     implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
+    constraints {
+        implementation('org.scala-lang:scala-library:2.13.9') {
+            because 'CVE-2022-36944'
+        }
+    }
     implementation "org.springframework.kafka:spring-kafka"
 
     // metrics
@@ -58,12 +39,13 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus:1.9.2'
     implementation 'io.micrometer:micrometer-core:1.9.2'
 
-    // mapper
-//    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-//    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
-
     // hapi fhir
     implementation "ca.uhn.hapi.fhir:hapi-fhir-base:$hapiFhirVersion"
+    constraints {
+        implementation('org.apache.commons:commons-text:1.10.0') {
+            because 'CVE-2022-42889'
+        }
+    }
     implementation "ca.uhn.hapi.fhir:hapi-fhir-client:$hapiFhirVersion"
     implementation "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:$hapiFhirVersion"
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation:$hapiFhirVersion"
@@ -80,17 +62,6 @@ dependencies {
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.assertj:assertj-core:3.23.1'
 
-    // integration tests
-    intTestImplementation 'org.springframework.kafka:spring-kafka-test:2.6.2'
-    intTestImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    intTestImplementation "org.testcontainers:kafka:$testContainersVersion"
-    intTestImplementation "org.testcontainers:postgresql:$testContainersVersion"
-    intTestImplementation "org.testcontainers:junit-jupiter:$testContainersVersion"
-    intTestImplementation 'org.awaitility:awaitility'
-    intTestImplementation 'org.assertj:assertj-core:3.23.1'
-
 }
 
 dependencyManagement {
@@ -100,10 +71,6 @@ dependencyManagement {
 }
 
 test {
-    useJUnitPlatform()
-}
-
-integrationTest {
     useJUnitPlatform()
 }
 

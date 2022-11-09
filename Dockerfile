@@ -6,28 +6,13 @@ COPY build.gradle settings.gradle ./
 RUN gradle clean build --no-daemon > /dev/null 2>&1 || true
 
 COPY --chown=gradle:gradle . .
-RUN gradle build -x integrationTest --info && \
+RUN gradle build --info && \
     gradle jacocoTestReport && \
     awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' build/jacoco/coverage.csv && \
     java -Djarmode=layertools -jar build/libs/*.jar extract
 
 FROM gcr.io/distroless/java17:nonroot
-USER root
-COPY cert/RKA_Root_CA_2.cer /tmp/RKA_Root_CA_2.cer
-RUN [\
- "/usr/lib/jvm/java-17-openjdk-amd64/bin/keytool",\
- "-import",\
- "-trustcacerts",\
- "-cacerts",\
- "-noprompt",\
- "-storepass",\
- "changeit",\
- "-alias",\
- "rka_root_ca_2",\
- "-file",\
- "/tmp/RKA_Root_CA_2.cer"\
-]
-USER nonroot
+
 WORKDIR /opt/lab-to-fhir
 COPY --from=build /home/gradle/src/dependencies/ ./
 COPY --from=build /home/gradle/src/spring-boot-loader/ ./
