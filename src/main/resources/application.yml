@@ -44,19 +44,6 @@ fhir:
     labReportMetaSystem: "https://fhir.diz.uni-marbrug.de/CodeSystem/lab-report-meta-code"
   generateNarrative: false
 
-mapping:
-  loinc:
-    version: "9fa7de13"
-    credentials:
-      user:
-      password:
-    proxy:
-    local:
-
-
-services:
-  pseudonymizer:
-    url: "http://localhost:5000/fhir"
 
 server:
   port: 8080
