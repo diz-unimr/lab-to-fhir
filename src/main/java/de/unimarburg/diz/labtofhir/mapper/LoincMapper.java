@@ -9,12 +9,15 @@ import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Observation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LoincMapper implements ValueJoiner<Bundle, LoincMap, Bundle> {
 
     private final FhirProperties fhirProperties;
+    private final static Logger log = LoggerFactory.getLogger(LoincMapper.class);
 
     public LoincMapper(FhirProperties fhirProperties) {
         this.fhirProperties = fhirProperties;
@@ -62,8 +65,13 @@ public class LoincMapper implements ValueJoiner<Bundle, LoincMap, Bundle> {
             .filter(Objects::nonNull)
             .findAny()
             .orElse(null);
+        if (meta != null) {
+            log.debug("Meta code '{}' found for {}", meta, loincMap.getSwl());
+        }
+
         // get mapping
         var entry = loincMap.entry(meta);
+        log.debug("Found mapping for code: {} with LOINC: {}", loincMap.getSwl(), entry.getLoinc());
 
         // add loinc coding
         var loincCoding = new Coding()

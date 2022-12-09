@@ -100,7 +100,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
     @Override
     public Bundle apply(LaboratoryReport report) {
-        log.debug("Mapping LaboratoryReport: {}", report);
+        log.debug("Mapping LaboratoryReport with id:{} and order number:{}", report.getId(),
+            report.getReportIdentifierValue());
         Bundle bundle = new Bundle();
         try {
 
@@ -158,8 +159,9 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
             return null;
         }
 
-        log.debug("Mapped successfully to FHIR bundle: {}",
-            fhirParser.encodeResourceToString(bundle));
+        log.debug("Mapped successfully to FHIR bundle: id:{}, order number{}", report.getId(),
+            report.getReportIdentifierValue());
+        log.trace("FHIR bundle: {}", fhirParser.encodeResourceToString(bundle));
 
         return bundle;
     }
