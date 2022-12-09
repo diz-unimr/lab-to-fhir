@@ -71,6 +71,10 @@ public class LoincMapper implements ValueJoiner<Bundle, LoincMap, Bundle> {
 
         // get mapping
         var entry = loincMap.entry(meta);
+        if (entry == null) {
+            log.warn("No mapping entry found for code: {} and meta: {}", loincMap.getSwl(), meta);
+            return;
+        }
         log.debug("Found mapping for code: {} with LOINC: {}", loincMap.getSwl(), entry.getLoinc());
 
         // add loinc coding
