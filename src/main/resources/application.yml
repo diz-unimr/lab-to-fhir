@@ -15,11 +15,11 @@ spring:
       function.definition: process
       bindings:
         process-in-0:
-          destination: laboratory
+          destination: ${INPUT_TOPIC:aim-lab}
         process-in-1:
-          destination: loinc
+          destination: ${MAPPING_TOPIC:loinc}
         process-out-0:
-          destination: test-fhir-laboratory
+          destination: ${OUTPUT_TOPIC:lab-fhir}
       kafka:
         streams:
           binder:
