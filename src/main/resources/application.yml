@@ -44,6 +44,7 @@ fhir:
     labReportMetaSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/lab-report-meta-code"
   generateNarrative: false
 
+app.kafka.rocksdb.level-compaction: true
 
 server:
   port: 8080
