@@ -29,6 +29,7 @@ spring:
               max.request.size: 5242880
               spring.json.use.type.headers: 'false'
             replicationFactor: 3
+            minPartitionCount: 3
 
 fhir:
   systems:
@@ -44,7 +45,7 @@ fhir:
     labReportMetaSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/lab-report-meta-code"
   generateNarrative: false
 
-app.kafka.rocksdb.level-compaction: true
+app.kafka.rocksdb.level-compaction: false
 
 server:
   port: 8080
