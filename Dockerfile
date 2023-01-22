@@ -13,6 +13,24 @@ RUN gradle build --info && \
 
 FROM gcr.io/distroless/java17:nonroot
 
+USER root
+COPY cert/RKA_Root_CA_2.cer /tmp/RKA_Root_CA_2.cer
+RUN [\
+ "/usr/lib/jvm/java-17-openjdk-amd64/bin/keytool",\
+ "-import",\
+ "-trustcacerts",\
+ "-cacerts",\
+ "-noprompt",\
+ "-storepass",\
+ "changeit",\
+ "-alias",\
+ "rka_root_ca_2",\
+ "-file",\
+ "/tmp/RKA_Root_CA_2.cer"\
+]
+USER nonroot
+
+
 WORKDIR /opt/lab-to-fhir
 COPY --from=build /home/gradle/src/dependencies/ ./
 COPY --from=build /home/gradle/src/spring-boot-loader/ ./

@@ -51,6 +51,9 @@ dependencies {
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation:$hapiFhirVersion"
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation-resources-r4:$hapiFhirVersion"
 
+    // mapper
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
+
     // unit tests
     testImplementation 'org.springframework.cloud:spring-cloud-stream'
     testImplementation 'org.apache.kafka:kafka-streams-test-utils:3.1.0'

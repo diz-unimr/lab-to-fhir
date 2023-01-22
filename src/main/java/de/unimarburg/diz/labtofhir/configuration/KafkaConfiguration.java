@@ -22,7 +22,7 @@ public class KafkaConfiguration {
 
     @Bean
     public StreamsBuilderFactoryBeanConfigurer streamsBuilderFactoryBeanCustomizer(
-        @Value("${app.kafka.rocksdb.level-compaction}") boolean enableLevelCompaction) {
+        @Value("${app.kafka.rocksdb.level-compaction:false}") boolean enableLevelCompaction) {
         return factoryBean -> {
             factoryBean.setKafkaStreamsCustomizer(
                 kafkaStreams -> kafkaStreams.setUncaughtExceptionHandler(e -> {

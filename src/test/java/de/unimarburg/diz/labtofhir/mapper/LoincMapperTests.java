@@ -4,12 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
+import de.unimarburg.diz.labtofhir.mapper.LoincMapperTests.LoincMapperTestConfiguration;
 import de.unimarburg.diz.labtofhir.model.LoincMap;
 import de.unimarburg.diz.labtofhir.model.LoincMapEntry;
-import java.util.List;
 import java.util.stream.Stream;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Observation;
@@ -22,17 +20,29 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 
 
-@SpringBootTest(classes = {LoincMapper.class, FhirConfiguration.class})
+@SpringBootTest(classes = {FhirConfiguration.class, LoincMapperTestConfiguration.class})
 public class LoincMapperTests {
 
+    private static LoincMap testLoincMap;
     @Autowired
     private LoincMapper loincMapper;
 
     @Autowired
     private FhirProperties fhirProperties;
-    private static LoincMap testLoincMap;
+    //    private static LoincMap testLoincMap;
+
+    @TestConfiguration
+    static class LoincMapperTestConfiguration {
+
+        @Bean
+        public LoincMapper loincMapper(FhirProperties fhirProperties) {
+            return new LoincMapper(fhirProperties, testLoincMap);
+        }
+    }
 
     private static Stream<Arguments> mapCodeAndQuantityProvidesMetaCodeArguments() {
         return Stream.of(Arguments.of("TEST", null, "1000-0"),
@@ -43,17 +53,19 @@ public class LoincMapperTests {
 
     @BeforeAll
     public static void init() {
-        testLoincMap = new LoincMap()
-            .setSwl("TEST")
-            .setEntries(List.of(new LoincMapEntry()
-                .setLoinc("1000-0")
-                .setUcum("mmol/L"), new LoincMapEntry()
-                .setMeta("meta1")
-                .setLoinc("1000-1")
-                .setUcum("mmol/L"), new LoincMapEntry()
-                .setMeta("meta2")
-                .setLoinc("1000-2")
-                .setUcum("mmol/L")));
+        testLoincMap = new LoincMap();
+        var testCode = "TEST";
+        testLoincMap.put(testCode, new LoincMapEntry()
+            .setLoinc("1000-0")
+            .setUcum("mmol/L"));
+        testLoincMap.put(testCode, new LoincMapEntry()
+            .setMeta("meta1")
+            .setLoinc("1000-1")
+            .setUcum("mmol/L"));
+        testLoincMap.put(testCode, new LoincMapEntry()
+            .setMeta("meta2")
+            .setLoinc("1000-2")
+            .setUcum("mmol/L"));
     }
 
 
@@ -73,8 +85,7 @@ public class LoincMapperTests {
                     .getSystems()
                     .getLabReportMetaSystem(), metaCode, null)))
             .setValue(new Quantity());
-        loincMapper.apply(new Bundle().addEntry(new BundleEntryComponent().setResource(obs)),
-            testLoincMap);
+        loincMapper.map(obs, metaCode);
 
         assertThat(obs
             .getCode()
@@ -94,16 +105,9 @@ public class LoincMapperTests {
             .addReferenceRange(new ObservationReferenceRangeComponent()
                 .setLow(oldUnitQuantity)
                 .setHigh(oldUnitQuantity));
-        //        var loincMap = new LoincMap()
-        //            .setSwl("TEST")
-        //            .setEntries(List.of(new LoincMapEntry()
-        //                .setLoinc("1000-1")
-        //                .setUcum("mmol/L")));
 
         // act
-        loincMapper.apply(
-            new Bundle().setEntry(List.of(new BundleEntryComponent().setResource(obs))),
-            testLoincMap);
+        loincMapper.map(obs, null);
 
         // assert value has new unit and code
         assertThat(obs.getValueQuantity())

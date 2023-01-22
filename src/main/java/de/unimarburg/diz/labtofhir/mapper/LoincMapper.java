@@ -2,80 +2,76 @@ package de.unimarburg.diz.labtofhir.mapper;
 
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LoincMap;
-import java.util.Objects;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.kafka.streams.kstream.ValueJoiner;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
+import de.unimarburg.diz.labtofhir.model.LoincMapEntry;
+import java.io.IOException;
+import javax.annotation.PostConstruct;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Observation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoincMapper implements ValueJoiner<Bundle, LoincMap, Bundle> {
+public class LoincMapper {
 
     private final FhirProperties fhirProperties;
+    private final Resource mappingPackage;
     private final static Logger log = LoggerFactory.getLogger(LoincMapper.class);
+    private LoincMap loincMap;
 
-    public LoincMapper(FhirProperties fhirProperties) {
+    @Autowired
+    public LoincMapper(FhirProperties fhirProperties,
+        @Qualifier("mappingPackage") Resource mappingPackage) {
+        this.mappingPackage = mappingPackage;
         this.fhirProperties = fhirProperties;
     }
 
-    @Override
-    public Bundle apply(Bundle bundle, LoincMap loincMap) {
-        if (loincMap == null) {
-            return bundle;
-        }
-
-        bundle
-            .getEntry()
-            .stream()
-            .map(BundleEntryComponent::getResource)
-            .filter(Observation.class::isInstance)
-            .map(Observation.class::cast)
-            .filter(o -> o
-                .getCode()
-                .hasCoding(fhirProperties
-                    .getSystems()
-                    .getLaboratorySystem(), loincMap.getSwl()))
-            .forEach(o -> mapCodeAndQuantity(o, loincMap));
-        return bundle;
+    public LoincMapper(FhirProperties fhirProperties, LoincMap loincMap) {
+        this.loincMap = loincMap;
+        this.mappingPackage = null;
+        this.fhirProperties = fhirProperties;
     }
 
-    private void mapCodeAndQuantity(Observation obs, LoincMap loincMap) {
+    private LoincMap getSwlLoincMapping(Resource mappingPackage) throws IOException {
+        return new LoincMap().with(mappingPackage, ',');
+    }
 
-        if (!obs
-            .getCode()
-            .hasCoding(fhirProperties
-                .getSystems()
-                .getLaboratorySystem(), loincMap.getSwl()) || !obs.hasValueQuantity()) {
-            return;
+    @PostConstruct
+    private void initializeMap() throws Exception {
+        if (this.mappingPackage != null) {
+            this.loincMap = getSwlLoincMapping(mappingPackage);
         }
-        // check if meta code exists
-        var meta = obs
+    }
+
+    public Observation map(Observation obs, String metaCode) {
+        var swlCode = obs
             .getCode()
             .getCoding()
             .stream()
-            .filter(c -> StringUtils.equals(c.getSystem(), fhirProperties
-                .getSystems()
-                .getLabReportMetaSystem()))
+            .filter(c -> c
+                .getSystem()
+                .equals(fhirProperties
+                    .getSystems()
+                    .getLaboratorySystem()))
             .map(Coding::getCode)
-            .filter(Objects::nonNull)
-            .findAny()
-            .orElse(null);
-        if (meta != null) {
-            log.debug("Meta code '{}' found for {}", meta, loincMap.getSwl());
+            .findAny();
+        if (swlCode.isEmpty()) {
+            return obs;
+        }
+        var mapping = loincMap.get(swlCode.get(), metaCode);
+        if (mapping == null) {
+            return obs;
         }
 
-        // get mapping
-        var entry = loincMap.entry(meta);
-        if (entry == null) {
-            log.warn("No mapping entry found for code: {} and meta: {}", loincMap.getSwl(), meta);
-            return;
-        }
-        log.debug("Found mapping for code: {} with LOINC: {}", loincMap.getSwl(), entry.getLoinc());
+        return map(obs, mapping);
+    }
+
+    private Observation map(Observation obs, LoincMapEntry entry) {
+
+        log.debug("Found mapping for code: {} with LOINC: {}", entry.getSwl(), entry.getLoinc());
 
         // add loinc coding
         var loincCoding = new Coding()
@@ -110,5 +106,7 @@ public class LoincMapper implements ValueJoiner<Bundle, LoincMap, Bundle> {
                         .setSystem("http://unitsofmeasure.org");
                 }
             });
+
+        return obs;
     }
 }

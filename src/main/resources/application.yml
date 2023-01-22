@@ -12,12 +12,10 @@ spring:
 
   cloud:
     stream:
-      function.definition: process
+      #      function.definition: process
       bindings:
         process-in-0:
           destination: ${INPUT_TOPIC:aim-lab}
-        process-in-1:
-          destination: ${MAPPING_TOPIC:loinc}
         process-out-0:
           destination: ${OUTPUT_TOPIC:lab-fhir}
       kafka:
@@ -45,7 +43,15 @@ fhir:
     labReportMetaSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/lab-report-meta-code"
   generateNarrative: false
 
-app.kafka.rocksdb.level-compaction: false
+mapping:
+  loinc:
+    version: "602baef6"
+    credentials:
+      user:
+      password:
+    proxy:
+    local:
+
 
 server:
   port: 8080

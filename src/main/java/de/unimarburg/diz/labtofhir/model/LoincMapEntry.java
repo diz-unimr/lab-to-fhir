@@ -1,27 +1,34 @@
 package de.unimarburg.diz.labtofhir.model;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import org.apache.commons.lang3.StringUtils;
+
 public class LoincMapEntry {
 
+    private String swl;
     private String loinc;
     private String ucum;
+    private boolean groupCode;
     private String meta;
 
-    private String version;
-
-    public String getVersion() {
-        return version;
+    public String getSwl() {
+        return this.swl;
     }
 
-    public LoincMapEntry setVersion(String version) {
-        this.version = version;
-        return this;
+    @JsonSetter("CODE")
+    public void setSwl(String swl) {
+        this.swl = swl;
     }
 
     public String getMeta() {
         return meta;
     }
 
+    @JsonSetter("QUELLE")
     public LoincMapEntry setMeta(String meta) {
+        if ("".equals(meta)) {
+            meta = null;
+        }
         this.meta = meta;
         return this;
     }
@@ -30,6 +37,7 @@ public class LoincMapEntry {
         return this.loinc;
     }
 
+    @JsonSetter("LOINC")
     public LoincMapEntry setLoinc(String loinc) {
         this.loinc = loinc;
         return this;
@@ -39,8 +47,19 @@ public class LoincMapEntry {
         return this.ucum;
     }
 
+    @JsonSetter("UCUM_WERT")
     public LoincMapEntry setUcum(String ucum) {
         this.ucum = ucum;
+        return this;
+    }
+
+    public boolean getGroupCode() {
+        return groupCode;
+    }
+
+    @JsonSetter("ETL_Staging")
+    public LoincMapEntry setGroupCode(String groupCode) {
+        this.groupCode = StringUtils.equalsIgnoreCase("X", groupCode);
         return this;
     }
 
