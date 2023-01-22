@@ -1,4 +1,4 @@
-FROM gradle:7.3-jdk17 AS build
+FROM gradle:7.4-jdk17 AS build
 WORKDIR /home/gradle/src
 ENV GRADLE_USER_HOME /gradle
 
@@ -12,6 +12,24 @@ RUN gradle build --info && \
     java -Djarmode=layertools -jar build/libs/*.jar extract
 
 FROM gcr.io/distroless/java17:nonroot
+
+USER root
+COPY cert/RKA_Root_CA_2.cer /tmp/RKA_Root_CA_2.cer
+RUN [\
+ "/usr/lib/jvm/java-17-openjdk-amd64/bin/keytool",\
+ "-import",\
+ "-trustcacerts",\
+ "-cacerts",\
+ "-noprompt",\
+ "-storepass",\
+ "changeit",\
+ "-alias",\
+ "rka_root_ca_2",\
+ "-file",\
+ "/tmp/RKA_Root_CA_2.cer"\
+]
+USER nonroot
+
 
 WORKDIR /opt/lab-to-fhir
 COPY --from=build /home/gradle/src/dependencies/ ./

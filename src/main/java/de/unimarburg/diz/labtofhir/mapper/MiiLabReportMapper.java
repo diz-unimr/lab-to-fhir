@@ -63,9 +63,12 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         .hashString(i, StandardCharsets.UTF_8)
         .toString();
     private final Identifier identifierAssigner;
+    private final LoincMapper loincMapper;
 
-    public MiiLabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties) {
+    public MiiLabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties,
+        LoincMapper loincMapper) {
         this.fhirProperties = fhirProperties;
+        this.loincMapper = loincMapper;
         fhirParser = fhirContext.newJsonParser();
         identifierAssigner = new Identifier()
             .setSystem(fhirProperties
@@ -122,6 +125,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     .stream()
                     // map observations
                     .map(this::mapObservation)
+                    .map(o -> loincMapper.map(o, report.getMetaCode()))
 
                     // add meta code as additional coding
                     .map(o -> o.addIdentifier(new Identifier()

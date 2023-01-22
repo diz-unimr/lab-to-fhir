@@ -7,6 +7,7 @@ import ca.uhn.fhir.validation.ValidationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
+import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
 import java.io.IOException;
@@ -38,12 +39,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
-@SpringBootTest
-@ContextConfiguration(classes = {MiiLabReportMapper.class, FhirConfiguration.class,
-    LoincMapper.class})
+@SpringBootTest(classes = {MiiLabReportMapper.class, FhirConfiguration.class, LoincMapper.class,
+    MappingConfiguration.class})
 @TestPropertySource(properties = {"mapping.loinc.local=mapping-swl-loinc.zip"})
 public class MiiLabReportMapperTests {
 
@@ -52,7 +51,6 @@ public class MiiLabReportMapperTests {
     @Value("classpath:reports/1-diagnostic-report.json")
     Resource testReport;
 
-    //  @Value("classpath:obs-value-null.json")
     @Value("classpath:reports/1-observations.json")
     Resource testObservations;
 
