@@ -6,3 +6,4 @@ gradle/
 dev/
 deploy/
 connect/
+**/application-dev.yml

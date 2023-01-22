@@ -1,8 +1,8 @@
 plugins {
     id 'java'
     id 'jacoco'
-    id 'org.springframework.boot' version '2.7.2'
-    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+    id 'org.springframework.boot' version '3.0.2'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 
@@ -17,8 +17,8 @@ repositories {
 }
 
 ext {
-    set('springBootVersion', "2.7.2")
-    set('springCloudVersion', "2021.0.3")
+    set('springBootVersion', "3.0.2")
+    set('springCloudVersion', "2022.0.0")
     set("hapiFhirVersion", "5.7.2")
 }
 
@@ -26,11 +26,11 @@ dependencies {
     // spring cloud stream kafka
     implementation 'org.springframework.cloud:spring-cloud-stream'
     implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
-    constraints {
-        implementation('org.scala-lang:scala-library:2.13.9') {
-            because 'CVE-2022-36944'
-        }
-    }
+//    constraints {
+//        implementation('org.scala-lang:scala-library:2.13.9') {
+//            because 'CVE-2022-36944'
+//        }
+//    }
     implementation "org.springframework.kafka:spring-kafka"
 
     // metrics
@@ -56,14 +56,13 @@ dependencies {
 
     // unit tests
     testImplementation 'org.springframework.cloud:spring-cloud-stream'
-    testImplementation 'org.apache.kafka:kafka-streams-test-utils:3.1.0'
+    testImplementation 'org.apache.kafka:kafka-streams-test-utils'
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-    testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
     testImplementation 'org.springframework.kafka:spring-kafka-test'
-    testImplementation 'org.assertj:assertj-core:3.23.1'
+    testImplementation 'org.assertj:assertj-core'
 
 }
 

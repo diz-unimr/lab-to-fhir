@@ -92,6 +92,9 @@ public class LabToFhirProcessorTests {
             obs.setId("obs-id");
             labReport.setObservations(List.of(obs));
 
+            // create input record
+            labTopic.pipeInput(labReport.getId(), labReport);
+
             // get record from output topic
             var outputRecords = outputTopic.readRecordsToList();
 
