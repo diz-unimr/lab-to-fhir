@@ -26,18 +26,11 @@ dependencies {
     // spring cloud stream kafka
     implementation 'org.springframework.cloud:spring-cloud-stream'
     implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
-//    constraints {
-//        implementation('org.scala-lang:scala-library:2.13.9') {
-//            because 'CVE-2022-36944'
-//        }
-//    }
     implementation "org.springframework.kafka:spring-kafka"
 
     // metrics
     implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
-    implementation 'io.micrometer:micrometer-registry-prometheus:1.9.2'
-    implementation 'io.micrometer:micrometer-core:1.9.2'
 
     // hapi fhir
     implementation "ca.uhn.hapi.fhir:hapi-fhir-base:$hapiFhirVersion"
