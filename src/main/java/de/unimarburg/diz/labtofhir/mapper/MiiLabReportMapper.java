@@ -126,13 +126,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     // map observations
                     .map(this::mapObservation)
                     .map(o -> loincMapper.map(o, report.getMetaCode()))
-
-                    // add meta code as additional coding
-                    .map(o -> o.addIdentifier(new Identifier()
-                        .setSystem(fhirProperties
-                            .getSystems()
-                            .getLabReportMetaSystem())
-                        .setValue(report.getMetaCode())))
+                    
                     // add to bundle
                     .peek(o -> addResourceToBundle(bundle, o))
                     // set result references

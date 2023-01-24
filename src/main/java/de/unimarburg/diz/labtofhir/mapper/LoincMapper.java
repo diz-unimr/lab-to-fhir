@@ -47,6 +47,11 @@ public class LoincMapper {
     }
 
     public Observation map(Observation obs, String metaCode) {
+        // LOINC mapping supported for Quantity type, only
+        if (!obs.hasValueQuantity()) {
+            return obs;
+        }
+
         var swlCode = obs
             .getCode()
             .getCoding()
