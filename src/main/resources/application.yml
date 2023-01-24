@@ -12,7 +12,6 @@ spring:
 
   cloud:
     stream:
-      #      function.definition: process
       bindings:
         process-in-0:
           destination: ${INPUT_TOPIC:aim-lab}

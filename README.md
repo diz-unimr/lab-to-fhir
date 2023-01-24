@@ -19,43 +19,36 @@ The input data from Synedra AIM consists of FHIR resources of type **DiagnosticR
 
 ### LOINC mapping
 
-Observation resources which have numerical result values are mapped to LOINC and UCUM using the `loinc` Kafka topic 
-(see [loinc-kafka](https://gitlab.diz.uni-marburg.de/etl/loinc-kafka.git) for details).
+Observation resources which have numerical result values are mapped to LOINC and UCUM using a fixed mapping.
 
-This results in an additional `coding` with `"system": "http://loinc.org"` where a LOINC mapping entry exists. 
+On startup, the _lab-to-fhir_ processor loads data from a [mapping package](https://gitlab.diz.uni-marburg.de/mapping/loinc-mapping/-/packages) which consists of a csv file and metadata.
+
+This data is looked up on processing and results in an additional `coding` (`"system": "http://loinc.org"`) where a LOINC mapping entry exists. 
 The original Swisslab coding is kept in either case.
 
 Result quantities for value and references ranges are mapped to their corresponding UCUM units.
-
-#### Updates
-
-Changes in the `loinc` topic's mapping data trigger a reprocessing of the laboratory data 
-from the input topic where the Swisslab code of Observations correspond to the changed Swisslab 
-code of the mapping data.
-
-In order for this to work dynamically, laboratory data is split into single entry FHIR bundles before
-joining them with the `loinc` topic. The Foreign-key extractor selects the Observation's Swisslab code
-or a generated UUID for DiagnosticReport and ServiceRequest resources (which will never be joined but send to
-the output topic anyway).
 
 ## <a name="deploy_config"></a> Configuration
 
 The following environment variables can be set:
 
-| Variable                          | Default                             | Description                                                      |
-|-----------------------------------|-------------------------------------|------------------------------------------------------------------|
-| BOOTSTRAP_SERVERS                 | localhost:9092                      | Kafka brokers                                                    |
-| SECURITY_PROTOCOL                 | PLAINTEXT                           | Kafka communication protocol                                     |
-| SSL_TRUST_STORE_LOCATION_INTERNAL | /opt/lab-to-fhir/ssl/truststore.jks | Truststore location                                              |
-| SSL_TRUST_STORE_PASSWORD          |                                     | Truststore password (if using `SECURITY_PROTOCOL=SSL`)           |
-| SSL_KEY_STORE_LOCATION_INTERNAL   | /opt/lab-to-fhir/ssl/keystore.jks   | Keystore location                                                |
-| SSL_KEY_STORE_PASSWORD            |                                     | Keystore password (if using `SECURITY_PROTOCOL=SSL`)             |
-| SSL_TRUST_STORE_PASSWORD          |                                     | Truststore password (if using `SECURITY_PROTOCOL=SSL`)           |
-| INPUT_TOPIC                       | aim-lab                             | Topic to read from                                               |
-| MAPPING_TOPIC                     | loinc                               | Mapping topic to join                                            |
-| OUTPUT_TOPIC                      | lab-fhir                            | Topic to store result bundles                                    |
-| WEB_PORT                          |                                     | Port to map the web endpoints (health, prometheus, info, metric) |
-| LOG_LEVEL                         | info                                | Log level (error, warn, info, debug)                             |
+| Variable                           | Default                             | Description                                                                                                                                                                                                                                  |
+|------------------------------------|-------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| BOOTSTRAP_SERVERS                  | localhost:9092                      | Kafka brokers                                                                                                                                                                                                                                |
+| SECURITY_PROTOCOL                  | PLAINTEXT                           | Kafka communication protocol                                                                                                                                                                                                                 |
+| SSL_TRUST_STORE_LOCATION_INTERNAL  | /opt/lab-to-fhir/ssl/truststore.jks | Truststore location                                                                                                                                                                                                                          |
+| SSL_TRUST_STORE_PASSWORD           |                                     | Truststore password (if using `SECURITY_PROTOCOL=SSL`)                                                                                                                                                                                       |
+| SSL_KEY_STORE_LOCATION_INTERNAL    | /opt/lab-to-fhir/ssl/keystore.jks   | Keystore location                                                                                                                                                                                                                            |
+| SSL_KEY_STORE_PASSWORD             |                                     | Keystore password (if using `SECURITY_PROTOCOL=SSL`)                                                                                                                                                                                         |
+| SSL_TRUST_STORE_PASSWORD           |                                     | Truststore password (if using `SECURITY_PROTOCOL=SSL`)                                                                                                                                                                                       |
+| INPUT_TOPIC                        | aim-lab                             | Topic to read from                                                                                                                                                                                                                           |
+| OUTPUT_TOPIC                       | lab-fhir                            | Topic to store result bundles                                                                                                                                                                                                                |
+| MAPPING_LOINC_VERSION              | 602baef6                            | LOINC mapping package version: [Package Registry · mapping / loinc-mapping](https://gitlab.diz.uni-marburg.de/mapping/loinc-mapping/-/packages/))                                                                                            |
+| MAPPING_LOINC_CREDENTIALS_USER     |                                     | LOINC mapping package registry user                                                                                                                                                                                                          |
+| MAPPING_LOINC_CREDENTIALS_PASSWORD |                                     | LOINC mapping package registry password                                                                                                                                                                                                      |
+| MAPPING_LOINC_PROXY                |                                     | Proxy server to use when pulling the package                                                                                                                                                                                                 |
+| MAPPING_LOINC_LOCAL                |                                     | Name of the local LOINC mapping package file to use (see [application resources](src/main/resources)) <br /><br /> **NOTE**: This option does not pull the file from the registry and credentials and version are fixed by the local package |
+| LOG_LEVEL                          | info                                | Log level (error, warn, info, debug)                                                                                                                                                                                                         |
 
 Additional application properties can be set by overriding values form the [application.yml](application.yml) by using environment variables. 
 
@@ -76,7 +69,12 @@ npm i
 
 ### Serialization errors
 
-ConsumerRecords are stored in `error.[INPUT TOPIC].lab-to-fhir`.
+Errors which occur during serialization of records from the input topic cause the processor to stop 
+and move to an error state.
+
+### Mapping errors
+
+Records which can't be mapped are skipped.
 
 ## Deployment
 
