@@ -34,7 +34,7 @@ fhir:
     diagnosticReportId: "https://fhir.diz.uni-marburg.de/sid/lab-report-id"
     observationId: "https://fhir.diz.uni-marburg.de/sid/lab-surrogate-observation-id"
     patientId: "https://fhir.diz.uni-marburg.de/sid/patient-id"
-    encounterId: "https://fhir.diz.uni-marburg.de/sid/encounter-id"
+    encounterId: "https://fhir.diz.uni-marburg.de/sid/encounter-admit-id"
     assignerId: "https://www.medizininformatik-initiative.de/fhir/core/NamingSystem/org-identifier"
     assignerCode: "UKMR"
     laboratorySystem: "https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code"
