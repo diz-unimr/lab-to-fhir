@@ -23,7 +23,7 @@ Observation resources which have numerical result values are mapped to LOINC and
 
 On startup, the _lab-to-fhir_ processor loads data from a [mapping package](https://gitlab.diz.uni-marburg.de/mapping/loinc-mapping/-/packages) which consists of a csv file and metadata.
 
-This data is looked up on processing and results in an additional `coding` (`"system": "http://loinc.org"`) where a LOINC mapping entry exists. 
+This data is looked up on processing and results in an additional `coding` (`"system": "http://loinc.org"`) where a LOINC mapping entry exists.
 The original Swisslab coding is kept in either case.
 
 Result quantities for value and references ranges are mapped to their corresponding UCUM units.
@@ -50,7 +50,7 @@ The following environment variables can be set:
 | MAPPING_LOINC_LOCAL                |                                     | Name of the local LOINC mapping package file to use (see [application resources](src/main/resources)) <br /><br /> **NOTE**: This option does not pull the file from the registry and credentials and version are fixed by the local package |
 | LOG_LEVEL                          | info                                | Log level (error, warn, info, debug)                                                                                                                                                                                                         |
 
-Additional application properties can be set by overriding values form the [application.yml](application.yml) by using environment variables. 
+Additional application properties can be set by overriding values form the [application.yml](src/main/resources/application.yml) by using environment variables.
 
 ## Tests
 
@@ -69,7 +69,7 @@ npm i
 
 ### Serialization errors
 
-Errors which occur during serialization of records from the input topic cause the processor to stop 
+Errors which occur during serialization of records from the input topic cause the processor to stop
 and move to an error state.
 
 ### Mapping errors
@@ -80,18 +80,18 @@ Records which can't be mapped are skipped.
 
 This project includes a docker-compose file for deployment purposes. Environment variables can be set according to the
 provided `sample.env`. Remember to replace the `IMAGE_TAG` variable according to the desired version tag. Available
-tags can be found at the [Container Registry](container_registry/) or under [Releases](-/releases/).
+tags can be found at the [Container Registry](https://github.com/orgs/diz-unimr/packages?repo_name=lab-to-fhir) or under [Releases](https://github.com/diz-unimr/lab-to-fhir/releases).
 
 ## Development
 
-A [test setup](dev/docker-compose.yml) and [test data provider](dev/docker-compose-data.yml) 
+A [test setup](dev/docker-compose.yml) and [test data provider](dev/docker-compose-data.yml)
 is available for development purposes.
 
 ### Builds
 
 You can build a docker image for this processor by using the provided [Dockerfile](Dockerfile).
 
-⚠ FHIR profiles must be installed for the build step to run successfully. 
+⚠ FHIR profiles must be installed for the build step to run successfully.
 
 ## License
 
