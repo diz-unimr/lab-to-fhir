@@ -41,8 +41,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.TestPropertySource;
 
-@SpringBootTest(classes = {MiiLabReportMapper.class, FhirConfiguration.class, LoincMapper.class,
-    MappingConfiguration.class})
+@SpringBootTest(classes = {MiiLabReportMapper.class, FhirConfiguration.class,
+    LoincMapper.class, MappingConfiguration.class})
 @TestPropertySource(properties = {"mapping.loinc.local=mapping-swl-loinc.zip"})
 public class MiiLabReportMapperTests {
 
@@ -60,7 +60,7 @@ public class MiiLabReportMapperTests {
     private FhirContext fhirContext;
 
     private static Stream<Arguments> metaCodesAreSetAndFilteredArgs() {
-        return MiiLabReportMapper.metaCodes
+        return MiiLabReportMapper.META_CODES
             .stream()
             .map(Arguments::of);
     }
@@ -91,7 +91,8 @@ public class MiiLabReportMapperTests {
         var report = createDummyReport();
         report.setObservations(List.of(new Observation()
             .setValue(new StringType("<42"))
-            .setCode(new CodeableConcept().addCoding(new Coding().setCode("LEU")))));
+            .setCode(
+                new CodeableConcept().addCoding(new Coding().setCode("LEU")))));
 
         // act
         var result = mapper.apply(report);
@@ -109,7 +110,8 @@ public class MiiLabReportMapperTests {
         assertThat(obs.getValueQuantity())
             .usingRecursiveComparison()
             .ignoringExpectedNullFields()
-            .isEqualTo(new Quantity(42.0).setComparator(QuantityComparator.fromCode("<")));
+            .isEqualTo(new Quantity(42.0).setComparator(
+                QuantityComparator.fromCode("<")));
     }
 
     @ParameterizedTest
@@ -117,7 +119,8 @@ public class MiiLabReportMapperTests {
     public void metaCodesAreSetAndFiltered(String code) {
         var report = createDummyReport();
         report.setObservations(new ArrayList<>(List.of(new Observation()
-            .setCode(new CodeableConcept().addCoding(new Coding().setCode(code)))
+            .setCode(
+                new CodeableConcept().addCoding(new Coding().setCode(code)))
             .setValue(new StringType("metaCode")))));
 
         // act
@@ -129,8 +132,8 @@ public class MiiLabReportMapperTests {
         assertThat(result).isNull();
     }
 
-    private LaboratoryReport getTestReport(Resource testReport, Resource testObservations)
-        throws IOException {
+    private LaboratoryReport getTestReport(Resource testReport,
+        Resource testObservations) throws IOException {
         var parser = fhirContext.newJsonParser();
         var diagnosticReport = parser.parseResource(DiagnosticReport.class,
             testReport.getInputStream());
@@ -161,7 +164,8 @@ public class MiiLabReportMapperTests {
         assertThat(result.getEntry())
             .extracting(BundleEntryComponent::getRequest)
             .allSatisfy(x -> assertThat(x)
-                .satisfies(y -> assertThat(y.getMethod()).isEqualTo(HTTPVerb.PUT))
+                .satisfies(
+                    y -> assertThat(y.getMethod()).isEqualTo(HTTPVerb.PUT))
                 .satisfies(z -> assertThat(z.getUrl()).isNotBlank()));
     }
 
@@ -169,10 +173,10 @@ public class MiiLabReportMapperTests {
         var report = new LaboratoryReport();
         report.setResource(new DiagnosticReport()
             .addIdentifier(new Identifier().setValue("reportId"))
-            .setSubject(
-                new Reference(new Patient().addIdentifier(new Identifier().setValue("test"))))
-            .setEncounter(new Reference(
-                new Encounter().addIdentifier(new Identifier().setValue("encounterId"))))
+            .setSubject(new Reference(
+                new Patient().addIdentifier(new Identifier().setValue("test"))))
+            .setEncounter(new Reference(new Encounter().addIdentifier(
+                new Identifier().setValue("encounterId"))))
             .setEffective(DateTimeType.now()));
         report.setObservations(List.of());
         return report;

@@ -11,7 +11,8 @@ public class MetadataResourceSchema {
         return fields;
     }
 
-    public MetadataResourceSchema setFields(List<MetadataResourceField> fields) {
+    public MetadataResourceSchema setFields(
+        List<MetadataResourceField> fields) {
         this.fields = fields;
         return this;
     }

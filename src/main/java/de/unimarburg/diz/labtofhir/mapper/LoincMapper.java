@@ -19,7 +19,8 @@ public class LoincMapper {
 
     private final FhirProperties fhirProperties;
     private final Resource mappingPackage;
-    private final static Logger log = LoggerFactory.getLogger(LoincMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(
+        LoincMapper.class);
     private LoincMap loincMap;
 
     @Autowired
@@ -35,7 +36,8 @@ public class LoincMapper {
         this.fhirProperties = fhirProperties;
     }
 
-    private LoincMap getSwlLoincMapping(Resource mappingPackage) throws IOException {
+    private LoincMap getSwlLoincMapping(Resource mappingPackage)
+        throws IOException {
         return new LoincMap().with(mappingPackage, ',');
     }
 
@@ -76,7 +78,8 @@ public class LoincMapper {
 
     private Observation map(Observation obs, LoincMapEntry entry) {
 
-        log.debug("Found mapping for code: {} with LOINC: {}", entry.getSwl(), entry.getLoinc());
+        LOG.debug("Found mapping for code: {} with LOINC: {}", entry.getSwl(),
+            entry.getLoinc());
 
         // add loinc coding
         var loincCoding = new Coding()

@@ -20,7 +20,8 @@ public class ObservationStringListDeserializer<T extends Resource> extends
 
 
     @Override
-    public Observation deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public Observation deserialize(JsonParser p, DeserializationContext ctxt)
+        throws IOException {
 
         var parser = LabFhirContext
             .getInstance()

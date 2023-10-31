@@ -10,11 +10,12 @@ import java.time.ZoneId;
 public class InstantDeserializer extends JsonDeserializer<Instant> {
 
     @Override
-    public Instant deserialize(JsonParser parser, DeserializationContext context)
-        throws IOException {
+    public Instant deserialize(JsonParser parser,
+        DeserializationContext context) throws IOException {
         long value = parser.getValueAsLong();
 
-        return Instant.ofEpochMilli(value)
+        return Instant
+            .ofEpochMilli(value)
             .atZone(ZoneId.systemDefault())
             .toInstant();
 

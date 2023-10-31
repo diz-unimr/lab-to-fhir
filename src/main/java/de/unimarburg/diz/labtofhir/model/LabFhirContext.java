@@ -4,9 +4,9 @@ import ca.uhn.fhir.context.FhirContext;
 
 public class LabFhirContext {
 
-    private static final FhirContext fhirContext = FhirContext.forR4();
+    private static final FhirContext FHIR_CONTEXT = FhirContext.forR4();
 
     public static FhirContext getInstance() {
-        return fhirContext;
+        return FHIR_CONTEXT;
     }
 }

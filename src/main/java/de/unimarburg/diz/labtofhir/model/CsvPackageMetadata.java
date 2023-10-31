@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import java.time.Instant;
 import java.util.List;
 
-public class CsvPackageMetadata {
+public final class CsvPackageMetadata {
 
     private String profile;
     private String name;

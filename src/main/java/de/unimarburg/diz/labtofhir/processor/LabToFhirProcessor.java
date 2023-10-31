@@ -19,6 +19,7 @@ public class LabToFhirProcessor {
         this.reportMapper = reportMapper;
     }
 
+    @SuppressWarnings("checkstyle:LineLength")
     @Bean
     public Function<KStream<String, LaboratoryReport>, KStream<String, Bundle>> process() {
 

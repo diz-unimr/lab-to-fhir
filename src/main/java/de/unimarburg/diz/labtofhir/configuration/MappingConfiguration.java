@@ -22,11 +22,13 @@ import org.springframework.util.StreamUtils;
 
 @Configuration
 public class MappingConfiguration {
-    
-    private static final Logger log = LoggerFactory.getLogger(MappingConfiguration.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(
+        MappingConfiguration.class);
 
     @Bean("mappingPackage")
-    public Resource getMappingFile(@Value("${mapping.loinc.version}") String version,
+    public Resource getMappingFile(
+        @Value("${mapping.loinc.version}") String version,
         @Value("${mapping.loinc.credentials.user}") String user,
         @Value("${mapping.loinc.credentials.password}") String password,
         @Value("${mapping.loinc.proxy}") String proxyServer,
@@ -34,7 +36,7 @@ public class MappingConfiguration {
 
         if (StringUtils.isBlank(localPkg)) {
             // load from remote location
-            log.info("Using LOINC mapping package from remote location");
+            LOG.info("Using LOINC mapping package from remote location");
 
             var provider = new BasicCredentialsProvider();
             var credentials = new UsernamePasswordCredentials(user, password);
@@ -51,10 +53,12 @@ public class MappingConfiguration {
             var response = clientBuilder
                 .build()
                 .execute(new HttpGet(String.format(
-                    "https://gitlab.diz.uni-marburg.de/api/v4/projects/63/packages/generic/mapping-swl-loinc/%s/mapping-swl-loinc.zip",
+                    "https://gitlab.diz.uni-marburg.de/"
+                        + "api/v4/projects/63/packages/generic/"
+                        + "mapping-swl-loinc/%s/mapping-swl-loinc.zip",
                     version)));
 
-            log.info("Package registry responded with: " + response
+            LOG.info("Package registry responded with: " + response
                 .getStatusLine()
                 .toString());
 
@@ -68,8 +72,9 @@ public class MappingConfiguration {
         } else {
 
             // load local file from classpath
-            log.info("Using local LOINC mapping package from: {}", localPkg);
-            return new FileSystemResource(new ClassPathResource(localPkg).getFile());
+            LOG.info("Using local LOINC mapping package from: {}", localPkg);
+            return new FileSystemResource(
+                new ClassPathResource(localPkg).getFile());
         }
     }
 }

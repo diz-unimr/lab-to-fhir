@@ -48,14 +48,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle> {
+public class MiiLabReportMapper implements
+    ValueMapper<LaboratoryReport, Bundle> {
 
-    public static final Set<String> metaCodes = EnumSet
+    public static final Set<String> META_CODES = EnumSet
         .allOf(MetaCode.class)
         .stream()
         .map(Enum::toString)
         .collect(Collectors.toSet());
-    private final static Logger log = LoggerFactory.getLogger(MiiLabReportMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(
+        MiiLabReportMapper.class);
     private final IParser fhirParser;
     private final FhirProperties fhirProperties;
     private final Function<String, String> hasher = i -> Hashing
@@ -65,8 +67,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
     private final Identifier identifierAssigner;
     private final LoincMapper loincMapper;
 
-    public MiiLabReportMapper(FhirContext fhirContext, FhirProperties fhirProperties,
-        LoincMapper loincMapper) {
+    public MiiLabReportMapper(FhirContext fhirContext,
+        FhirProperties fhirProperties, LoincMapper loincMapper) {
         this.fhirProperties = fhirProperties;
         this.loincMapper = loincMapper;
         fhirParser = fhirContext.newJsonParser();
@@ -79,7 +81,9 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                 .getAssignerCode());
     }
 
-    private <T extends Resource> T createWithId(Class<T> resourceType, String id)
+    @SuppressWarnings("checkstyle:LineLength")
+    private <T extends Resource> T createWithId(Class<T> resourceType,
+        String id)
         throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         var resource = resourceType
             .getConstructor()
@@ -103,8 +107,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
     @Override
     public Bundle apply(LaboratoryReport report) {
-        log.debug("Mapping LaboratoryReport with id:{} and order number:{}", report.getId(),
-            report.getReportIdentifierValue());
+        LOG.debug("Mapping LaboratoryReport with id:{} and order number:{}",
+            report.getId(), report.getReportIdentifierValue());
         Bundle bundle = new Bundle();
         try {
 
@@ -126,7 +130,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     // map observations
                     .map(this::mapObservation)
                     .map(o -> loincMapper.map(o, report.getMetaCode()))
-                    
+
                     // add to bundle
                     .peek(o -> addResourceToBundle(bundle, o))
                     // set result references
@@ -136,8 +140,9 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                 .getResult()
                 .isEmpty()) {
                 // report contains no observations
-                log.info(
-                    "No Observations after mapping for LaboratoryReport with id {} and order number {}. Discarding.",
+                LOG.info(
+                    "No Observations after mapping for LaboratoryReport with "
+                        + "id {} and order number {}. Discarding.",
                     report.getId(), report.getReportIdentifierValue());
                 return null;
             }
@@ -151,15 +156,17 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
 
         } catch (Exception e) {
-            log.error("Mapping failed for LaboratoryReport with id {} and order number {}",
-                report.getId(), report.getReportIdentifierValue(), e);
+            LOG.error(
+                "Mapping failed for LaboratoryReport with id {} and order "
+                    + "number {}", report.getId(),
+                report.getReportIdentifierValue(), e);
             // TODO add metrics
             return null;
         }
 
-        log.debug("Mapped successfully to FHIR bundle: id:{}, order number{}", report.getId(),
-            report.getReportIdentifierValue());
-        log.trace("FHIR bundle: {}", fhirParser.encodeResourceToString(bundle));
+        LOG.debug("Mapped successfully to FHIR bundle: id:{}, order number{}",
+            report.getId(), report.getReportIdentifierValue());
+        LOG.trace("FHIR bundle: {}", fhirParser.encodeResourceToString(bundle));
 
         return bundle;
     }
@@ -168,7 +175,7 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         var metaObs = report
             .getObservations()
             .stream()
-            .filter(x -> metaCodes.contains(x
+            .filter(x -> META_CODES.contains(x
                 .getCode()
                 .getCoding()
                 .stream()
@@ -206,7 +213,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
     }
 
 
-    private DiagnosticReport mapDiagnosticReport(DiagnosticReport labReport, Bundle bundle) {
+    private DiagnosticReport mapDiagnosticReport(DiagnosticReport labReport,
+        Bundle bundle) {
         var identifierType = new CodeableConcept().addCoding(new Coding()
             .setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
             .setCode("FILL"));
@@ -220,7 +228,9 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         // meta data
         report.setMeta(new Meta()
             .setProfile(List.of(new CanonicalType(
-                "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab")))
+                "https://www.medizininformatik-initiative"
+                    + ".de/fhir/core/modul-labor/StructureDefinition"
+                    + "/DiagnosticReportLab")))
             .setSource("#swisslab"));
 
         // identifier
@@ -230,12 +240,15 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     .getSystems()
                     .getDiagnosticReportId())
                 .setValue(identifierValue)
-                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+                .setAssigner(
+                    new Reference().setIdentifier(getIdentifierAssigner()))))
 
             // basedOn
-            .setBasedOn(List.of(new Reference("ServiceRequest/" + createId(fhirProperties
-                .getSystems()
-                .getServiceRequestId(), identifierValue, labReport.getEffectiveDateTimeType()))))
+            .setBasedOn(List.of(new Reference("ServiceRequest/" + createId(
+                fhirProperties
+                    .getSystems()
+                    .getServiceRequestId(), identifierValue,
+                labReport.getEffectiveDateTimeType()))))
 
             // status
             .setStatus(labReport.getStatus())
@@ -263,7 +276,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
             .setEffective(labReport.getEffectiveDateTimeType())
 
             // issued
-            .setIssuedElement(new InstantType(labReport.getEffectiveDateTimeType()));
+            .setIssuedElement(
+                new InstantType(labReport.getEffectiveDateTimeType()));
 
         // add to bundle
         addResourceToBundle(bundle, report);
@@ -284,7 +298,9 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         // meta data
         obs.setMeta(new Meta()
             .setProfile(List.of(new CanonicalType(
-                "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab")))
+                "https://www.medizininformatik-initiative"
+                    + ".de/fhir/core/modul-labor/StructureDefinition"
+                    + "/ObservationLab")))
             .setSource("#swisslab"));
 
         // identifier
@@ -294,7 +310,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     .getSystems()
                     .getObservationId())
                 .setValue(identifierValue)
-                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner())))
+                .setAssigner(
+                    new Reference().setIdentifier(getIdentifierAssigner())))
 
             // status
             .setStatus(source.getStatus())
@@ -304,7 +321,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     .setSystem("http://loinc.org")
                     .setCode("26436-6"))
                 .addCoding(new Coding()
-                    .setSystem("http://terminology.hl7.org/CodeSystem/observation-category")
+                    .setSystem("http://terminology.hl7"
+                        + ".org/CodeSystem/observation-category")
                     .setCode("laboratory"))
                 // with local category
                 .addCoding(source
@@ -329,8 +347,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     cc
                         .getCoding()
                         .stream()
-                        .map(c -> c.setSystem(
-                            "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"))
+                        .map(c -> c.setSystem("http://terminology.hl7"
+                            + ".org/CodeSystem/v3-ObservationInterpretation"))
                         .collect(Collectors.toList())))
                 .collect(Collectors.toList()))
             // map reference range to simple quantity with value only
@@ -369,8 +387,10 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                 .substring(1)
                 .trim();
 
-            if ((comp == '<' || comp == '>') && NumberUtils.isCreatable(valuePart)) {
-                return new Quantity(NumberUtils.createDouble(valuePart)).setComparator(
+            if ((comp == '<' || comp == '>') && NumberUtils.isCreatable(
+                valuePart)) {
+                return new Quantity(
+                    NumberUtils.createDouble(valuePart)).setComparator(
                     QuantityComparator.fromCode(String.valueOf(comp)));
             }
         } else if (obs.hasValueQuantity()) {
@@ -396,8 +416,10 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
     }
 
 
-    public MiiLabReportMapper mapServiceRequest(DiagnosticReport report, Bundle bundle) {
-        // TODO clarify intention: using this as a wrapper resource in order to be conform to MII profiles
+    public MiiLabReportMapper mapServiceRequest(DiagnosticReport report,
+        Bundle bundle) {
+        // TODO clarify intention: using this as a wrapper resource in order
+        //  to be conform to MII profiles
         var identifierType = new CodeableConcept(new Coding()
             .setSystem("http://terminology.hl7.org/CodeSystem/v2-0203")
             .setCode("PLAC"));
@@ -412,8 +434,9 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
         serviceRequest.setId(identifierValue);
         // meta
         serviceRequest.setMeta(new Meta()
-            .addProfile(
-                "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab")
+            .addProfile("https://www.medizininformatik-initiative"
+                + ".de/fhir/core/modul-labor/StructureDefinition"
+                + "/ServiceRequestLab")
             .setSource("#swisslab"));
 
         serviceRequest.setIdentifier(List.of(new Identifier()
@@ -422,7 +445,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                     .getServiceRequestId())
                 .setType(identifierType)
                 .setValue(identifierValue)
-                .setAssigner(new Reference().setIdentifier(getIdentifierAssigner()))))
+                .setAssigner(
+                    new Reference().setIdentifier(getIdentifierAssigner()))))
 
             // authoredOn
             // uses report effective (date)
@@ -434,7 +458,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
             // category
             .setCategory(List.of(new CodeableConcept(new Coding()
-                .setSystem("http://terminology.hl7.org/CodeSystem/observation-category")
+                .setSystem("http://terminology.hl7"
+                    + ".org/CodeSystem/observation-category")
                 .setCode("laboratory"))))
 
             // code
@@ -449,7 +474,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
 
     /**
-     * Set the encounter reference for {@link DiagnosticReport} and {@link Observation}
+     * Set the encounter reference for {@link DiagnosticReport} and
+     * {@link Observation}
      */
     private void setEncounter(LaboratoryReport report, Bundle bundle) {
         if (report
@@ -457,8 +483,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
             .getEncounter()
             .getResource() == null) {
             throw new IllegalArgumentException(String.format(
-                "Missing referenced encounter resource in report '%s'. Reference is '%s'",
-                report.getId(), report
+                "Missing referenced encounter resource in report '%s'. "
+                    + "Reference is '%s'", report.getId(), report
                     .getResource()
                     .getEncounter()
                     .getReference()));
@@ -473,16 +499,20 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
         getBundleEntryResources(bundle, ServiceRequest.class).forEach(r -> r
             .getEncounter()
-            .setReference(getConditionalReference(ResourceType.Encounter, encounterId)));
+            .setReference(
+                getConditionalReference(ResourceType.Encounter, encounterId)));
         getBundleEntryResources(bundle, DiagnosticReport.class).forEach(r -> r
             .getEncounter()
-            .setReference(getConditionalReference(ResourceType.Encounter, encounterId)));
+            .setReference(
+                getConditionalReference(ResourceType.Encounter, encounterId)));
         getBundleEntryResources(bundle, Observation.class).forEach(o -> o
             .getEncounter()
-            .setReference(getConditionalReference(ResourceType.Encounter, encounterId)));
+            .setReference(
+                getConditionalReference(ResourceType.Encounter, encounterId)));
     }
 
-    private String getConditionalReference(ResourceType resourceType, String id) {
+    private String getConditionalReference(ResourceType resourceType,
+        String id) {
 
         String idSystem;
         switch (resourceType) {
@@ -502,14 +532,16 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
                 .getSystems()
                 .getObservationId();
             default -> throw new IllegalArgumentException(
-                "Unsupported resource type when building conditional reference");
+                "Unsupported resource type when building conditional "
+                    + "reference");
         }
 
         return String.format("%s?identifier=%s|%s", resourceType, idSystem, id);
     }
 
     /**
-     * Set the subject reference for {@link DiagnosticReport} and {@link Observation}
+     * Set the subject reference for {@link DiagnosticReport} and
+     * {@link Observation}
      */
     public void setPatient(LaboratoryReport report, Bundle bundle) {
         if (report
@@ -517,8 +549,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
             .getSubject()
             .getResource() == null) {
             throw new IllegalArgumentException(String.format(
-                "Missing referenced patient resource in report '%s'. Reference is '%s'",
-                report.getId(), report
+                "Missing referenced patient resource in report '%s'. "
+                    + "Reference is '%s'", report.getId(), report
                     .getResource()
                     .getSubject()
                     .getReference()));
@@ -533,17 +565,21 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
 
         getBundleEntryResources(bundle, ServiceRequest.class).forEach(r -> r
             .getSubject()
-            .setReference(getConditionalReference(ResourceType.Patient, patientId)));
+            .setReference(
+                getConditionalReference(ResourceType.Patient, patientId)));
         getBundleEntryResources(bundle, DiagnosticReport.class).forEach(r -> r
             .getSubject()
-            .setReference(getConditionalReference(ResourceType.Patient, patientId)));
+            .setReference(
+                getConditionalReference(ResourceType.Patient, patientId)));
         getBundleEntryResources(bundle, Observation.class).forEach(o -> o
             .getSubject()
-            .setReference(getConditionalReference(ResourceType.Patient, patientId)));
+            .setReference(
+                getConditionalReference(ResourceType.Patient, patientId)));
 
     }
 
-    public <T> List<T> getBundleEntryResources(Bundle bundle, Class<T> domainType) {
+    public <T> List<T> getBundleEntryResources(Bundle bundle,
+        Class<T> domainType) {
         return bundle
             .getEntry()
             .stream()
@@ -558,10 +594,12 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
     }
 
     private String createId(Identifier identifier, DateTimeType dateTimeType) {
-        return createId(identifier.getSystem(), identifier.getValue(), dateTimeType);
+        return createId(identifier.getSystem(), identifier.getValue(),
+            dateTimeType);
     }
 
-    private String createId(String idSystem, String id, DateTimeType dateTimeType) {
+    private String createId(String idSystem, String id,
+        DateTimeType dateTimeType) {
         return TimestampPrefixedId.createNewIdentityValue(dateTimeType,
             hasher.apply(idSystem + "|" + id));
     }
@@ -578,7 +616,8 @@ public class MiiLabReportMapper implements ValueMapper<LaboratoryReport, Bundle>
             .setResource(resource)
             .setRequest(new BundleEntryRequestComponent()
                 .setMethod(HTTPVerb.PUT)
-                .setUrl(getConditionalReference(resource.getResourceType(), idElement)));
+                .setUrl(getConditionalReference(resource.getResourceType(),
+                    idElement)));
     }
 
 }
