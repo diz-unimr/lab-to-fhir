@@ -22,3 +22,5 @@ jobs:
         uses: gradle/gradle-build-action@v2.9.0
       - name: Execute Gradle build
         run: ./gradlew build
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3

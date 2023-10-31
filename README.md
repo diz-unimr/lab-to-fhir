@@ -1,3 +1,5 @@
+[![MegaLinter](https://github.com/diz-unimr/lab-to-fhir/workflows/MegaLinter/badge.svg?branch=main)](https://github.com/diz-unimr/lab-to-fhir/actions?query=workflow%3AMegaLinter+branch%3Amain) ![build](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/build.yml/badge.svg) ![docker](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/release.yml/badge.svg) [![codecov](https://codecov.io/gh/diz-unimr/lab-to-fhir/branch/main/graph/badge.svg?token=D66XMZ5ALR)](https://codecov.io/gh/diz-unimr/lab-to-fhir)
+
 # lab-to-fhir
 
 > Kafka Stream Processor, transforming laboratory data to MII FHIR
