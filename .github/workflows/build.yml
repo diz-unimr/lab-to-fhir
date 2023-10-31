@@ -21,11 +21,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2.9.0
       - name: Execute Gradle build
-        run: |
-          ./gradlew build
-          ./gradlew test
-      - uses: actions/checkout@master
-      - uses: codecov/codecov-action@v3
+        run: gradle build
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
         with:
           fail_ci_if_error: true
 
