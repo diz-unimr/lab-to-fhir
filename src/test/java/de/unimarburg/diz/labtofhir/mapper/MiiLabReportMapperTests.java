@@ -49,10 +49,10 @@ public class MiiLabReportMapperTests {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("classpath:reports/1-diagnostic-report.json")
-    Resource testReport;
+    private Resource testReport;
 
     @Value("classpath:reports/1-observations.json")
-    Resource testObservations;
+    private Resource testObservations;
 
     @Autowired
     private MiiLabReportMapper mapper;
@@ -85,6 +85,7 @@ public class MiiLabReportMapperTests {
         assertThat(validations).allMatch(ValidationResult::isSuccessful);
     }
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     @Test
     public void parseValueConvertsNumericWithComparator() {
         // arrange
@@ -153,7 +154,7 @@ public class MiiLabReportMapperTests {
     }
 
     @Test
-    public void BundleEntriesHaveRequestParameters() throws IOException {
+    public void bundleEntriesHaveRequestParameters() throws IOException {
         // arrange
         var report = getTestReport(testReport, testObservations);
 

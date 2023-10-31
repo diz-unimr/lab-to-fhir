@@ -38,10 +38,12 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.test.context.TestPropertySource;
 
 
-@SpringBootTest(classes = {LabToFhirProcessor.class, MiiLabReportMapper.class, LoincMapper.class,
-    FhirConfiguration.class, MappingConfiguration.class})
-@TestPropertySource(properties = {"mapping.loinc.version=''", "mapping.loinc.credentials.user=''",
-    "mapping.loinc.credentials.password=''", "mapping.loinc.local=mapping-swl-loinc.zip"})
+@SpringBootTest(classes = {LabToFhirProcessor.class, MiiLabReportMapper.class,
+    LoincMapper.class, FhirConfiguration.class, MappingConfiguration.class})
+@TestPropertySource(properties = {"mapping.loinc.version=''",
+    "mapping.loinc.credentials.user=''",
+    "mapping.loinc.credentials.password=''",
+    "mapping.loinc.local=mapping-swl-loinc.zip"})
 
 public class LabToFhirProcessorTests {
 
@@ -52,42 +54,47 @@ public class LabToFhirProcessorTests {
     @Autowired
     private FhirProperties fhirProperties;
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     @Test
     public void observationIsLoincMapped() {
 
         // build stream
         var builder = new StreamsBuilder();
-        final KStream<String, LaboratoryReport> labStream = builder.stream("lab",
-            Consumed.with(Serdes.String(), JsonSerdes.LaboratoryReport()));
-        //        final KTable<String, LoincMap> loincTable = builder.table("loinc",
-        //            Consumed.with(Serdes.String(), JsonSerdes.LoincMapEntry()));
+        final KStream<String, LaboratoryReport> labStream = builder.stream(
+            "lab",
+            Consumed.with(Serdes.String(), JsonSerdes.laboratoryReport()));
+        //        final KTable<String, LoincMap> loincTable = builder.table
+        //        ("loinc", Consumed.with(Serdes.String(), JsonSerdes
+        //        .LoincMapEntry ()));
         processor
             .process()
             .apply(labStream)
             .to("lab-mapped", Produced.with(Serdes.String(),
-                Serdes.serdeFrom(new FhirSerializer<>(), new FhirDeserializer<>(Bundle.class))));
+                Serdes.serdeFrom(new FhirSerializer<>(),
+                    new FhirDeserializer<>(Bundle.class))));
 
         try (var driver = new TopologyTestDriver(builder.build())) {
 
-            var labTopic = driver.createInputTopic("lab", new IntegerSerializer(),
-                new JsonSerializer<>());
-            var outputTopic = driver.createOutputTopic("lab-mapped", new StringDeserializer(),
-                new FhirDeserializer<>(Bundle.class));
+            var labTopic = driver.createInputTopic("lab",
+                new IntegerSerializer(), new JsonSerializer<>());
+            var outputTopic = driver.createOutputTopic("lab-mapped",
+                new StringDeserializer(), new FhirDeserializer<>(Bundle.class));
 
             var labReport = new LaboratoryReport();
             labReport.setId(42);
             labReport.setResource(new DiagnosticReport()
                 .addIdentifier(new Identifier().setValue("report-id"))
-                .setSubject(
-                    new Reference(new Patient().addIdentifier(new Identifier().setValue("1"))))
-                .setEncounter(
-                    new Reference(new Encounter().addIdentifier(new Identifier().setValue("1")))));
+                .setSubject(new Reference(new Patient().addIdentifier(
+                    new Identifier().setValue("1"))))
+                .setEncounter(new Reference(new Encounter().addIdentifier(
+                    new Identifier().setValue("1")))));
 
             var obs = new Observation()
                 .addIdentifier(new Identifier().setValue("obs-id"))
-                .setCode(new CodeableConcept().setCoding(List.of(new Coding(fhirProperties
-                    .getSystems()
-                    .getLaboratorySystem(), "NA", null))))
+                .setCode(new CodeableConcept().setCoding(List.of(new Coding(
+                    fhirProperties
+                        .getSystems()
+                        .getLaboratorySystem(), "NA", null))))
                 .setValue(new Quantity(1));
             obs.setId("obs-id");
             labReport.setObservations(List.of(obs));
@@ -108,12 +115,14 @@ public class LabToFhirProcessorTests {
                 .filter(Observation.class::isInstance)
                 .map(Observation.class::cast)
                 .map(Observation::getCode)
-                //                .max(Comparator.comparing(TestRecord::getRecordTime))
+                //                .max(Comparator.comparing
+                //                (TestRecord::getRecordTime))
                 .findAny()
                 .orElseThrow();
 
             // assert both codings exist
-            assertThat(obsCodes.hasCoding("http://loinc.org", "2951-2")).isTrue();
+            assertThat(
+                obsCodes.hasCoding("http://loinc.org", "2951-2")).isTrue();
             assertThat(obsCodes.hasCoding(fhirProperties
                 .getSystems()
                 .getLaboratorySystem(), "NA")).isTrue();

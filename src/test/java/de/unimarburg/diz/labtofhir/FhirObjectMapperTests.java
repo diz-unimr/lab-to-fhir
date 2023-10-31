@@ -18,7 +18,7 @@ public class FhirObjectMapperTests {
 
     private final ObjectMapper mapper = JacksonUtils.enhancedObjectMapper();
     @Value("classpath:reports/test-input.json")
-    Resource input;
+    private Resource input;
 
     @Test
     public void inputMapsToModel() throws IOException {
