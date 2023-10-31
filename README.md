@@ -80,7 +80,7 @@ Records which can't be mapped are skipped.
 
 This project includes a docker-compose file for deployment purposes. Environment variables can be set according to the
 provided `sample.env`. Remember to replace the `IMAGE_TAG` variable according to the desired version tag. Available
-tags can be found at the [Container Registry](packages/) or under [Releases](releases/).
+tags can be found at the [Container Registry](https://github.com/orgs/diz-unimr/packages?repo_name=lab-to-fhir) or under [Releases](https://github.com/diz-unimr/lab-to-fhir/releases).
 
 ## Development
 
