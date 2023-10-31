@@ -1,6 +1,5 @@
-[![MegaLinter](https://github.com/diz-unimr/lab-to-fhir/workflows/MegaLinter/badge.svg?branch=main)](https://github.com/diz-unimr/lab-to-fhir/actions?query=workflow%3AMegaLinter+branch%3Amain) ![build](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/build.yml/badge.svg) ![docker](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/release.yml/badge.svg) [![codecov](https://codecov.io/gh/diz-unimr/lab-to-fhir/branch/main/graph/badge.svg?token=D66XMZ5ALR)](https://codecov.io/gh/diz-unimr/lab-to-fhir)
-
 # lab-to-fhir
+[![MegaLinter](https://github.com/diz-unimr/lab-to-fhir/workflows/MegaLinter/badge.svg?branch=main)](https://github.com/diz-unimr/lab-to-fhir/actions?query=workflow%3AMegaLinter+branch%3Amain) ![build](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/build-gradle.yml/badge.svg) ![docker](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/release.yml/badge.svg) [![codecov](https://codecov.io/gh/diz-unimr/lab-to-fhir/branch/main/graph/badge.svg?token=D66XMZ5ALR)](https://codecov.io/gh/diz-unimr/lab-to-fhir)
 
 > Kafka Stream Processor, transforming laboratory data to MII FHIR
 
@@ -25,7 +24,7 @@ Observation resources which have numerical result values are mapped to LOINC and
 
 On startup, the _lab-to-fhir_ processor loads data from a [mapping package](https://gitlab.diz.uni-marburg.de/mapping/loinc-mapping/-/packages) which consists of a csv file and metadata.
 
-This data is looked up on processing and results in an additional `coding` (`"system": "http://loinc.org"`) where a LOINC mapping entry exists. 
+This data is looked up on processing and results in an additional `coding` (`"system": "http://loinc.org"`) where a LOINC mapping entry exists.
 The original Swisslab coding is kept in either case.
 
 Result quantities for value and references ranges are mapped to their corresponding UCUM units.
@@ -52,7 +51,7 @@ The following environment variables can be set:
 | MAPPING_LOINC_LOCAL                |                                     | Name of the local LOINC mapping package file to use (see [application resources](src/main/resources)) <br /><br /> **NOTE**: This option does not pull the file from the registry and credentials and version are fixed by the local package |
 | LOG_LEVEL                          | info                                | Log level (error, warn, info, debug)                                                                                                                                                                                                         |
 
-Additional application properties can be set by overriding values form the [application.yml](application.yml) by using environment variables. 
+Additional application properties can be set by overriding values form the [application.yml](application.yml) by using environment variables.
 
 ## Tests
 
@@ -71,7 +70,7 @@ npm i
 
 ### Serialization errors
 
-Errors which occur during serialization of records from the input topic cause the processor to stop 
+Errors which occur during serialization of records from the input topic cause the processor to stop
 and move to an error state.
 
 ### Mapping errors
@@ -86,14 +85,14 @@ tags can be found at the [Container Registry](container_registry/) or under [Rel
 
 ## Development
 
-A [test setup](dev/docker-compose.yml) and [test data provider](dev/docker-compose-data.yml) 
+A [test setup](dev/docker-compose.yml) and [test data provider](dev/docker-compose-data.yml)
 is available for development purposes.
 
 ### Builds
 
 You can build a docker image for this processor by using the provided [Dockerfile](Dockerfile).
 
-⚠ FHIR profiles must be installed for the build step to run successfully. 
+⚠ FHIR profiles must be installed for the build step to run successfully.
 
 ## License
 

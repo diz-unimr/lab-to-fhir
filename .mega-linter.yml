@@ -1,2 +1,2 @@
 REPOSITORY_KICS_ARGUMENTS: --exclude-paths dev --fail-on high
-COPYPASTE_JSCPD_ARGUMENTS: --ignore-pattern ".*"
+COPYPASTE_JSCPD_ARGUMENTS: --ignore-pattern "import\s*'.*';"
