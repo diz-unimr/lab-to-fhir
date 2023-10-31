@@ -1,7 +1,6 @@
 version: "3.7"
 
 services:
-
   lab-data-loader:
     image: confluentinc/cp-kafkacat:7.0.1
     entrypoint: ["/bin/bash", "-c"]
