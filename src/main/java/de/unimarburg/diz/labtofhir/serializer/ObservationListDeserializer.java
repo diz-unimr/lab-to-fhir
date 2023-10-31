@@ -13,16 +13,18 @@ import java.util.stream.StreamSupport;
 import org.hl7.fhir.r4.model.Observation;
 
 /**
- * Deserializes a string of an Observation array to a {@link List<Observation>}.
+ * Deserializes a string of an Observation array to a
+ * {@link List<Observation>}.
  **/
-public class ObservationListDeserializer extends JsonDeserializer<List<Observation>> {
+public class ObservationListDeserializer extends
+    JsonDeserializer<List<Observation>> {
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
 
     @Override
-    public List<Observation> deserialize(JsonParser p, DeserializationContext ctxt)
-        throws IOException {
+    public List<Observation> deserialize(JsonParser p,
+        DeserializationContext ctxt) throws IOException {
 
         var parser = LabFhirContext
             .getInstance()
@@ -33,7 +35,7 @@ public class ObservationListDeserializer extends JsonDeserializer<List<Observati
             return List.of();
         }
 
-        var node = mapper.readTree(valueAsString);
+        var node = MAPPER.readTree(valueAsString);
 
         return StreamSupport
             .stream(node.spliterator(), false)

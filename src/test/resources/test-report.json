@@ -75,9 +75,7 @@
       "id": "embedded-patient",
       "name": [
         {
-          "given": [
-            "Testvorname"
-          ],
+          "given": ["Testvorname"],
           "family": "Testnachname"
         }
       ],
@@ -554,7 +552,7 @@
           },
           "high": {
             "unit": "g/cm3",
-            "value": 1.040
+            "value": 1.04
           }
         }
       ],

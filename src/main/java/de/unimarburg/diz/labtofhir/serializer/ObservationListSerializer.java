@@ -9,15 +9,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.hl7.fhir.r4.model.Observation;
 
-public class ObservationListSerializer extends JsonSerializer<List<Observation>> {
+public class ObservationListSerializer extends
+    JsonSerializer<List<Observation>> {
 
-    private static final FhirContext fhirContext = FhirContext.forR4();
+    private static final FhirContext FHIR_CONTEXT = FhirContext.forR4();
 
     @Override
     public void serialize(List<Observation> value, JsonGenerator gen,
         SerializerProvider serializers) throws IOException {
 
-        var jsonParser = fhirContext.newJsonParser();
+        var jsonParser = FHIR_CONTEXT.newJsonParser();
 
         var serialized = value
             .stream()

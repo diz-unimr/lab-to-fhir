@@ -6,11 +6,11 @@ import org.springframework.kafka.support.serializer.JsonSerde;
 
 public class JsonSerdes {
 
-    public static JsonSerde<LaboratoryReport> LaboratoryReport() {
+    public static JsonSerde<LaboratoryReport> laboratoryReport() {
         return new JsonSerde<>(LaboratoryReport.class);
     }
 
-    public static JsonSerde<LoincMap> LoincMapEntry() {
+    public static JsonSerde<LoincMap> loincMapEntry() {
         return new JsonSerde<>(LoincMap.class);
     }
 

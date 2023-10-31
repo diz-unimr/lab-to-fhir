@@ -7,14 +7,12 @@ RUN gradle clean build --no-daemon > /dev/null 2>&1 || true
 
 COPY --chown=gradle:gradle . .
 RUN gradle build --info && \
-    gradle jacocoTestReport && \
-    awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }' build/jacoco/coverage.csv && \
     java -Djarmode=layertools -jar build/libs/*.jar extract
 
 FROM gcr.io/distroless/java17:nonroot
 
 USER root
-COPY cert/RKA_Root_CA_2.cer /tmp/RKA_Root_CA_2.cer
+COPY cert/RKA_CA.crt /tmp/RKA_CA.crt
 RUN [\
  "/usr/lib/jvm/java-17-openjdk-amd64/bin/keytool",\
  "-import",\
@@ -24,9 +22,9 @@ RUN [\
  "-storepass",\
  "changeit",\
  "-alias",\
- "rka_root_ca_2",\
+ "rka_ca",\
  "-file",\
- "/tmp/RKA_Root_CA_2.cer"\
+ "/tmp/RKA_CA.crt"\
 ]
 USER nonroot
 

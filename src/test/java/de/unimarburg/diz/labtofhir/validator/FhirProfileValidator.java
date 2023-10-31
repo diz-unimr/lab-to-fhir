@@ -21,16 +21,20 @@ import org.slf4j.LoggerFactory;
 
 public class FhirProfileValidator {
 
-    private final static Logger log = LoggerFactory.getLogger(FhirProfileValidator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(
+        FhirProfileValidator.class);
 
     private static Collection<StructureDefinition> loadedProfiles;
     private static Collection<CodeSystem> loadedCodeSystems;
     private static Collection<ValueSet> loadedValueSets;
 
+    private static final char ESC = (char) 27;
+
     public static FhirValidator create(FhirContext ctx) {
         var validator = ctx.newValidator();
 
-        // Create a PrePopulatedValidationSupport and load it with our custom structures
+        // Create a PrePopulatedValidationSupport and load it with our custom
+        // structures
         var customValidation = new PrePopulatedValidationSupport(ctx);
 
         // Load StructureDefinitions, ValueSets, CodeSystems, etc.
@@ -40,10 +44,12 @@ public class FhirProfileValidator {
         //        getCodeSystems(ctx).forEach(customValidation::addCodeSystem);
         //        getValueSets(ctx).forEach(customValidation::addValueSet);
 
-        // We'll create a chain that includes both the pre-populated and default. We put
-        // the pre-populated (custom) support module first so that it takes precedence
-        var validationSupportChain = new ValidationSupportChain(customValidation,
-            new SnapshotGeneratingValidationSupport(ctx), new DefaultProfileValidationSupport(ctx),
+        // We'll create a chain that includes both the pre-populated and
+        // default. We put the pre-populated (custom) support module first so
+        // that it takes precedence
+        var validationSupportChain = new ValidationSupportChain(
+            customValidation, new SnapshotGeneratingValidationSupport(ctx),
+            new DefaultProfileValidationSupport(ctx),
             new InMemoryTerminologyServerValidationSupport(ctx),
             new CommonCodeSystemsTerminologyService(ctx));
 
@@ -53,10 +59,12 @@ public class FhirProfileValidator {
         return validator;
     }
 
-    private static Collection<StructureDefinition> getProfiles(FhirContext ctx) {
+    private static Collection<StructureDefinition> getProfiles(
+        FhirContext ctx) {
         // get profiles
         if (loadedProfiles == null || loadedProfiles.isEmpty()) {
-            loadedProfiles = FhirResourceLoader.loadFromDirectory(ctx, "node_modules", "*.json")
+            loadedProfiles = FhirResourceLoader
+                .loadFromDirectory(ctx, "node_modules", "*.json")
                 .stream()
                 .filter(StructureDefinition.class::isInstance)
                 .map(StructureDefinition.class::cast)
@@ -68,7 +76,8 @@ public class FhirProfileValidator {
     private static Collection<CodeSystem> getCodeSystems(FhirContext ctx) {
         // get code systems
         if (loadedCodeSystems == null || loadedCodeSystems.isEmpty()) {
-            loadedCodeSystems = FhirResourceLoader.loadFromDirectory(ctx, "codesystems")
+            loadedCodeSystems = FhirResourceLoader
+                .loadFromDirectory(ctx, "codesystems")
                 .stream()
                 .filter(CodeSystem.class::isInstance)
                 .map(CodeSystem.class::cast)
@@ -80,7 +89,8 @@ public class FhirProfileValidator {
     private static Collection<ValueSet> getValueSets(FhirContext ctx) {
         // get value sets
         if (loadedValueSets == null || loadedValueSets.isEmpty()) {
-            loadedValueSets = FhirResourceLoader.loadFromDirectory(ctx, "valueset")
+            loadedValueSets = FhirResourceLoader
+                .loadFromDirectory(ctx, "valueset")
                 .stream()
                 .filter(ValueSet.class::isInstance)
                 .map(ValueSet.class::cast)
@@ -90,29 +100,39 @@ public class FhirProfileValidator {
     }
 
     public static void prettyPrint(ValidationResult validationResult) {
-        prettyPrint(log, validationResult);
+        prettyPrint(LOG, validationResult);
     }
 
-    public static void prettyPrint(Logger log, ValidationResult validationResult) {
-        validationResult.getMessages()
+    public static void prettyPrint(Logger log,
+        ValidationResult validationResult) {
+        validationResult
+            .getMessages()
             .forEach(message -> {
 
                 switch (message.getSeverity()) {
                     case ERROR:
-                        log.error((char) 27 + "[31mFHIR Validation" + (char) 27 + "[0m" + ": "
-                            + message.getLocationString() + " - " + message.getMessage());
+                        log.error(
+                            ESC + "[31mFHIR Validation" + ESC + "[0m" + ": "
+                                + message.getLocationString() + " - "
+                                + message.getMessage());
                         break;
                     case WARNING:
-                        log.warn((char) 27 + "[33mFHIR Validation" + (char) 27 + "[0m" + ": "
-                            + message.getLocationString() + " - " + message.getMessage());
+                        log.warn(
+                            ESC + "[33mFHIR Validation" + ESC + "[0m" + ": "
+                                + message.getLocationString() + " - "
+                                + message.getMessage());
                         break;
                     case INFORMATION:
-                        log.info((char) 27 + "[34mFHIR Validation" + (char) 27 + "[0m" + ": "
-                            + message.getLocationString() + " - " + message.getMessage());
+                        log.info(
+                            ESC + "[34mFHIR Validation" + ESC + "[0m" + ": "
+                                + message.getLocationString() + " - "
+                                + message.getMessage());
                         break;
                     default:
-                        log.debug("Validation issue " + message.getSeverity() + " - "
-                            + message.getLocationString() + " - " + message.getMessage());
+                        log.debug(
+                            "Validation issue " + message.getSeverity() + " - "
+                                + message.getLocationString() + " - "
+                                + message.getMessage());
                 }
             });
     }

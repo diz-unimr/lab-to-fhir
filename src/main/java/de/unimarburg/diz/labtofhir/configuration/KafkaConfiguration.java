@@ -18,15 +18,17 @@ import org.springframework.kafka.config.StreamsBuilderFactoryBeanConfigurer;
 @EnableKafka
 public class KafkaConfiguration {
 
-    private static final Logger log = LoggerFactory.getLogger(KafkaConfiguration.class);
+    private static final Logger LOG = LoggerFactory.getLogger(
+        KafkaConfiguration.class);
 
+    @SuppressWarnings("checkstyle:LineLength")
     @Bean
-    public StreamsBuilderFactoryBeanConfigurer streamsBuilderFactoryBeanCustomizer(
+    public StreamsBuilderFactoryBeanConfigurer streamsBuilderCustomizer(
         @Value("${app.kafka.rocksdb.level-compaction:false}") boolean enableLevelCompaction) {
         return factoryBean -> {
             factoryBean.setKafkaStreamsCustomizer(
                 kafkaStreams -> kafkaStreams.setUncaughtExceptionHandler(e -> {
-                    log.error("Uncaught exception occurred.", e);
+                    LOG.error("Uncaught exception occurred.", e);
                     // default handler response
                     return StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.SHUTDOWN_CLIENT;
                 }));
@@ -34,7 +36,8 @@ public class KafkaConfiguration {
             if (enableLevelCompaction) {
                 Objects
                     .requireNonNull(factoryBean.getStreamsConfiguration())
-                    .put(StreamsConfig.ROCKSDB_CONFIG_SETTER_CLASS_CONFIG, RocksDbConfig.class);
+                    .put(StreamsConfig.ROCKSDB_CONFIG_SETTER_CLASS_CONFIG,
+                        RocksDbConfig.class);
             }
         };
     }

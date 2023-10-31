@@ -24,7 +24,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
 
-@SpringBootTest(classes = {FhirConfiguration.class, LoincMapperTestConfiguration.class})
+@SpringBootTest(classes = {FhirConfiguration.class,
+    LoincMapperTestConfiguration.class})
 public class LoincMapperTests {
 
     private static LoincMap testLoincMap;
@@ -44,9 +45,11 @@ public class LoincMapperTests {
         }
     }
 
+    @SuppressWarnings("checkstyle:LineLength")
     private static Stream<Arguments> mapCodeAndQuantityProvidesMetaCodeArguments() {
         return Stream.of(Arguments.of("TEST", null, "1000-0"),
-            Arguments.of("TEST", "meta1", "1000-1"), Arguments.of("TEST", "meta2", "1000-2"),
+            Arguments.of("TEST", "meta1", "1000-1"),
+            Arguments.of("TEST", "meta2", "1000-2"),
             // fallback to null source
             Arguments.of("TEST", "not-mapped", "1000-0"));
     }

@@ -9,8 +9,9 @@ import java.nio.charset.StandardCharsets;
 import org.apache.kafka.common.serialization.Serializer;
 import org.hl7.fhir.r4.model.Resource;
 
-public class FhirSerializer<T extends Resource> extends JsonSerializer<T> implements Serializer<T> {
-    
+public class FhirSerializer<T extends Resource> extends
+    JsonSerializer<T> implements Serializer<T> {
+
     @Override
     public byte[] serialize(String topic, T data) {
         if (data == null) {
@@ -26,8 +27,8 @@ public class FhirSerializer<T extends Resource> extends JsonSerializer<T> implem
 
 
     @Override
-    public void serialize(T value, JsonGenerator gen, SerializerProvider provider)
-        throws IOException {
+    public void serialize(T value, JsonGenerator gen,
+        SerializerProvider provider) throws IOException {
         var valueString = LabFhirContext
             .getInstance()
             .newJsonParser()

@@ -9,8 +9,8 @@ import java.io.IOException;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.hl7.fhir.r4.model.Resource;
 
-public class FhirDeserializer<T extends Resource> extends JsonDeserializer<T> implements
-    Deserializer<T> {
+public class FhirDeserializer<T extends Resource> extends
+    JsonDeserializer<T> implements Deserializer<T> {
 
     private final Class<T> classType;
 
@@ -32,7 +32,8 @@ public class FhirDeserializer<T extends Resource> extends JsonDeserializer<T> im
     }
 
     @Override
-    public T deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
+    public T deserialize(JsonParser p, DeserializationContext ctx)
+        throws IOException {
         return deserialize(p.getValueAsString());
     }
 
