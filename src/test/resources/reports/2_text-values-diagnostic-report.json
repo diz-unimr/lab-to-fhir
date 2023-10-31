@@ -27,9 +27,7 @@
       "id": "embedded-patient",
       "name": [
         {
-          "given": [
-            "Testvorname"
-          ],
+          "given": ["Testvorname"],
           "family": "Testnachname"
         }
       ],

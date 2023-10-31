@@ -145,7 +145,7 @@
       {
         "low": {
           "unit": "mmol/l",
-          "value": 2.20
+          "value": 2.2
         },
         "high": {
           "unit": "mmol/l",
@@ -554,7 +554,7 @@
       {
         "low": {
           "unit": "T/l",
-          "value": 4.10
+          "value": 4.1
         },
         "high": {
           "unit": "T/l",

@@ -72,7 +72,7 @@
     "resourceType": "Observation",
     "valueQuantity": {
       "unit": "G/l",
-      "value": 10.00
+      "value": 10.0
     },
     "interpretation": [
       {
