@@ -6,7 +6,11 @@ import java.net.http.HttpResponse.BodyHandlers;
 
 public class HealthCheck {
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    private static final int STATUS_OK = 200;
+
+    public static void main(String[] args)
+        throws InterruptedException, IOException {
+
         var client = HttpClient.newHttpClient();
         var request = HttpRequest
             .newBuilder()
@@ -14,7 +18,7 @@ public class HealthCheck {
             .header("accept", "application/json")
             .build();
         var response = client.send(request, BodyHandlers.ofString());
-        if (response.statusCode() != 200 || !response
+        if (response.statusCode() != STATUS_OK || !response
             .body()
             .contains("UP")) {
             throw new RuntimeException("Healthcheck failed");
