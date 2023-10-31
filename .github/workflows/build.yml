@@ -4,7 +4,8 @@ on:
   push:
   pull_request:
 
-permissions: read-all
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -19,9 +20,14 @@ jobs:
         uses: gradle/wrapper-validation-action@v1.1.0
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2.9.0
+        with:
+          dependency-graph: generate-and-submit
       - name: Execute Gradle build
         run: ./gradlew build
-      - name: Execute Gradle test
-        run: ./gradlew test
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+
+  dependency-review:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Perform dependency review
+        uses: actions/dependency-review-action@v3
