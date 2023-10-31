@@ -92,3 +92,7 @@ is available for development purposes.
 You can build a docker image for this processor by using the provided [Dockerfile](Dockerfile).
 
 ⚠ FHIR profiles must be installed for the build step to run successfully. 
+
+## License
+
+[AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.en.html)
