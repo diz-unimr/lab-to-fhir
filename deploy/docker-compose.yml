@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   lab-to-fhir:
-    image: registry.diz.uni-marburg.de/etl/lab-to-fhir:v3.0.0
+    image: ghcr.io/diz-unimr/lab-to-fhir:latest
     environment:
       SPRING_CLOUD_STREAM_BINDINGS_PROCESS_IN_0_DESTINATION: aim-lab
       SPRING_CLOUD_STREAM_BINDINGS_PROCESS_IN_1_DESTINATION: loinc
