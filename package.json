@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@gitlab.diz.uni-marburg.de:2224/etl/lab-to-fhir.git"
+    "url": "https://github.com/diz-unimr/lab-to-fhir.git"
   },
   "author": "",
   "license": "ISC",
