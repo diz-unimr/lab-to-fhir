@@ -44,7 +44,7 @@ fhir:
 
 mapping:
   loinc:
-    version: "602baef6"
+    version: "2.0.0"
     credentials:
       user:
       password:

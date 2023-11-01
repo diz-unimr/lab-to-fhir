@@ -79,13 +79,14 @@ Records which can't be mapped are skipped.
 
 ## Deployment
 
-This project includes a docker-compose file for deployment purposes. Environment variables can be set according to the
+This project includes a docker compose file for deployment purposes.
+Environment variables can be set according to the
 provided `sample.env`. Remember to replace the `IMAGE_TAG` variable according to the desired version tag. Available
 tags can be found at the [Container Registry](https://github.com/orgs/diz-unimr/packages?repo_name=lab-to-fhir) or under [Releases](https://github.com/diz-unimr/lab-to-fhir/releases).
 
 ## Development
 
-A [test setup](dev/docker-compose.yml) and [test data provider](dev/docker-compose-data.yml)
+A [test setup](dev/compose.yaml) and [test data provider](dev/compose-data.yaml)
 is available for development purposes.
 
 ### Builds

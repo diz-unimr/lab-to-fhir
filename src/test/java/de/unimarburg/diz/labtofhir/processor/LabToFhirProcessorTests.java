@@ -63,9 +63,7 @@ public class LabToFhirProcessorTests {
         final KStream<String, LaboratoryReport> labStream = builder.stream(
             "lab",
             Consumed.with(Serdes.String(), JsonSerdes.laboratoryReport()));
-        //        final KTable<String, LoincMap> loincTable = builder.table
-        //        ("loinc", Consumed.with(Serdes.String(), JsonSerdes
-        //        .LoincMapEntry ()));
+
         processor
             .process()
             .apply(labStream)
@@ -115,8 +113,6 @@ public class LabToFhirProcessorTests {
                 .filter(Observation.class::isInstance)
                 .map(Observation.class::cast)
                 .map(Observation::getCode)
-                //                .max(Comparator.comparing
-                //                (TestRecord::getRecordTime))
                 .findAny()
                 .orElseThrow();
 

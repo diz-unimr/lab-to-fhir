@@ -8,7 +8,6 @@ public class LoincMapEntry {
     private String swl;
     private String loinc;
     private String ucum;
-    private boolean groupCode;
     private String meta;
 
     public String getSwl() {
@@ -26,10 +25,8 @@ public class LoincMapEntry {
 
     @JsonSetter("QUELLE")
     public LoincMapEntry setMeta(String meta) {
-        if ("".equals(meta)) {
-            meta = null;
-        }
-        this.meta = meta;
+        this.meta = StringUtils.isBlank(meta) ? null : meta;
+
         return this;
     }
 
@@ -50,16 +47,6 @@ public class LoincMapEntry {
     @JsonSetter("UCUM_WERT")
     public LoincMapEntry setUcum(String ucum) {
         this.ucum = ucum;
-        return this;
-    }
-
-    public boolean getGroupCode() {
-        return groupCode;
-    }
-
-    @JsonSetter("ETL_Staging")
-    public LoincMapEntry setGroupCode(String groupCode) {
-        this.groupCode = StringUtils.equalsIgnoreCase("X", groupCode);
         return this;
     }
 
