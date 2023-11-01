@@ -1,5 +1,5 @@
 # lab-to-fhir
-[![MegaLinter](https://github.com/diz-unimr/lab-to-fhir/workflows/MegaLinter/badge.svg?branch=main)](https://github.com/diz-unimr/lab-to-fhir/actions?query=workflow%3AMegaLinter+branch%3Amain) ![java](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/build.yml/badge.svg) ![docker](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/release.yml/badge.svg) [![codecov](https://codecov.io/gh/diz-unimr/lab-to-fhir/branch/main/graph/badge.svg?token=ub0ZDTKwrz)](https://codecov.io/gh/diz-unimr/lab-to-fhir)
+[![MegaLinter](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/mega-linter.yml/badge.svg?branch=main)](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/mega-linter.yml?query=branch%3Amain) ![java](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/build.yml/badge.svg) ![docker](https://github.com/diz-unimr/lab-to-fhir/actions/workflows/release.yml/badge.svg) [![codecov](https://codecov.io/gh/diz-unimr/lab-to-fhir/branch/main/graph/badge.svg?token=ub0ZDTKwrz)](https://codecov.io/gh/diz-unimr/lab-to-fhir)
 
 > Kafka Stream Processor, transforming laboratory data to MII FHIR
 
