@@ -100,12 +100,9 @@ public class LoincMap {
     }
 
     public void put(String code, LoincMapEntry entry) {
-        // 1. source: entries are ordered with null values being last
-        // 2. group code: entries are ordered with group codes being last
+        // source: entries are ordered with null values first
         var entries = internalMap.computeIfAbsent(code, s -> new TreeSet<>(
-            comparing(LoincMapEntry::getMeta,
-                nullsFirst(naturalOrder())).thenComparing(
-                LoincMapEntry::getGroupCode, Boolean::compare)));
+            comparing(LoincMapEntry::getMeta, nullsFirst(naturalOrder()))));
         entries.add(entry);
     }
 
@@ -130,10 +127,6 @@ public class LoincMap {
 
     public int size() {
         return internalMap.size();
-    }
-
-    public CsvPackageMetadata metadata() {
-        return metadata;
     }
 
     private <T> List<T> loadItems(Class<T> type, InputStream inputStream,
