@@ -19,7 +19,7 @@ repositories {
 
 ext {
     set('springBootVersion', "3.2.1")
-    set('springCloudVersion', "2022.0.4")
+    set('springCloudVersion', "2023.0.0")
     set("hapiFhirVersion", "6.8.5")
 }
 
