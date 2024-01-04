@@ -1,8 +1,10 @@
 package de.unimarburg.diz.labtofhir.mapper;
 
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
+import de.unimarburg.diz.labtofhir.metric.TagCounter;
 import de.unimarburg.diz.labtofhir.model.LoincMap;
 import de.unimarburg.diz.labtofhir.model.LoincMapEntry;
+import io.micrometer.core.instrument.Metrics;
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import org.hl7.fhir.r4.model.Coding;
@@ -21,19 +23,28 @@ public class LoincMapper {
     private final Resource mappingPackage;
     private static final Logger LOG = LoggerFactory.getLogger(
         LoincMapper.class);
+    private final TagCounter unmappedCodes;
     private LoincMap loincMap;
 
     @Autowired
     public LoincMapper(FhirProperties fhirProperties,
         @Qualifier("mappingPackage") Resource mappingPackage) {
-        this.mappingPackage = mappingPackage;
         this.fhirProperties = fhirProperties;
+        this.unmappedCodes = new TagCounter("loinc_unmapped",
+            "Number of unmapped resources by code", "swl_code",
+            Metrics.globalRegistry);
+
+        this.mappingPackage = mappingPackage;
     }
 
     public LoincMapper(FhirProperties fhirProperties, LoincMap loincMap) {
+        this.fhirProperties = fhirProperties;
+        this.unmappedCodes = new TagCounter("loinc_unmapped",
+            "Number of unmapped resources by code", "swl_code",
+            Metrics.globalRegistry);
+
         this.loincMap = loincMap;
         this.mappingPackage = null;
-        this.fhirProperties = fhirProperties;
     }
 
     private LoincMap getSwlLoincMapping(Resource mappingPackage)
@@ -70,6 +81,7 @@ public class LoincMapper {
         }
         var mapping = loincMap.get(swlCode.get(), metaCode);
         if (mapping == null) {
+            unmappedCodes.increment(swlCode.get());
             return obs;
         }
 

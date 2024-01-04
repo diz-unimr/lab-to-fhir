@@ -51,7 +51,8 @@ public class LoincMapperTests {
             Arguments.of("TEST", "meta1", "1000-1"),
             Arguments.of("TEST", "meta2", "1000-2"),
             // fallback to null source
-            Arguments.of("TEST", "not-mapped", "1000-0"));
+            Arguments.of("TEST", "not-mapped", "1000-0"),
+            Arguments.of("UNKNOWN", null, "UNKNOWN"));
     }
 
     @BeforeAll
