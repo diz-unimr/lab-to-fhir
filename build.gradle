@@ -22,7 +22,7 @@ ext {
     set('springCloudDepsVersion', "2023.0.0")
     set('springCloudStreamVersion', "4.1.0")
     set('springKafkaVersion', "3.1.1")
-    set("hapiFhirVersion", "6.8.5")
+    set("hapiFhirVersion", "6.10.5")
 }
 
 dependencies {
