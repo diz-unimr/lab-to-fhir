@@ -5,7 +5,6 @@ import de.unimarburg.diz.labtofhir.metric.TagCounter;
 import de.unimarburg.diz.labtofhir.model.LoincMap;
 import de.unimarburg.diz.labtofhir.model.LoincMapEntry;
 import io.micrometer.core.instrument.Metrics;
-import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Observation;
@@ -14,9 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class LoincMapper {
 
     private final FhirProperties fhirProperties;
@@ -24,6 +22,11 @@ public class LoincMapper {
     private static final Logger LOG = LoggerFactory.getLogger(
         LoincMapper.class);
     private final TagCounter unmappedCodes;
+
+    public LoincMap getMap() {
+        return loincMap;
+    }
+
     private LoincMap loincMap;
 
     @Autowired
@@ -47,12 +50,17 @@ public class LoincMapper {
         this.mappingPackage = null;
     }
 
-    private LoincMap getSwlLoincMapping(Resource mappingPackage)
+    public static LoincMap getSwlLoincMapping(Resource mappingPackage)
         throws IOException {
         return new LoincMap().with(mappingPackage, ',');
     }
 
-    @PostConstruct
+    public LoincMapper initialize() throws Exception {
+        initializeMap();
+        return this;
+    }
+
+    //    @PostConstruct
     private void initializeMap() throws Exception {
         if (this.mappingPackage != null) {
             this.loincMap = getSwlLoincMapping(mappingPackage);

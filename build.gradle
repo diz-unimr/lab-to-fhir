@@ -27,9 +27,14 @@ ext {
 
 dependencies {
     // spring cloud stream kafka
-    implementation "org.springframework.cloud:spring-cloud-stream:$springCloudStreamVersion"
+    implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka:$springCloudStreamVersion"
     implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka-streams:$springCloudStreamVersion"
+    implementation "org.springframework.cloud:spring-cloud-starter-stream-kafka:$springCloudStreamVersion"
     implementation "org.springframework.kafka:spring-kafka:$springKafkaVersion"
+
+    // retry
+    implementation 'org.springframework.retry:spring-retry:2.0.3'
+    implementation 'org.springframework:spring-aspects:6.0.11'
 
     // metrics
     implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"

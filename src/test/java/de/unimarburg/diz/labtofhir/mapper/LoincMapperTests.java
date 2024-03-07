@@ -34,7 +34,6 @@ public class LoincMapperTests {
 
     @Autowired
     private FhirProperties fhirProperties;
-    //    private static LoincMap testLoincMap;
 
     @TestConfiguration
     static class LoincMapperTestConfiguration {

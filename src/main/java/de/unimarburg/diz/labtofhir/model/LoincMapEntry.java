@@ -1,6 +1,7 @@
 package de.unimarburg.diz.labtofhir.model;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
+import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 
 public class LoincMapEntry {
@@ -50,4 +51,22 @@ public class LoincMapEntry {
         return this;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        LoincMapEntry that = (LoincMapEntry) o;
+        return Objects.equals(swl, that.swl) && Objects.equals(loinc,
+            that.loinc) && Objects.equals(ucum, that.ucum) && Objects.equals(
+            meta, that.meta);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(swl, loinc, ucum, meta);
+    }
 }
