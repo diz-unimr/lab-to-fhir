@@ -71,15 +71,16 @@ dependencyManagement {
 
 test {
     useJUnitPlatform()
-    finalizedBy jacocoTestReport
 }
 
 jacocoTestReport {
     reports {
-        xml.required.set(false)
+        xml.required = true
+        html.required = false
     }
-    dependsOn test
 }
+
+check.dependsOn jacocoTestReport
 
 
 jar {
