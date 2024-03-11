@@ -52,7 +52,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
           DISABLE: SPELL # ignore spell checks
-          DISABLE_ERRORS_LINTERS: REPOSITORY_DEVSKIM # missing git safe.directory
           DISABLE_LINTERS: JAVA_PMD
 
       # Upload MegaLinter artifacts
