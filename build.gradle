@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'jacoco'
-    id 'org.springframework.boot' version '3.2.2'
+    id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'checkstyle'
 }
@@ -18,7 +18,7 @@ repositories {
 }
 
 ext {
-    set('springBootVersion', "3.2.2")
+    set('springBootVersion', "3.2.3")
     set('springCloudDepsVersion', "2023.0.0")
     set('springCloudStreamVersion', "4.1.0")
     set('springKafkaVersion', "3.1.1")
