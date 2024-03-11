@@ -124,5 +124,4 @@ public class LabToFhirProcessorTests {
                 .getLaboratorySystem(), "NA")).isTrue();
         }
     }
-
 }
