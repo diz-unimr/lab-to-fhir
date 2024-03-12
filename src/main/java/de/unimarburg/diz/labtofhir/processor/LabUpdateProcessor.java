@@ -1,6 +1,5 @@
 package de.unimarburg.diz.labtofhir.processor;
 
-import de.unimarburg.diz.labtofhir.LabRunner;
 import de.unimarburg.diz.labtofhir.UpdateCompleted;
 import de.unimarburg.diz.labtofhir.mapper.MiiLabReportMapper;
 import de.unimarburg.diz.labtofhir.model.LabOffsets;
@@ -34,9 +33,9 @@ public class LabUpdateProcessor {
     private final ApplicationEventPublisher eventPublisher;
 
 
-    public LabUpdateProcessor(LabRunner labRunner,
-        MiiLabReportMapper reportMapper, @Nullable MappingInfo mappingInfo,
-        LabOffsets offsets, ApplicationEventPublisher eventPublisher) {
+    public LabUpdateProcessor(MiiLabReportMapper reportMapper,
+        @Nullable MappingInfo mappingInfo, LabOffsets offsets,
+        ApplicationEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
         this.reportMapper = reportMapper;
         if (mappingInfo != null) {
@@ -73,7 +72,7 @@ public class LabUpdateProcessor {
 
                         // check partitions and offsets
                         var partitionState = offsetState.get(currentPartition);
-                        if (partitionState.offset() <= currentOffset + 1) {
+                        if (currentOffset > partitionState.offset()) {
                             if (!partitionState.done()) {
 
                                 offsetState.computeIfPresent(currentPartition,
