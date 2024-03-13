@@ -58,15 +58,20 @@ public class KafkaConfiguration {
         };
     }
 
+    @Bean
+    public AdminClientProvider clientProvider(KafkaAdmin kafkaAdmin) {
+        return () -> AdminClient.create(
+            kafkaAdmin.getConfigurationProperties());
+    }
+
 
     @Bean
-    public LabOffsets getOffsets(KafkaAdmin kafkaAdmin,
+    public LabOffsets getOffsets(AdminClientProvider kafkaAdmin,
         @Value("${spring.cloud.stream.kafka.streams.binder.functions.process.applicationId}") String processGroup,
         @Value("${spring.cloud.stream.kafka.streams.binder.functions.update.applicationId}") String updateGroup)
         throws ExecutionException, InterruptedException {
         // get current offsets
-        try (var client = AdminClient.create(
-            kafkaAdmin.getConfigurationProperties())) {
+        try (var client = kafkaAdmin.createClient()) {
             var processOffsets = client
                 .listConsumerGroupOffsets(processGroup)
                 .partitionsToOffsetAndMetadata()

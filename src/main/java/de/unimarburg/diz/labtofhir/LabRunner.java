@@ -1,12 +1,11 @@
 package de.unimarburg.diz.labtofhir;
 
+import de.unimarburg.diz.labtofhir.configuration.AdminClientProvider;
 import de.unimarburg.diz.labtofhir.model.MappingInfo;
 import java.util.Collections;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import javax.annotation.Nullable;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.clients.admin.Admin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +14,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.cloud.stream.binding.BindingsLifecycleController.State;
 import org.springframework.cloud.stream.endpoint.BindingsEndpoint;
 import org.springframework.context.event.EventListener;
-import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.retry.RetryCallback;
 import org.springframework.retry.RetryContext;
 import org.springframework.retry.RetryListener;
@@ -31,7 +29,7 @@ public class LabRunner implements ApplicationRunner {
 
     private static final Logger LOG = LoggerFactory.getLogger(LabRunner.class);
     private final BindingsEndpoint endpoint;
-    private final KafkaAdmin kafkaAdmin;
+    private final AdminClientProvider kafkaAdmin;
     private final MappingInfo mappingInfo;
     private final String updateGroup;
     private final RetryTemplate retryTemplate;
@@ -40,7 +38,7 @@ public class LabRunner implements ApplicationRunner {
     static final long RETRY_BACKOFF_PERIOD = 2_000L;
 
     @SuppressWarnings("checkstyle:LineLength")
-    public LabRunner(BindingsEndpoint endpoint, KafkaAdmin kafkaAdmin,
+    public LabRunner(BindingsEndpoint endpoint, AdminClientProvider kafkaAdmin,
         @Nullable MappingInfo mappingInfo, @Value(
         "${spring.cloud.stream.kafka.streams.binder.functions.update"
             + ".applicationId}") String updateGroup) {
@@ -89,17 +87,8 @@ public class LabRunner implements ApplicationRunner {
         endpoint.changeState("process-in-0", State.STARTED);
     }
 
-    void resetUpdateConsumer(AdminClient client, Set<TopicPartition> offsets)
-        throws ExecutionException, InterruptedException {
-
-        client
-            .deleteConsumerGroupOffsets(updateGroup, offsets)
-            .all()
-            .get();
-    }
-
-    private AdminClient createAdminClient() {
-        return AdminClient.create(kafkaAdmin.getConfigurationProperties());
+    private Admin createAdminClient() {
+        return kafkaAdmin.createClient();
     }
 
     RetryTemplate setupRetryTemplate() {

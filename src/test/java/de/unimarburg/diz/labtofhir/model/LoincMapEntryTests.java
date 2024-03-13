@@ -26,6 +26,7 @@ public class LoincMapEntryTests {
 
         assertThat(entry.equals(entry)).isTrue();
         assertThat(entry.equals(entry2)).isTrue();
+        assertThat(entry.equals(null)).isFalse();
         assertThat(entry.equals(entry3)).isFalse();
     }
 

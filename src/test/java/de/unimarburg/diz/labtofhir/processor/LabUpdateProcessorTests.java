@@ -77,7 +77,7 @@ public class LabUpdateProcessorTests {
         processor
             .update()
             .apply(labStream)
-            .to("lab-mapped", Produced.with(Serdes.String(),
+            .to("output-topic", Produced.with(Serdes.String(),
                 Serdes.serdeFrom(new FhirSerializer<>(),
                     new FhirDeserializer<>(Bundle.class))));
 
@@ -85,7 +85,7 @@ public class LabUpdateProcessorTests {
 
             TestInputTopic<String, LaboratoryReport> labTopic = driver.createInputTopic(
                 "lab", new StringSerializer(), new JsonSerializer<>());
-            var outputTopic = driver.createOutputTopic("lab-mapped",
+            var outputTopic = driver.createOutputTopic("output-topic",
                 new StringDeserializer(), new FhirDeserializer<>(Bundle.class));
 
             var inputReports = List.of(createReport(1, "NA"),
