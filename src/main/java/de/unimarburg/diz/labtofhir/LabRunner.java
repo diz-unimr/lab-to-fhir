@@ -3,6 +3,7 @@ package de.unimarburg.diz.labtofhir;
 import de.unimarburg.diz.labtofhir.configuration.AdminClientProvider;
 import de.unimarburg.diz.labtofhir.model.MappingInfo;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import javax.annotation.Nullable;
 import org.apache.kafka.clients.admin.Admin;
@@ -104,8 +105,9 @@ public class LabRunner implements ApplicationRunner {
                     Throwable throwable) {
                     LOG.debug(
                         "Delete Consumer group failed: {}. " + "Retrying {}",
-                        throwable
-                            .getCause()
+                        Optional
+                            .ofNullable(throwable.getCause())
+                            .orElse(throwable)
                             .getMessage(), context.getRetryCount());
                 }
             })
@@ -144,7 +146,8 @@ public class LabRunner implements ApplicationRunner {
             stopAndDeleteUpdateConsumer();
         } catch (Exception e) {
             LOG.error("stopAndDeleteUpdateConsumer", e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to delete update consumer group",
+                e);
         }
     }
 }

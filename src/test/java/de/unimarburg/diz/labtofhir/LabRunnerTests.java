@@ -1,5 +1,6 @@
 package de.unimarburg.diz.labtofhir;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
@@ -13,6 +14,7 @@ import de.unimarburg.diz.labtofhir.model.MappingInfo;
 import de.unimarburg.diz.labtofhir.model.MappingUpdate;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
@@ -30,7 +32,6 @@ public class LabRunnerTests {
     private BindingsEndpoint endpoint;
     @Mock
     private AdminClientProvider kafkaAdmin;
-
 
     @Test
     void runAlwaysStartsLabBinder() throws Exception {
@@ -84,6 +85,42 @@ public class LabRunnerTests {
 
         verify(endpoint).changeState("process-in-0", State.STARTED);
         verify(endpoint).changeState("update-in-0", State.STARTED);
+    }
+
+    @Test
+    void onEventCompletedDeletesConsumer()
+        throws ExecutionException, InterruptedException {
+        // setup
+        var admin = setupAdminClient();
+        var runner = setupRunner(null);
+
+        // act
+        runner.onApplicationEvent(new UpdateCompleted(this));
+
+        // verify consumer stopped and consumer group deleted
+        verify(endpoint).changeState("update-in-0", State.STOPPED);
+        verify(admin
+            .deleteConsumerGroups(anyCollection())
+            .all()).get();
+    }
+
+    @Test
+    void onEventCompletedFailureThrows()
+        throws ExecutionException, InterruptedException {
+        // setup
+        var admin = setupAdminClient();
+        when(admin
+            .deleteConsumerGroups(anyCollection())
+            .all()
+            .get()).thenThrow(new InterruptedException("oops"));
+        var runner = setupRunner(null);
+
+        assertThatExceptionOfType(RuntimeException.class)
+            .isThrownBy(
+                () -> runner.onApplicationEvent(new UpdateCompleted(this)))
+            .withCauseInstanceOf(InterruptedException.class)
+            .withMessage("Failed to delete update consumer group");
+
     }
 
     private LabRunner setupRunner(MappingInfo mappingInfo) {

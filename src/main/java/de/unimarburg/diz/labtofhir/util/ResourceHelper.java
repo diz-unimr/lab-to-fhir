@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -42,13 +43,14 @@ public class ResourceHelper {
                 clientBuilder.setProxy(HttpHost.create(proxyServer));
             }
 
-            var response = clientBuilder
-                .build()
-                .execute(new HttpGet(String.format(
+            CloseableHttpResponse response;
+            try (var client = clientBuilder.build()) {
+                response = client.execute(new HttpGet(String.format(
                     "https://gitlab.diz.uni-marburg.de/"
                         + "api/v4/projects/63/packages/generic/"
                         + "mapping-swl-loinc/%s/mapping-swl-loinc.zip",
                     version)));
+            }
 
             LOG.info("Package registry responded with: " + response
                 .getStatusLine()
