@@ -52,7 +52,6 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.16.1'
 
     // unit tests
-    testImplementation "org.springframework.cloud:spring-cloud-stream:$springCloudStreamVersion"
     testImplementation 'org.apache.kafka:kafka-streams-test-utils:3.6.1'
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
