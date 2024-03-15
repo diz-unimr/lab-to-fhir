@@ -58,17 +58,20 @@ public class LoincMapperTests {
     public static void init() {
         testLoincMap = new LoincMap();
         var testCode = "TEST";
-        testLoincMap.put(testCode, new LoincMapEntry()
-            .setLoinc("1000-0")
-            .setUcum("mmol/L"));
-        testLoincMap.put(testCode, new LoincMapEntry()
-            .setMeta("meta1")
-            .setLoinc("1000-1")
-            .setUcum("mmol/L"));
-        testLoincMap.put(testCode, new LoincMapEntry()
-            .setMeta("meta2")
-            .setLoinc("1000-2")
-            .setUcum("mmol/L"));
+        testLoincMap.put(testCode, new LoincMapEntry.Builder()
+            .withLoinc("1000-0")
+            .withUcum("mmol/L")
+            .build());
+        testLoincMap.put(testCode, new LoincMapEntry.Builder()
+            .withMeta("meta1")
+            .withLoinc("1000-1")
+            .withUcum("mmol/L")
+            .build());
+        testLoincMap.put(testCode, new LoincMapEntry.Builder()
+            .withMeta("meta2")
+            .withLoinc("1000-2")
+            .withUcum("mmol/L")
+            .build());
     }
 
 

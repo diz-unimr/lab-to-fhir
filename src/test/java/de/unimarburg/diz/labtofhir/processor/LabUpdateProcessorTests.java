@@ -12,25 +12,11 @@ import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.model.MappingInfo;
 import de.unimarburg.diz.labtofhir.model.MappingUpdate;
 import de.unimarburg.diz.labtofhir.processor.LabUpdateProcessorTests.KafkaConfig;
-import de.unimarburg.diz.labtofhir.serde.JsonSerdes;
-import de.unimarburg.diz.labtofhir.serializer.FhirDeserializer;
-import de.unimarburg.diz.labtofhir.serializer.FhirSerializer;
 import java.util.List;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
-import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.streams.KeyValue;
-import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.TestInputTopic;
-import org.apache.kafka.streams.TopologyTestDriver;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.test.TestRecord;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DiagnosticReport;
@@ -45,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(classes = {LabUpdateProcessor.class, MiiLabReportMapper.class,
@@ -55,7 +40,7 @@ import org.springframework.test.context.TestPropertySource;
     "mapping.loinc.credentials.user=''",
     "mapping.loinc.credentials.password=''",
     "mapping.loinc.local=mapping-swl-loinc.zip"})
-public class LabUpdateProcessorTests {
+public class LabUpdateProcessorTests extends BaseProcessorTests {
 
     @Autowired
     private LabUpdateProcessor processor;
@@ -69,24 +54,10 @@ public class LabUpdateProcessorTests {
     void updateIsProcessed() {
 
         // build stream
-        var builder = new StreamsBuilder();
-        final KStream<String, LaboratoryReport> labStream = builder.stream(
-            "lab",
-            Consumed.with(Serdes.String(), JsonSerdes.laboratoryReport()));
+        try (var driver = buildStream(processor.update())) {
 
-        processor
-            .update()
-            .apply(labStream)
-            .to("output-topic", Produced.with(Serdes.String(),
-                Serdes.serdeFrom(new FhirSerializer<>(),
-                    new FhirDeserializer<>(Bundle.class))));
-
-        try (var driver = new TopologyTestDriver(builder.build())) {
-
-            TestInputTopic<String, LaboratoryReport> labTopic = driver.createInputTopic(
-                "lab", new StringSerializer(), new JsonSerializer<>());
-            var outputTopic = driver.createOutputTopic("output-topic",
-                new StringDeserializer(), new FhirDeserializer<>(Bundle.class));
+            var labTopic = createInputTopic(driver);
+            var outputTopic = createOutputTopic(driver);
 
             var inputReports = List.of(createReport(1, "NA"),
                 createReport(2, "ERY"), createReport(3, "NA"),
@@ -108,17 +79,7 @@ public class LabUpdateProcessorTests {
                 .toList()).isEqualTo(List.of("1", "3"));
 
             // assert codes are mapped
-            var obsCodes = outputRecords
-                .stream()
-                .flatMap(b -> b
-                    .getValue()
-                    .getEntry()
-                    .stream()
-                    .map(BundleEntryComponent::getResource))
-                .filter(Observation.class::isInstance)
-                .map(Observation.class::cast)
-                .map(Observation::getCode)
-                .toList();
+            var obsCodes = getObservationsCodes(outputRecords).toList();
 
             assertThat(obsCodes).allMatch(
                 c -> c.hasCoding("http://loinc.org", "2951-2"));
@@ -164,5 +125,4 @@ public class LabUpdateProcessorTests {
                 false);
         }
     }
-
 }

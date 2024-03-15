@@ -50,18 +50,18 @@ public class ResourceHelper {
                         + "api/v4/projects/63/packages/generic/"
                         + "mapping-swl-loinc/%s/mapping-swl-loinc.zip",
                     version)));
+
+                LOG.info("Package registry responded with: " + response
+                    .getStatusLine()
+                    .toString());
+
+                var tmpFile = File.createTempFile("download", ".zip");
+                StreamUtils.copy(response
+                    .getEntity()
+                    .getContent(), new FileOutputStream(tmpFile));
+
+                return new FileSystemResource(tmpFile);
             }
-
-            LOG.info("Package registry responded with: " + response
-                .getStatusLine()
-                .toString());
-
-            var tmpFile = File.createTempFile("download", ".zip");
-            StreamUtils.copy(response
-                .getEntity()
-                .getContent(), new FileOutputStream(tmpFile));
-
-            return new FileSystemResource(tmpFile);
 
         } else {
 

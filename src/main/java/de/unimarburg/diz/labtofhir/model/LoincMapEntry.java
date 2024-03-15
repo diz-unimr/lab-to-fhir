@@ -1,55 +1,73 @@
 package de.unimarburg.diz.labtofhir.model;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.Objects;
-import org.apache.commons.lang3.StringUtils;
 
-public class LoincMapEntry {
+@JsonDeserialize(builder = LoincMapEntry.Builder.class)
+public final class LoincMapEntry {
 
-    private String swl;
-    private String loinc;
-    private String ucum;
-    private String meta;
+    private final String swl;
+    private final String loinc;
+    private final String ucum;
+    private final String meta;
+
+    private LoincMapEntry(String swl, String loinc, String ucum, String meta) {
+        this.swl = swl;
+        this.loinc = loinc;
+        this.ucum = ucum;
+        this.meta = meta;
+    }
+
+    //    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    //    public LoincMapEntry(@JsonProperty("CODE") String swl,
+    //        @JsonProperty("LOINC") String loinc, @JsonProperty("UCUM") String ucum,
+    //        @JsonProperty("QUELLE") String meta) {
+    //        this.swl = swl;
+    //        this.loinc = loinc;
+    //        this.ucum = ucum;
+    //        this.meta = meta;
+    //    }
 
     public String getSwl() {
         return this.swl;
     }
 
-    @JsonSetter("CODE")
-    public void setSwl(String swl) {
-        this.swl = swl;
-    }
+    //    @JsonSetter("CODE")
+    //    public void setSwl(String swl) {
+    //        this.swl = swl;
+    //    }
 
     public String getMeta() {
         return meta;
     }
 
-    @JsonSetter("QUELLE")
-    public LoincMapEntry setMeta(String meta) {
-        this.meta = StringUtils.isBlank(meta) ? null : meta;
-
-        return this;
-    }
+    //    @JsonSetter("QUELLE")
+    //    public LoincMapEntry setMeta(String meta) {
+    //        this.meta = StringUtils.isBlank(meta) ? null : meta;
+    //
+    //        return this;
+    //    }
 
     public String getLoinc() {
         return this.loinc;
     }
 
-    @JsonSetter("LOINC")
-    public LoincMapEntry setLoinc(String loinc) {
-        this.loinc = loinc;
-        return this;
-    }
+    //    @JsonSetter("LOINC")
+    //    public LoincMapEntry setLoinc(String loinc) {
+    //        this.loinc = loinc;
+    //        return this;
+    //    }
 
     public String getUcum() {
         return this.ucum;
     }
 
-    @JsonSetter("UCUM_WERT")
-    public LoincMapEntry setUcum(String ucum) {
-        this.ucum = ucum;
-        return this;
-    }
+    //    @JsonSetter("UCUM_WERT")
+    //    public LoincMapEntry setUcum(String ucum) {
+    //        this.ucum = ucum;
+    //        return this;
+    //    }
 
     @Override
     public boolean equals(Object o) {
@@ -68,5 +86,39 @@ public class LoincMapEntry {
     @Override
     public int hashCode() {
         return Objects.hash(swl, loinc, ucum, meta);
+    }
+
+    @JsonPOJOBuilder
+    public static class Builder {
+
+        private String swl;
+        private String loinc;
+        private String ucum;
+        private String meta;
+
+        public Builder withSwl(String swl) {
+            this.swl = swl;
+            return this;
+        }
+
+        public Builder withLoinc(String loinc) {
+            this.loinc = loinc;
+            return this;
+        }
+
+        public Builder withUcum(String ucum) {
+            this.ucum = ucum;
+            return this;
+        }
+
+        public Builder withMeta(String meta) {
+            this.meta = meta;
+            return this;
+        }
+
+
+        public LoincMapEntry build() {
+            return new LoincMapEntry(swl, loinc, ucum, meta);
+        }
     }
 }

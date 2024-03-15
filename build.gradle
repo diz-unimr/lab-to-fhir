@@ -53,6 +53,7 @@ dependencies {
 
     // unit tests
     testImplementation 'org.apache.kafka:kafka-streams-test-utils:3.6.1'
+    testImplementation 'nl.jqno.equalsverifier:equalsverifier:3.15.8'
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
