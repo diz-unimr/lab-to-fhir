@@ -52,6 +52,7 @@ abstract class BaseProcessorTests {
             new FhirDeserializer<>(Bundle.class));
     }
 
+    @SuppressWarnings("checkstyle:LineLength")
     TopologyTestDriver buildStream(
         Function<KStream<String, LaboratoryReport>, KStream<String, Bundle>> processor) {
         var builder = new StreamsBuilder();
