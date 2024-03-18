@@ -1,5 +1,7 @@
 version: "3.7"
 
+name: lab-to-fhir
+
 services:
   lab-data-loader:
     image: confluentinc/cp-kafkacat:7.0.1

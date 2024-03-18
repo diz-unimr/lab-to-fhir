@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'jacoco'
-    id 'org.springframework.boot' version '3.2.2'
+    id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'checkstyle'
 }
@@ -18,23 +18,28 @@ repositories {
 }
 
 ext {
-    set('springBootVersion', "3.2.2")
+    set('springBootVersion', "3.2.3")
     set('springCloudDepsVersion', "2023.0.0")
     set('springCloudStreamVersion', "4.1.0")
     set('springKafkaVersion', "3.1.1")
-    set("hapiFhirVersion", "6.8.5")
+    set("hapiFhirVersion", "6.10.5")
 }
 
 dependencies {
     // spring cloud stream kafka
-    implementation "org.springframework.cloud:spring-cloud-stream:$springCloudStreamVersion"
+    implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka:$springCloudStreamVersion"
     implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka-streams:$springCloudStreamVersion"
+    implementation "org.springframework.cloud:spring-cloud-starter-stream-kafka:$springCloudStreamVersion"
     implementation "org.springframework.kafka:spring-kafka:$springKafkaVersion"
+
+    // retry
+    implementation 'org.springframework.retry:spring-retry:2.0.3'
+    implementation 'org.springframework:spring-aspects:6.0.11'
 
     // metrics
     implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
-    implementation 'io.micrometer:micrometer-registry-prometheus:1.12.1'
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.12.3'
 
     // hapi fhir
     implementation "ca.uhn.hapi.fhir:hapi-fhir-base:$hapiFhirVersion"
@@ -47,8 +52,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.16.1'
 
     // unit tests
-    testImplementation "org.springframework.cloud:spring-cloud-stream:$springCloudStreamVersion"
     testImplementation 'org.apache.kafka:kafka-streams-test-utils:3.6.1'
+    testImplementation 'nl.jqno.equalsverifier:equalsverifier:3.15.8'
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion") {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -66,15 +71,16 @@ dependencyManagement {
 
 test {
     useJUnitPlatform()
-    finalizedBy jacocoTestReport
 }
 
 jacocoTestReport {
     reports {
-        xml.required.set(false)
+        xml.required = true
+        html.required = false
     }
-    dependsOn test
 }
+
+check.dependsOn jacocoTestReport
 
 
 jar {

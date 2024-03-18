@@ -1,5 +1,7 @@
 version: "3.7"
 
+name: lab-to-fhir
+
 services:
   zoo:
     image: zookeeper:3.6.1

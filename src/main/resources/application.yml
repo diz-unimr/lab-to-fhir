@@ -11,16 +11,30 @@ spring:
       key-store-password: ${SSL_KEY_STORE_PASSWORD}
 
   cloud:
+    function:
+      definition: process;update
     stream:
       bindings:
         process-in-0:
           destination: ${INPUT_TOPIC:aim-lab}
+          consumer:
+            auto-startup: false
         process-out-0:
+          destination: ${OUTPUT_TOPIC:lab-fhir}
+        update-in-0:
+          destination: ${INPUT_TOPIC:aim-lab}
+          consumer:
+            auto-startup: false
+        update-out-0:
           destination: ${OUTPUT_TOPIC:lab-fhir}
       kafka:
         streams:
           binder:
-            applicationId: lab-to-fhir
+            functions:
+              process:
+                applicationId: lab-to-fhir
+              update:
+                applicationId: lab-update
             configuration:
               compression.type: gzip
               max.request.size: 5242880
@@ -44,7 +58,7 @@ fhir:
 
 mapping:
   loinc:
-    version: "2.0.1"
+    version: "2.0.2"
     credentials:
       user:
       password:
