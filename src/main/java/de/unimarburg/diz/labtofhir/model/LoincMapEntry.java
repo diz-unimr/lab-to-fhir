@@ -19,55 +19,21 @@ public final class LoincMapEntry {
         this.meta = meta;
     }
 
-    //    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    //    public LoincMapEntry(@JsonProperty("CODE") String swl,
-    //        @JsonProperty("LOINC") String loinc, @JsonProperty("UCUM") String ucum,
-    //        @JsonProperty("QUELLE") String meta) {
-    //        this.swl = swl;
-    //        this.loinc = loinc;
-    //        this.ucum = ucum;
-    //        this.meta = meta;
-    //    }
-
     public String getSwl() {
         return this.swl;
     }
-
-    //    @JsonSetter("CODE")
-    //    public void setSwl(String swl) {
-    //        this.swl = swl;
-    //    }
 
     public String getMeta() {
         return meta;
     }
 
-    //    @JsonSetter("QUELLE")
-    //    public LoincMapEntry setMeta(String meta) {
-    //        this.meta = StringUtils.isBlank(meta) ? null : meta;
-    //
-    //        return this;
-    //    }
-
     public String getLoinc() {
         return this.loinc;
     }
 
-    //    @JsonSetter("LOINC")
-    //    public LoincMapEntry setLoinc(String loinc) {
-    //        this.loinc = loinc;
-    //        return this;
-    //    }
-
     public String getUcum() {
         return this.ucum;
     }
-
-    //    @JsonSetter("UCUM_WERT")
-    //    public LoincMapEntry setUcum(String ucum) {
-    //        this.ucum = ucum;
-    //        return this;
-    //    }
 
     @Override
     public boolean equals(Object o) {
