@@ -31,7 +31,7 @@ import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Reference;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-@SuppressWarnings("CheckStyle")
+@SuppressWarnings("checkstyle:LineLength")
 abstract class BaseProcessorTests {
 
     Stream<CodeableConcept> getObservationsCodes(

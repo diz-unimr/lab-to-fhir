@@ -1,5 +1,6 @@
 package de.unimarburg.diz.labtofhir.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.Objects;
@@ -57,13 +58,17 @@ public final class LoincMapEntry {
     @JsonPOJOBuilder
     public static class Builder {
 
-        private String swl;
+        @JsonProperty("CODE")
+        private String code;
+        @JsonProperty("LOINC")
         private String loinc;
+        @JsonProperty("UCUM_WERT")
         private String ucum;
+        @JsonProperty("QUELLE")
         private String meta;
 
-        public Builder withSwl(String swl) {
-            this.swl = swl;
+        public Builder withCode(String swl) {
+            this.code = swl;
             return this;
         }
 
@@ -84,7 +89,7 @@ public final class LoincMapEntry {
 
 
         public LoincMapEntry build() {
-            return new LoincMapEntry(swl, loinc, ucum, meta);
+            return new LoincMapEntry(code, loinc, ucum, meta);
         }
     }
 }

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import java.io.IOException;
 import java.io.InputStream;
@@ -154,6 +155,7 @@ public class LoincMap {
             MappingIterator<T> readValues = mapper
                 .readerFor(type)
                 .with(bootstrapSchema)
+                .withFeatures(CsvParser.Feature.EMPTY_STRING_AS_NULL)
                 .readValues(inputStream);
             return readValues.readAll();
         } catch (IOException e) {
