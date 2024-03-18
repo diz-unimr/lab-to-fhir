@@ -17,15 +17,7 @@ import java.util.Map;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.test.TestRecord;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.Encounter;
-import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.Observation;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Quantity;
-import org.hl7.fhir.r4.model.Reference;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -87,26 +79,11 @@ public class LabUpdateProcessorTests extends BaseProcessorTests {
     }
 
     private LaboratoryReport createReport(int reportId, String labCode) {
-        var report = new LaboratoryReport();
-        report.setId(reportId);
-        report.setResource(new DiagnosticReport()
-            .addIdentifier(new Identifier().setValue("report-id"))
-            .setSubject(new Reference(
-                new Patient().addIdentifier(new Identifier().setValue("1"))))
-            .setEncounter(new Reference(new Encounter().addIdentifier(
-                new Identifier().setValue("1")))));
-
-        var obs = new Observation()
-            .addIdentifier(new Identifier().setValue("obs-id"))
-            .setCode(new CodeableConcept().setCoding(List.of(new Coding(
-                fhirProperties
-                    .getSystems()
-                    .getLaboratorySystem(), labCode, null))))
-            .setValue(new Quantity(1));
-        obs.setId("obs-id");
-        report.setObservations(List.of(obs));
-
-        return report;
+        return createReport(reportId, new Coding()
+            .setSystem(fhirProperties
+                .getSystems()
+                .getLaboratorySystem())
+            .setCode(labCode));
     }
 
     @TestConfiguration
