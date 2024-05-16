@@ -41,9 +41,10 @@ import org.springframework.retry.annotation.EnableRetry;
 @EnableRetry
 public class KafkaConfiguration {
 
-    private static final Logger LOG = LoggerFactory.getLogger(
-        KafkaConfiguration.class);
-    private static final String USE_TYPE_INFO_HEADERS = "spring.cloud.stream.kafka.streams.binder.configuration.spring.json.use.type.headers";
+    private static final Logger LOG =
+        LoggerFactory.getLogger(KafkaConfiguration.class);
+    private static final String USE_TYPE_INFO_HEADERS =
+        "spring.cloud.stream.kafka.streams.binder.configuration.spring.json.use.type.headers";
 
     @Bean
     public StreamsBuilderFactoryBeanConfigurer streamsBuilderCustomizer() {
@@ -67,32 +68,23 @@ public class KafkaConfiguration {
 
     @Bean
     public LabOffsets getOffsets(AdminClientProvider kafkaAdmin,
-        @Value("${spring.cloud.stream.kafka.streams.binder.functions.process.applicationId}") String processGroup,
-        @Value("${spring.cloud.stream.kafka.streams.binder.functions.update.applicationId}") String updateGroup)
-        throws ExecutionException, InterruptedException {
+        @Value("${spring.cloud.stream.kafka.streams.binder.functions.process.applicationId}")
+        String processGroup,
+        @Value("${spring.cloud.stream.kafka.streams.binder.functions.update.applicationId}")
+        String updateGroup) throws ExecutionException, InterruptedException {
         // get current offsets
         try (var client = kafkaAdmin.createClient()) {
-            var processOffsets = client
-                .listConsumerGroupOffsets(processGroup)
-                .partitionsToOffsetAndMetadata()
-                .get();
+            var processOffsets = client.listConsumerGroupOffsets(processGroup)
+                .partitionsToOffsetAndMetadata().get();
 
-            var updateOffsets = client
-                .listConsumerGroupOffsets(updateGroup)
-                .partitionsToOffsetAndMetadata()
-                .get();
+            var updateOffsets = client.listConsumerGroupOffsets(updateGroup)
+                .partitionsToOffsetAndMetadata().get();
 
-            return new LabOffsets(processOffsets
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(e -> e
-                    .getKey()
-                    .partition(), Map.Entry::getValue)), updateOffsets
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(e -> e
-                    .getKey()
-                    .partition(), Map.Entry::getValue)));
+            return new LabOffsets(processOffsets.entrySet().stream().collect(
+                Collectors.toMap(e -> e.getKey().partition(),
+                    Map.Entry::getValue)), updateOffsets.entrySet().stream()
+                .collect(Collectors.toMap(e -> e.getKey().partition(),
+                    Map.Entry::getValue)));
         }
     }
 
@@ -111,11 +103,9 @@ public class KafkaConfiguration {
 
     @Bean
     public NewTopic mappingTopic(
-        @Value("${spring.cloud.stream.kafka.streams.binder.replicationFactor}") int replicas) {
-        return TopicBuilder
-            .name("mapping")
-            .partitions(1)
-            .replicas(replicas)
+        @Value("${spring.cloud.stream.kafka.streams.binder.replicationFactor}")
+        int replicas) {
+        return TopicBuilder.name("mapping").partitions(1).replicas(replicas)
             .build();
     }
 
@@ -125,7 +115,7 @@ public class KafkaConfiguration {
         @Value("${" + USE_TYPE_INFO_HEADERS + "}") boolean useTypeHeaders) {
 
         var props = new HashMap<>(cf.getConfigurationProperties());
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "mapping-update");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "lab-mapping");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
             StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,

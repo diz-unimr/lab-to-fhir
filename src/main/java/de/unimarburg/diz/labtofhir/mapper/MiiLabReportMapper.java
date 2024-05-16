@@ -164,7 +164,7 @@ public class MiiLabReportMapper implements
             return null;
         }
 
-        LOG.debug("Mapped successfully to FHIR bundle: id:{}, order number{}",
+        LOG.debug("Mapped successfully to FHIR bundle: id:{}, order number:{}",
             report.getId(), report.getReportIdentifierValue());
         LOG.trace("FHIR bundle: {}", fhirParser.encodeResourceToString(bundle));
 

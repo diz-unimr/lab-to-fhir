@@ -58,9 +58,9 @@ public final class LoincMapEntry {
     @JsonPOJOBuilder
     public static class Builder {
 
-        @JsonProperty("CODE")
+        @JsonProperty("SWL_CODE")
         private String code;
-        @JsonProperty("LOINC")
+        @JsonProperty("CODE_VALUE")
         private String loinc;
         @JsonProperty("UCUM_WERT")
         private String ucum;

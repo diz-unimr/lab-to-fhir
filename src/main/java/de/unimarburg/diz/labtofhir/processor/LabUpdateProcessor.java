@@ -25,12 +25,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class LabUpdateProcessor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(
-        LabUpdateProcessor.class);
-    private MappingUpdate mappingVersion;
+    private static final Logger LOG =
+        LoggerFactory.getLogger(LabUpdateProcessor.class);
     private final MiiLabReportMapper reportMapper;
     private final ConcurrentHashMap<Integer, OffsetTarget> offsetState;
     private final ApplicationEventPublisher eventPublisher;
+    private MappingUpdate mappingVersion;
 
 
     public LabUpdateProcessor(MiiLabReportMapper reportMapper,
@@ -42,13 +42,10 @@ public class LabUpdateProcessor {
             this.mappingVersion = mappingInfo.update();
         }
 
-        this.offsetState = new ConcurrentHashMap<>(offsets
-            .processOffsets()
-            .entrySet()
-            .stream()
-            .collect(Collectors.toMap(Entry::getKey, e -> new OffsetTarget(e
-                .getValue()
-                .offset(), false))));
+        this.offsetState = new ConcurrentHashMap<>(
+            offsets.processOffsets().entrySet().stream().collect(
+                Collectors.toMap(Entry::getKey,
+                    e -> new OffsetTarget(e.getValue().offset(), false))));
     }
 
     @SuppressWarnings("checkstyle:LineLength")
@@ -61,61 +58,68 @@ public class LabUpdateProcessor {
 
                     @Override
                     public void process(Record<String, LaboratoryReport> record) {
-                        var currentPartition = context()
-                            .recordMetadata()
-                            .orElseThrow()
-                            .partition();
-                        var currentOffset = context()
-                            .recordMetadata()
-                            .orElseThrow()
-                            .offset();
+                        var currentPartition =
+                            context().recordMetadata().orElseThrow().partition();
+                        var currentOffset =
+                            context().recordMetadata().orElseThrow().offset();
 
                         // check partitions and offsets
                         var partitionState = offsetState.get(currentPartition);
-                        if (currentOffset > partitionState.offset()) {
-                            if (!partitionState.done()) {
-
-                                offsetState.computeIfPresent(currentPartition,
-                                    (partition, target) -> new OffsetTarget(
-                                        target.offset(), true));
-                            }
+                        if (currentOffset >= partitionState.offset()
+                            && checkCompleted(offsetState, currentPartition)) {
 
                             // all done
-                            if (offsetState
-                                .values()
-                                .stream()
-                                .allMatch(s -> s.done)) {
-
-                                // send completed event
-                                eventPublisher.publishEvent(
-                                    new UpdateCompleted(this));
-                            }
-
                             return;
                         }
 
                         // filter for update codes
-                        if (record
-                            .value()
-                            .getObservations()
-                            .stream()
-                            .anyMatch(o -> o
-                                .getCode()
-                                .getCoding()
-                                .stream()
-                                .anyMatch(c -> mappingVersion
-                                    .getUpdates()
+                        if (record.value().getObservations().stream().anyMatch(
+                            o -> o.getCode().getCoding().stream().anyMatch(
+                                c -> mappingVersion.getUpdates()
                                     .contains(c.getCode())))) {
 
                             // map
                             var bundle = reportMapper.apply(record.value());
-
                             context().forward(record.withValue(bundle));
+                        }
+
+                        // check completed for current offset +1
+                        if (currentOffset + 1 >= partitionState.offset()) {
+                            checkCompleted(offsetState, currentPartition);
                         }
                     }
                 })
             // filter
             .filter((k, v) -> v != null);
+    }
+
+    private boolean checkCompleted(
+        ConcurrentHashMap<Integer, OffsetTarget> offsetState,
+        int currentPartition) {
+        var partitionState = offsetState.get(currentPartition);
+        if (partitionState.done()) {
+            // already done; just return
+            return true;
+        } else {
+            this.offsetState.computeIfPresent(currentPartition,
+                (partition, target) -> new OffsetTarget(target.offset(), true));
+
+        }
+
+        // all done
+        if (this.offsetState.values().stream().allMatch(s -> s.done)) {
+
+            LOG.info("Update done with offset state {}", offsetState);
+            // send completed event
+            sendCompleted();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void sendCompleted() {
+        eventPublisher.publishEvent(new UpdateCompleted(this));
     }
 
     private record OffsetTarget(long offset, boolean done) {

@@ -28,15 +28,13 @@ import org.springframework.stereotype.Service;
 @Retryable
 public class LabRunner implements ApplicationRunner {
 
+    static final long RETRY_BACKOFF_PERIOD = 2_000L;
     private static final Logger LOG = LoggerFactory.getLogger(LabRunner.class);
     private final BindingsEndpoint endpoint;
     private final AdminClientProvider kafkaAdmin;
     private final MappingInfo mappingInfo;
     private final String updateGroup;
     private final RetryTemplate retryTemplate;
-
-
-    static final long RETRY_BACKOFF_PERIOD = 2_000L;
 
     @SuppressWarnings("checkstyle:LineLength")
     public LabRunner(BindingsEndpoint endpoint, AdminClientProvider kafkaAdmin,
@@ -60,18 +58,13 @@ public class LabRunner implements ApplicationRunner {
                 // reset update consumer
 
                 try (var client = createAdminClient()) {
-                    var offsets = client
-                        .listConsumerGroupOffsets(updateGroup)
-                        .partitionsToOffsetAndMetadata()
-                        .get();
+                    var offsets = client.listConsumerGroupOffsets(updateGroup)
+                        .partitionsToOffsetAndMetadata().get();
 
                     if (!offsets.isEmpty()) {
                         LOG.info("Starting mapping update from {} to {}",
-                            mappingInfo
-                                .update()
-                                .getOldVersion(), mappingInfo
-                                .update()
-                                .getVersion());
+                            mappingInfo.update().getOldVersion(),
+                            mappingInfo.update().getVersion());
 
                         // start update at the beginning
                         // delete consumer group
@@ -94,9 +87,7 @@ public class LabRunner implements ApplicationRunner {
 
     RetryTemplate setupRetryTemplate() {
 
-        return RetryTemplate
-            .builder()
-            .customPolicy(new AlwaysRetryPolicy())
+        return RetryTemplate.builder().customPolicy(new AlwaysRetryPolicy())
             .fixedBackoff(RETRY_BACKOFF_PERIOD)
             .withListener(new RetryListener() {
                 @Override
@@ -105,14 +96,11 @@ public class LabRunner implements ApplicationRunner {
                     Throwable throwable) {
                     LOG.debug(
                         "Delete Consumer group failed: {}. " + "Retrying {}",
-                        Optional
-                            .ofNullable(throwable.getCause())
-                            .orElse(throwable)
-                            .getMessage(), context.getRetryCount());
+                        Optional.ofNullable(throwable.getCause())
+                            .orElse(throwable).getMessage(),
+                        context.getRetryCount());
                 }
-            })
-            .retryOn(ExecutionException.class)
-            .build();
+            }).retryOn(ExecutionException.class).build();
     }
 
     public void stopAndDeleteUpdateConsumer() throws Exception {
@@ -131,8 +119,7 @@ public class LabRunner implements ApplicationRunner {
     private void deleteUpdateConsumerGroup() throws Exception {
         try (var client = createAdminClient()) {
             retryTemplate.execute(ctx -> client
-                .deleteConsumerGroups(Collections.singleton(updateGroup))
-                .all()
+                .deleteConsumerGroups(Collections.singleton(updateGroup)).all()
                 .get());
         }
     }

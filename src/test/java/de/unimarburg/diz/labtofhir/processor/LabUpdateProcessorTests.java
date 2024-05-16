@@ -51,13 +51,15 @@ public class LabUpdateProcessorTests extends BaseProcessorTests {
             var labTopic = createInputTopic(driver);
             var outputTopic = createOutputTopic(driver);
 
-            var inputReports = List.of(createReport(1, "NA"),
-                createReport(2, "ERY"), createReport(3, "NA"),
-                createReport(4, "NA"));
+            // NA values are updated, but update only processes the first two
+            // because the last one (4) is where the default processor picks up
+            // according to processOffsets()
+            var inputReports =
+                List.of(createReport(1, "NA"), createReport(2, "ERY"),
+                    createReport(3, "NA"), createReport(4, "NA"));
 
             // create input records
-            labTopic.pipeKeyValueList(inputReports
-                .stream()
+            labTopic.pipeKeyValueList(inputReports.stream()
                 .map(r -> new KeyValue<>(String.valueOf(r.getId()), r))
                 .toList());
 
@@ -65,34 +67,32 @@ public class LabUpdateProcessorTests extends BaseProcessorTests {
             var outputRecords = outputTopic.readRecordsToList();
 
             // expected keys are: 1, 3
-            assertThat(outputRecords
-                .stream()
-                .map(TestRecord::getKey)
+            assertThat(outputRecords.stream().map(TestRecord::getKey)
                 .toList()).isEqualTo(List.of("1", "3"));
 
             // assert codes are mapped
             var obsCodes = getObservationsCodes(outputRecords).toList();
 
+            // all updated observations have LOINC coding for NA
             assertThat(obsCodes).allMatch(
-                c -> c.hasCoding("http://loinc.org", "2951-2"));
+                codes -> codes.hasCoding("http://loinc.org", "2951-2"));
         }
     }
 
     private LaboratoryReport createReport(int reportId, String labCode) {
         return createReport(reportId, new Coding()
-            .setSystem(fhirProperties
-                .getSystems()
-                .getLaboratorySystem())
+            .setSystem(fhirProperties.getSystems().getLaboratorySystem())
             .setCode(labCode));
     }
 
     @TestConfiguration
     static class KafkaConfig {
 
+        @SuppressWarnings("checkstyle:MagicNumber")
         @Bean
         LabOffsets testOffsets() {
-            // offset target will be 2 on partition 0
-            return new LabOffsets(Map.of(0, new OffsetAndMetadata(2L)),
+            // offset target will be 3 on partition 0
+            return new LabOffsets(Map.of(0, new OffsetAndMetadata(3L)),
                 Map.of());
         }
 
