@@ -55,20 +55,20 @@ Additional application properties can be set by overriding values form the [appl
 
 ## Mapping updates
 
-In addition to the regular Kafka processor this application uses a separate 
-update processor to apply mapping updates to all records up until the 
+In addition to the regular Kafka processor this application uses a separate
+update processor to apply mapping updates to all records up until the
 current offset state of the regular processor.
 
-The update processor is a separate Kafka consumer and keeps its own offset 
-state in order to be able to resume unfinished updates. On completion, the 
+The update processor is a separate Kafka consumer and keeps its own offset
+state in order to be able to resume unfinished updates. On completion, the
 update consumer group is deleted.
 
-On startup, the application checks the configured mapping version and 
-determines a diff between the mappings of the current and the last used 
+On startup, the application checks the configured mapping version and
+determines a diff between the mappings of the current and the last used
 mapping version. This data is stored in the Kafka topic `mapping` with the key
 `lab-update`.
 
-In case there are no changes or the mapping versions used are equal, the 
+In case there are no changes or the mapping versions used are equal, the
 update processor is not started.
 
 ## Tests
