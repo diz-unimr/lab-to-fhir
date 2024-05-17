@@ -24,6 +24,11 @@ public class LoincMapper {
     private static final Logger LOG = LoggerFactory.getLogger(
         LoincMapper.class);
     private final TagCounter unmappedCodes;
+
+    public LoincMap getMap() {
+        return loincMap;
+    }
+
     private LoincMap loincMap;
 
     @Autowired
@@ -47,12 +52,17 @@ public class LoincMapper {
         this.mappingPackage = null;
     }
 
-    private LoincMap getSwlLoincMapping(Resource mappingPackage)
+    public static LoincMap getSwlLoincMapping(Resource mappingPackage)
         throws IOException {
         return new LoincMap().with(mappingPackage, ',');
     }
 
     @PostConstruct
+    public LoincMapper initialize() throws Exception {
+        initializeMap();
+        return this;
+    }
+
     private void initializeMap() throws Exception {
         if (this.mappingPackage != null) {
             this.loincMap = getSwlLoincMapping(mappingPackage);

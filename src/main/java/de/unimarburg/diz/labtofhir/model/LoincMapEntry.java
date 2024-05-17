@@ -1,53 +1,95 @@
 package de.unimarburg.diz.labtofhir.model;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
-import org.apache.commons.lang3.StringUtils;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import java.util.Objects;
 
-public class LoincMapEntry {
+@JsonDeserialize(builder = LoincMapEntry.Builder.class)
+public final class LoincMapEntry {
 
-    private String swl;
-    private String loinc;
-    private String ucum;
-    private String meta;
+    private final String swl;
+    private final String loinc;
+    private final String ucum;
+    private final String meta;
+
+    private LoincMapEntry(String swl, String loinc, String ucum, String meta) {
+        this.swl = swl;
+        this.loinc = loinc;
+        this.ucum = ucum;
+        this.meta = meta;
+    }
 
     public String getSwl() {
         return this.swl;
-    }
-
-    @JsonSetter("CODE")
-    public void setSwl(String swl) {
-        this.swl = swl;
     }
 
     public String getMeta() {
         return meta;
     }
 
-    @JsonSetter("QUELLE")
-    public LoincMapEntry setMeta(String meta) {
-        this.meta = StringUtils.isBlank(meta) ? null : meta;
-
-        return this;
-    }
-
     public String getLoinc() {
         return this.loinc;
-    }
-
-    @JsonSetter("LOINC")
-    public LoincMapEntry setLoinc(String loinc) {
-        this.loinc = loinc;
-        return this;
     }
 
     public String getUcum() {
         return this.ucum;
     }
 
-    @JsonSetter("UCUM_WERT")
-    public LoincMapEntry setUcum(String ucum) {
-        this.ucum = ucum;
-        return this;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        LoincMapEntry that = (LoincMapEntry) o;
+        return Objects.equals(swl, that.swl) && Objects.equals(loinc,
+            that.loinc) && Objects.equals(ucum, that.ucum) && Objects.equals(
+            meta, that.meta);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(swl, loinc, ucum, meta);
+    }
+
+    @JsonPOJOBuilder
+    public static class Builder {
+
+        @JsonProperty("SWL_CODE")
+        private String code;
+        @JsonProperty("CODE_VALUE")
+        private String loinc;
+        @JsonProperty("UCUM_WERT")
+        private String ucum;
+        @JsonProperty("QUELLE")
+        private String meta;
+
+        public Builder withCode(String swl) {
+            this.code = swl;
+            return this;
+        }
+
+        public Builder withLoinc(String loinc) {
+            this.loinc = loinc;
+            return this;
+        }
+
+        public Builder withUcum(String ucum) {
+            this.ucum = ucum;
+            return this;
+        }
+
+        public Builder withMeta(String meta) {
+            this.meta = meta;
+            return this;
+        }
+
+
+        public LoincMapEntry build() {
+            return new LoincMapEntry(code, loinc, ucum, meta);
+        }
+    }
 }

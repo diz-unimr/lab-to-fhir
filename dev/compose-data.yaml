@@ -1,5 +1,7 @@
 version: "3.7"
 
+name: lab-to-fhir
+
 services:
   lab-data-loader:
     image: confluentinc/cp-kafkacat:7.0.1
@@ -7,5 +9,5 @@ services:
     command: >
       "kafkacat -b localhost:9092 -K: -t laboratory -P -l /data/lab-data.ndjson"
     volumes:
-      - ./lab-data-single.ndjson:/data/lab-data.ndjson:ro
+      - ./lab-data.ndjson:/data/lab-data.ndjson:ro
     network_mode: host

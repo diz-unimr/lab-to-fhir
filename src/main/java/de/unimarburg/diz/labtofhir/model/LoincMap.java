@@ -9,15 +9,19 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -27,8 +31,17 @@ import org.springframework.core.io.Resource;
 public class LoincMap {
 
     private final Map<String, Set<LoincMapEntry>> internalMap = new HashMap<>();
+
+    public Map<String, Set<LoincMapEntry>> getInternalMap() {
+        return internalMap;
+    }
+
     private final Logger log = LoggerFactory.getLogger(LoincMap.class);
     private CsvPackageMetadata metadata;
+
+    public CsvPackageMetadata getMetadata() {
+        return metadata;
+    }
 
     private LoincMap parsePackage(Resource pkg, char delimiter)
         throws IOException {
@@ -142,6 +155,7 @@ public class LoincMap {
             MappingIterator<T> readValues = mapper
                 .readerFor(type)
                 .with(bootstrapSchema)
+                .withFeatures(CsvParser.Feature.EMPTY_STRING_AS_NULL)
                 .readValues(inputStream);
             return readValues.readAll();
         } catch (IOException e) {
@@ -161,4 +175,34 @@ public class LoincMap {
         throw new IllegalArgumentException("Mapping resource must be a file.");
     }
 
+    public Set<String> diff(LoincMap fromMap) {
+
+        var keys = new HashSet<>(fromMap
+            .getInternalMap()
+            .keySet());
+
+        // remove keys present in current map
+        keys.removeAll(this
+            .getInternalMap()
+            .keySet());
+        // add keys of entries that differ
+        keys.addAll(this
+            .getInternalMap()
+            .entrySet()
+            .stream()
+            .filter(e ->
+                // new entry or updated
+                !fromMap
+                    .getInternalMap()
+                    .containsKey(e.getKey()) || !fromMap
+                    .getInternalMap()
+                    .get(e.getKey())
+                    .stream()
+                    .collect(Collectors.toUnmodifiableSet())
+                    .equals(e.getValue()))
+            .map(Entry::getKey)
+            .toList());
+
+        return keys;
+    }
 }
