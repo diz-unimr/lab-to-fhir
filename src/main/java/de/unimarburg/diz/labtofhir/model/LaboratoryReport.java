@@ -90,21 +90,16 @@ public class LaboratoryReport implements Serializable {
     }
 
     private void sanitizeIdentifierValue(DiagnosticReport resource) {
-        var identifierValue = resource
-            .getIdentifierFirstRep()
-            .getValue();
-        var idPart = StringUtils.substringAfterLast(identifierValue, "_");
+        var identifierValue = resource.getIdentifierFirstRep().getValue();
+        var idPart =
+            StringUtils.substringAfterLast(identifierValue, "SWISSLAB_");
         if (StringUtils.isNotBlank(idPart)) {
-            resource
-                .getIdentifierFirstRep()
-                .setValue(idPart);
+            resource.getIdentifierFirstRep().setValue(idPart);
         }
     }
 
     public String getReportIdentifierValue() {
-        return resource
-            .getIdentifierFirstRep()
-            .getValue();
+        return resource.getIdentifierFirstRep().getValue();
     }
 
     public String getMetaCode() {
