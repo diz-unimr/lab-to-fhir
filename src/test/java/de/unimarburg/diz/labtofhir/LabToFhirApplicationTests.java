@@ -9,6 +9,7 @@ import org.springframework.cloud.stream.endpoint.BindingsEndpoint;
 import org.springframework.context.annotation.Import;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 
+@SuppressWarnings("checkstyle:LineLength")
 @EmbeddedKafka(partitions = 1, brokerProperties = {
     "listeners=PLAINTEXT://localhost:9092", "port=9092"})
 @Import(BindingsEndpoint.class)
