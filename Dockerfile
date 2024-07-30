@@ -3,7 +3,7 @@ WORKDIR /home/gradle/src
 ENV GRADLE_USER_HOME=/gradle
 
 COPY . .
-RUN ./gradlew build --info && \
+RUN ./gradlew clean build --info && \
     java -Djarmode=layertools -jar build/libs/*.jar extract
 
 FROM gcr.io/distroless/java17:nonroot

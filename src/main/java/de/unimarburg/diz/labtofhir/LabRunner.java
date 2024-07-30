@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.cloud.stream.binding.BindingsLifecycleController;
 import org.springframework.cloud.stream.binding.BindingsLifecycleController.State;
-import org.springframework.cloud.stream.endpoint.BindingsEndpoint;
 import org.springframework.context.event.EventListener;
 import org.springframework.retry.RetryCallback;
 import org.springframework.retry.RetryContext;
@@ -30,16 +30,16 @@ public class LabRunner implements ApplicationRunner {
 
     static final long RETRY_BACKOFF_PERIOD = 2_000L;
     private static final Logger LOG = LoggerFactory.getLogger(LabRunner.class);
-    private final BindingsEndpoint endpoint;
+    private final BindingsLifecycleController endpoint;
     private final AdminClientProvider kafkaAdmin;
     private final MappingInfo mappingInfo;
     private final String updateGroup;
     private final RetryTemplate retryTemplate;
 
     @SuppressWarnings("checkstyle:LineLength")
-    public LabRunner(BindingsEndpoint endpoint, AdminClientProvider kafkaAdmin,
-        @Nullable MappingInfo mappingInfo, @Value(
-        "${spring.cloud.stream.kafka.streams.binder.functions.update"
+    public LabRunner(BindingsLifecycleController endpoint,
+        AdminClientProvider kafkaAdmin, @Nullable MappingInfo mappingInfo,
+        @Value("${spring.cloud.stream.kafka.streams.binder.functions.update"
             + ".applicationId}") String updateGroup) {
         this.endpoint = endpoint;
         this.kafkaAdmin = kafkaAdmin;
@@ -59,12 +59,14 @@ public class LabRunner implements ApplicationRunner {
 
                 try (var client = createAdminClient()) {
                     var offsets = client.listConsumerGroupOffsets(updateGroup)
-                        .partitionsToOffsetAndMetadata().get();
+                        .partitionsToOffsetAndMetadata()
+                        .get();
 
                     if (!offsets.isEmpty()) {
                         LOG.info("Starting mapping update from {} to {}",
-                            mappingInfo.update().getOldVersion(),
-                            mappingInfo.update().getVersion());
+                            mappingInfo.update()
+                                .getOldVersion(), mappingInfo.update()
+                                .getVersion());
 
                         // start update at the beginning
                         // delete consumer group
@@ -87,7 +89,8 @@ public class LabRunner implements ApplicationRunner {
 
     RetryTemplate setupRetryTemplate() {
 
-        return RetryTemplate.builder().customPolicy(new AlwaysRetryPolicy())
+        return RetryTemplate.builder()
+            .customPolicy(new AlwaysRetryPolicy())
             .fixedBackoff(RETRY_BACKOFF_PERIOD)
             .withListener(new RetryListener() {
                 @Override
@@ -97,10 +100,12 @@ public class LabRunner implements ApplicationRunner {
                     LOG.debug(
                         "Delete Consumer group failed: {}. " + "Retrying {}",
                         Optional.ofNullable(throwable.getCause())
-                            .orElse(throwable).getMessage(),
-                        context.getRetryCount());
+                            .orElse(throwable)
+                            .getMessage(), context.getRetryCount());
                 }
-            }).retryOn(ExecutionException.class).build();
+            })
+            .retryOn(ExecutionException.class)
+            .build();
     }
 
     public void stopAndDeleteUpdateConsumer() throws Exception {
@@ -118,8 +123,9 @@ public class LabRunner implements ApplicationRunner {
 
     private void deleteUpdateConsumerGroup() throws Exception {
         try (var client = createAdminClient()) {
-            retryTemplate.execute(ctx -> client
-                .deleteConsumerGroups(Collections.singleton(updateGroup)).all()
+            retryTemplate.execute(ctx -> client.deleteConsumerGroups(
+                    Collections.singleton(updateGroup))
+                .all()
                 .get());
         }
     }

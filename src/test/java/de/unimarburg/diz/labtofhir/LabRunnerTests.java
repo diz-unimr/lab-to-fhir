@@ -22,14 +22,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.cloud.stream.binding.BindingsLifecycleController;
 import org.springframework.cloud.stream.binding.BindingsLifecycleController.State;
-import org.springframework.cloud.stream.endpoint.BindingsEndpoint;
 
 @ExtendWith(MockitoExtension.class)
 public class LabRunnerTests {
 
     @Mock
-    private BindingsEndpoint endpoint;
+    private BindingsLifecycleController endpoint;
     @Mock
     private AdminClientProvider kafkaAdmin;
 
@@ -65,8 +65,7 @@ public class LabRunnerTests {
         // admin client
         var admin = setupAdminClient();
 
-        when(admin
-            .listConsumerGroupOffsets(anyString())
+        when(admin.listConsumerGroupOffsets(anyString())
             .partitionsToOffsetAndMetadata()
             .get()).thenReturn(Map.of(new TopicPartition("lab-input", 0),
             new OffsetAndMetadata(0, null)));
@@ -79,8 +78,7 @@ public class LabRunnerTests {
         runner.run(null);
 
         // verify delete consumer group
-        verify(admin
-            .deleteConsumerGroups(anyCollection())
+        verify(admin.deleteConsumerGroups(anyCollection())
             .all()).get();
 
         verify(endpoint).changeState("process-in-0", State.STARTED);
@@ -99,8 +97,7 @@ public class LabRunnerTests {
 
         // verify consumer stopped and consumer group deleted
         verify(endpoint).changeState("update-in-0", State.STOPPED);
-        verify(admin
-            .deleteConsumerGroups(anyCollection())
+        verify(admin.deleteConsumerGroups(anyCollection())
             .all()).get();
     }
 
@@ -109,14 +106,12 @@ public class LabRunnerTests {
         throws ExecutionException, InterruptedException {
         // setup
         var admin = setupAdminClient();
-        when(admin
-            .deleteConsumerGroups(anyCollection())
+        when(admin.deleteConsumerGroups(anyCollection())
             .all()
             .get()).thenThrow(new InterruptedException("oops"));
         var runner = setupRunner(null);
 
-        assertThatExceptionOfType(RuntimeException.class)
-            .isThrownBy(
+        assertThatExceptionOfType(RuntimeException.class).isThrownBy(
                 () -> runner.onApplicationEvent(new UpdateCompleted(this)))
             .withCauseInstanceOf(InterruptedException.class)
             .withMessage("Failed to delete update consumer group");

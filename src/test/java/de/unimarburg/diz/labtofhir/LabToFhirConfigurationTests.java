@@ -7,8 +7,6 @@ import de.unimarburg.diz.labtofhir.processor.LabUpdateProcessor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.stream.endpoint.BindingsEndpoint;
-import org.springframework.context.annotation.Import;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.TestPropertySource;
 
@@ -16,7 +14,6 @@ import org.springframework.test.context.TestPropertySource;
 @EmbeddedKafka(partitions = 1, brokerProperties = {
     "listeners=PLAINTEXT://localhost:9092", "port=9092"})
 @SpringBootTest
-@Import(BindingsEndpoint.class)
 @TestPropertySource(properties = {"mapping.loinc.version=''",
     "mapping.loinc.credentials.user=''",
     "mapping.loinc.credentials.password=''",
