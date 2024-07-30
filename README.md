@@ -104,8 +104,8 @@ tags can be found at the [Container Registry](https://github.com/orgs/diz-unimr/
 
 ## Development
 
-A [test setup](dev/compose.yaml) and [test data provider](dev/compose-data.yaml)
-is available for development purposes.
+A [test setup](dev/compose.yaml) with test data is available for development
+purposes.
 
 ### Builds
 
