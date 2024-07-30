@@ -20,21 +20,21 @@ spring:
           consumer:
             auto-startup: false
         process-out-0:
-          destination: ${OUTPUT_TOPIC:lab-fhir}
+          destination: ${OUTPUT_TOPIC:lab-fhir-idat}
         update-in-0:
           destination: ${INPUT_TOPIC:aim-lab}
           consumer:
             auto-startup: false
         update-out-0:
-          destination: ${OUTPUT_TOPIC:lab-fhir}
+          destination: ${OUTPUT_TOPIC:lab-fhir-idat}
       kafka:
         streams:
           binder:
             functions:
               process:
-                applicationId: lab-to-fhir
+                applicationId: aim-lab-to-fhir
               update:
-                applicationId: lab-update
+                applicationId: aim-lab-update
             configuration:
               compression.type: gzip
               max.request.size: 5242880
