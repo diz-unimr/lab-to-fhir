@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
+import de.unimarburg.diz.labtofhir.mapper.AimLabMapper;
 import de.unimarburg.diz.labtofhir.mapper.LoincMapper;
-import de.unimarburg.diz.labtofhir.mapper.MiiLabReportMapper;
 import de.unimarburg.diz.labtofhir.model.LabOffsets;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.model.MappingInfo;
@@ -25,7 +25,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.TestPropertySource;
 
-@SpringBootTest(classes = {LabUpdateProcessor.class, MiiLabReportMapper.class,
+@SpringBootTest(classes = {LabUpdateProcessor.class, AimLabMapper.class,
     LoincMapper.class, FhirConfiguration.class, MappingConfiguration.class,
     KafkaConfig.class})
 @TestPropertySource(properties = {"mapping.loinc.version=''",

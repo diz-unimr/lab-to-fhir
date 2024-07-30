@@ -41,7 +41,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.TestPropertySource;
 
-@SpringBootTest(classes = {MiiLabReportMapper.class, FhirConfiguration.class,
+@SpringBootTest(classes = {AimLabMapper.class, FhirConfiguration.class,
     LoincMapper.class, MappingConfiguration.class})
 @TestPropertySource(properties = {"mapping.loinc.local=mapping-swl-loinc.zip"})
 public class MiiLabReportMapperTests {
@@ -55,14 +55,12 @@ public class MiiLabReportMapperTests {
     private Resource testObservations;
 
     @Autowired
-    private MiiLabReportMapper mapper;
+    private AimLabMapper mapper;
     @Autowired
     private FhirContext fhirContext;
 
     private static Stream<Arguments> metaCodesAreSetAndFilteredArgs() {
-        return MiiLabReportMapper.META_CODES
-            .stream()
-            .map(Arguments::of);
+        return AimLabMapper.META_CODES.stream().map(Arguments::of);
     }
 
     @Disabled("TODO move validation to processor tests")
@@ -74,9 +72,7 @@ public class MiiLabReportMapperTests {
 
         var bundle = mapper.apply(report);
 
-        var validations = bundle
-            .getEntry()
-            .stream()
+        var validations = bundle.getEntry().stream()
             .map(x -> validator.validateWithResult(x.getResource()))
             .collect(Collectors.toList());
 
@@ -90,29 +86,22 @@ public class MiiLabReportMapperTests {
     public void parseValueConvertsNumericWithComparator() {
         // arrange
         var report = createDummyReport();
-        report.setObservations(List.of(new Observation()
-            .setValue(new StringType("<42"))
-            .setCode(
+        report.setObservations(List.of(
+            new Observation().setValue(new StringType("<42")).setCode(
                 new CodeableConcept().addCoding(new Coding().setCode("LEU")))));
 
         // act
         var result = mapper.apply(report);
 
         // assert
-        var obs = result
-            .getEntry()
-            .stream()
-            .map(BundleEntryComponent::getResource)
-            .filter(Observation.class::isInstance)
-            .map(Observation.class::cast)
-            .findFirst()
-            .orElseThrow();
+        var obs =
+            result.getEntry().stream().map(BundleEntryComponent::getResource)
+                .filter(Observation.class::isInstance)
+                .map(Observation.class::cast).findFirst().orElseThrow();
 
-        assertThat(obs.getValueQuantity())
-            .usingRecursiveComparison()
-            .ignoringExpectedNullFields()
-            .isEqualTo(new Quantity(42.0).setComparator(
-                QuantityComparator.fromCode("<")));
+        assertThat(obs.getValueQuantity()).usingRecursiveComparison()
+            .ignoringExpectedNullFields().isEqualTo(
+                new Quantity(42.0).setComparator(QuantityComparator.fromCode("<")));
     }
 
     @ParameterizedTest
@@ -140,8 +129,7 @@ public class MiiLabReportMapperTests {
             testReport.getInputStream());
 
         var node = objectMapper.readTree(testObservations.getInputStream());
-        var observations = StreamSupport
-            .stream(node.spliterator(), false)
+        var observations = StreamSupport.stream(node.spliterator(), false)
             .map(JsonNode::toString)
             .map(s -> parser.parseResource(Observation.class, s))
             .collect(Collectors.toList());
@@ -163,21 +151,20 @@ public class MiiLabReportMapperTests {
 
         // assert entries
         assertThat(result.getEntry())
-            .extracting(BundleEntryComponent::getRequest)
-            .allSatisfy(x -> assertThat(x)
-                .satisfies(
-                    y -> assertThat(y.getMethod()).isEqualTo(HTTPVerb.PUT))
-                .satisfies(z -> assertThat(z.getUrl()).isNotBlank()));
+            .extracting(BundleEntryComponent::getRequest).allSatisfy(
+                x -> assertThat(x).satisfies(
+                        y -> assertThat(y.getMethod()).isEqualTo(HTTPVerb.PUT))
+                    .satisfies(z -> assertThat(z.getUrl()).isNotBlank()));
     }
 
     private LaboratoryReport createDummyReport() {
         var report = new LaboratoryReport();
         report.setResource(new DiagnosticReport()
-            .addIdentifier(new Identifier().setValue("reportId"))
-            .setSubject(new Reference(
-                new Patient().addIdentifier(new Identifier().setValue("test"))))
-            .setEncounter(new Reference(new Encounter().addIdentifier(
-                new Identifier().setValue("encounterId"))))
+            .addIdentifier(new Identifier().setValue("reportId")).setSubject(
+                new Reference(new Patient().addIdentifier(
+                    new Identifier().setValue("test")))).setEncounter(
+                new Reference(new Encounter().addIdentifier(
+                    new Identifier().setValue("encounterId"))))
             .setEffective(DateTimeType.now()));
         report.setObservations(List.of());
         return report;

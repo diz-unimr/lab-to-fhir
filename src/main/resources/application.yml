@@ -57,6 +57,7 @@ fhir:
   generateNarrative: false
 
 mapping:
+  format: hl7 # hl7 » aim
   loinc:
     version: "3.0.1"
     credentials:

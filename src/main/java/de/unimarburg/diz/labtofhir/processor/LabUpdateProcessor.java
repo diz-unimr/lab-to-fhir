@@ -1,7 +1,7 @@
 package de.unimarburg.diz.labtofhir.processor;
 
 import de.unimarburg.diz.labtofhir.UpdateCompleted;
-import de.unimarburg.diz.labtofhir.mapper.MiiLabReportMapper;
+import de.unimarburg.diz.labtofhir.mapper.AimLabMapper;
 import de.unimarburg.diz.labtofhir.model.LabOffsets;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.model.MappingInfo;
@@ -27,13 +27,13 @@ public class LabUpdateProcessor {
 
     private static final Logger LOG =
         LoggerFactory.getLogger(LabUpdateProcessor.class);
-    private final MiiLabReportMapper reportMapper;
+    private final AimLabMapper reportMapper;
     private final ConcurrentHashMap<Integer, OffsetTarget> offsetState;
     private final ApplicationEventPublisher eventPublisher;
     private MappingUpdate mappingVersion;
 
 
-    public LabUpdateProcessor(MiiLabReportMapper reportMapper,
+    public LabUpdateProcessor(AimLabMapper reportMapper,
         @Nullable MappingInfo mappingInfo, LabOffsets offsets,
         ApplicationEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;

@@ -25,7 +25,6 @@ public class LaboratoryReport implements Serializable {
     private List<Observation> observations;
     private String metaCode;
 
-    //    @JsonSerialize(contentUsing = FhirSerializer.class)
     @JsonSerialize(using = ObservationListSerializer.class)
     public List<Observation> getObservations() {
         return observations;
@@ -33,7 +32,6 @@ public class LaboratoryReport implements Serializable {
 
     @JsonSetter("fhir_obs")
     @JsonDeserialize(using = ObservationListDeserializer.class)
-    //    @JsonDeserialize(using = ObservationListDeserializer.class)
     public void setObservations(List<Observation> observations) {
         this.observations = observations;
     }

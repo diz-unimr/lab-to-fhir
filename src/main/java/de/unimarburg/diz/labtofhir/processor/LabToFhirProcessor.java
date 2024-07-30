@@ -1,6 +1,6 @@
 package de.unimarburg.diz.labtofhir.processor;
 
-import de.unimarburg.diz.labtofhir.mapper.MiiLabReportMapper;
+import de.unimarburg.diz.labtofhir.mapper.AimLabMapper;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import java.util.function.Function;
 import org.apache.kafka.streams.kstream.KStream;
@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class LabToFhirProcessor {
 
-    private final MiiLabReportMapper reportMapper;
+    private final AimLabMapper reportMapper;
 
     @Autowired
-    public LabToFhirProcessor(MiiLabReportMapper reportMapper) {
+    public LabToFhirProcessor(AimLabMapper reportMapper) {
         this.reportMapper = reportMapper;
     }
 
@@ -23,8 +23,7 @@ public class LabToFhirProcessor {
     @Bean
     public Function<KStream<String, LaboratoryReport>, KStream<String, Bundle>> process() {
 
-        return report -> report
-            .mapValues(reportMapper)
+        return report -> report.mapValues(reportMapper)
             .filter((k, v) -> v != null);
     }
 }
