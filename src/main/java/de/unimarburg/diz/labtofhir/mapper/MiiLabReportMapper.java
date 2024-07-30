@@ -7,7 +7,6 @@ import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.model.MetaCode;
 import de.unimarburg.diz.labtofhir.util.TimestampPrefixedId;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
 import java.util.List;
@@ -32,14 +31,12 @@ import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.Meta;
-import org.hl7.fhir.r4.model.Narrative.NarrativeStatus;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.Type;
@@ -75,26 +72,6 @@ public class MiiLabReportMapper
                     .getAssignerId())
             .setValue(fhirProperties.getSystems()
                 .getAssignerCode());
-    }
-
-    @SuppressWarnings("checkstyle:LineLength")
-    private <T extends Resource> T createWithId(Class<T> resourceType,
-        String id) throws NoSuchMethodException, IllegalAccessException,
-        InvocationTargetException, InstantiationException {
-        var resource = resourceType.getConstructor()
-            .newInstance();
-        resource.setId(resourceType.getSimpleName() + "/" + id);
-
-        return resource;
-    }
-
-    private <T extends DomainResource> void setNarrative(T resource) {
-        var narrative = fhirParser.setPrettyPrint(true)
-            .encodeResourceToString(resource);
-        resource.getText()
-            .setStatus(NarrativeStatus.GENERATED);
-        resource.getText()
-            .setDivAsString(narrative);
     }
 
     @Override
@@ -141,12 +118,6 @@ public class MiiLabReportMapper
 
             setPatient(report, bundle);
             setEncounter(report, bundle);
-
-            if (fhirProperties.getGenerateNarrative()) {
-                generateNarratives(bundle);
-            }
-
-
         } catch (Exception e) {
             LOG.error(
                 "Mapping failed for LaboratoryReport with id {} and order "
@@ -188,15 +159,6 @@ public class MiiLabReportMapper
         }
 
         return this;
-    }
-
-    private void generateNarratives(Bundle bundle) {
-        bundle.getEntry()
-            .stream()
-            .map(BundleEntryComponent::getResource)
-            .filter(DomainResource.class::isInstance)
-            .map(DomainResource.class::cast)
-            .forEach(this::setNarrative);
     }
 
 
