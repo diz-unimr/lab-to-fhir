@@ -22,8 +22,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MappingUpdateConfiguration {
 
-    private static final Logger LOG = LoggerFactory.getLogger(
-        MappingUpdateConfiguration.class);
+    private static final Logger LOG =
+        LoggerFactory.getLogger(MappingUpdateConfiguration.class);
     private static final long MAX_CONSUMER_POLL_DURATION_SECONDS = 10L;
 
     @Bean("mappingInfo")
@@ -33,10 +33,7 @@ public class MappingUpdateConfiguration {
         Producer<String, MappingUpdate> producer)
         throws ExecutionException, InterruptedException, IOException {
         // check versions
-        var configuredVersion = loincMapper
-            .getMap()
-            .getMetadata()
-            .getVersion();
+        var configuredVersion = loincMapper.getMap().getMetadata().getVersion();
 
         // 1. consume latest from (mapping) update topic
         var lastUpdate = getLastMappingUpdate(consumer);
@@ -54,13 +51,12 @@ public class MappingUpdateConfiguration {
 
         // 2. check if already on latest
         if (Objects.equals(configuredVersion, lastUpdate.getVersion())) {
-            LOG.info("Configured mapping version ({}) matches last version "
-                    + "({}). " + "No update necesssary", configuredVersion,
+            LOG.info(
+                "Configured mapping version ({}) matches last version ({}). "
+                    + "No update necesssary", configuredVersion,
                 lastUpdate.getVersion());
 
-            if (!labOffsets
-                .updateOffsets()
-                .isEmpty()) {
+            if (!labOffsets.updateOffsets().isEmpty()) {
                 // update in progress, continue
                 return new MappingInfo(lastUpdate, true);
             }
@@ -72,23 +68,15 @@ public class MappingUpdateConfiguration {
         // get last version's mapping
         var lastMap = LoincMapper.getSwlLoincMapping(
             ResourceHelper.getMappingFile(lastUpdate.getVersion(),
-                mappingProperties
-                    .getLoinc()
-                    .getCredentials()
-                    .getUser(), mappingProperties
-                    .getLoinc()
-                    .getCredentials()
-                    .getPassword(), mappingProperties
-                    .getLoinc()
-                    .getProxy(), mappingProperties
-                    .getLoinc()
-                    .getLocal()));
+                mappingProperties.getLoinc().getCredentials().getUser(),
+                mappingProperties.getLoinc().getCredentials().getPassword(),
+                mappingProperties.getLoinc().getProxy(),
+                mappingProperties.getLoinc().getLocal()));
         // ceate diff
-        var updates = loincMapper
-            .getMap()
-            .diff(lastMap);
-        var update = new MappingUpdate(configuredVersion,
-            lastUpdate.getVersion(), updates);
+        var updates = loincMapper.getMap().diff(lastMap);
+        var update =
+            new MappingUpdate(configuredVersion, lastUpdate.getVersion(),
+                updates);
 
         // save new mapping update
         saveMappingUpdate(producer, update);
@@ -96,12 +84,13 @@ public class MappingUpdateConfiguration {
         return new MappingInfo(update, false);
     }
 
+    @SuppressWarnings("checkstyle:LineLength")
     private void saveMappingUpdate(Producer<String, MappingUpdate> producer,
         MappingUpdate mappingUpdate)
         throws ExecutionException, InterruptedException {
 
-        producer
-            .send(new ProducerRecord<>("mapping", "lab-update", mappingUpdate))
+        producer.send(
+                new ProducerRecord<>("mapping", "aim-lab-update", mappingUpdate))
             .get();
     }
 
@@ -124,8 +113,7 @@ public class MappingUpdateConfiguration {
 
             var record = consumer
                 .poll(Duration.ofSeconds(MAX_CONSUMER_POLL_DURATION_SECONDS))
-                .iterator()
-                .next();
+                .iterator().next();
 
             consumer.unsubscribe();
             return record.value();
