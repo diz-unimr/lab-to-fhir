@@ -81,8 +81,8 @@ public class MiiLabReportMapper
         Bundle bundle = new Bundle();
         try {
 
-            // set meta information
-            bundle.setId(report.getReportIdentifierValue());
+            // set meta information (with valid id)
+            bundle.setId(report.getValidReportId());
             bundle.setType(BundleType.TRANSACTION);
 
             processMetaResults(report)
