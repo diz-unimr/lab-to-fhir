@@ -5,21 +5,21 @@ import ca.uhn.fhir.parser.IParser;
 import com.google.common.hash.Hashing;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.MetaCode;
+import org.apache.kafka.streams.kstream.ValueMapper;
+import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.Identifier;
+
 import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.apache.kafka.streams.kstream.ValueMapper;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Identifier;
 
 abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
 
     public static final Set<String> META_CODES =
         EnumSet.allOf(MetaCode.class).stream().map(Enum::toString)
             .collect(Collectors.toSet());
-    
 
     private final IParser fhirParser;
     private final FhirProperties fhirProperties;
@@ -29,7 +29,7 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
     private final LoincMapper loincMapper;
 
     BaseMapper(FhirContext fhirContext, FhirProperties fhirProperties,
-        LoincMapper loincMapper) {
+               LoincMapper loincMapper) {
         this.fhirProperties = fhirProperties;
         this.loincMapper = loincMapper;
         fhirParser = fhirContext.newJsonParser();
