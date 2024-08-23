@@ -12,29 +12,27 @@ spring:
 
   cloud:
     function:
-      definition: process;update
+      definition: aim;hl7
     stream:
       bindings:
-        process-in-0:
-          destination: ${INPUT_TOPIC:aim-lab}
-          consumer:
-            auto-startup: false
-        process-out-0:
-          destination: ${OUTPUT_TOPIC:lab-fhir}
-        update-in-0:
-          destination: ${INPUT_TOPIC:aim-lab}
-          consumer:
-            auto-startup: false
-        update-out-0:
-          destination: ${OUTPUT_TOPIC:lab-fhir}
+        # aim source
+        aim-in-0:
+          destination: ${AIM_TOPIC:aim-lab}
+        aim-out-0:
+          destination: ${OUTPUT_TOPIC:lab-fhir-idat}
+        # hl7 source
+        hl7-in-0:
+          destination: ${HL7_TOPIC:hl7-lab}
+        hl7-out-0:
+          destination: ${OUTPUT_TOPIC:lab-fhir-idat}
       kafka:
         streams:
           binder:
             functions:
-              process:
-                applicationId: lab-to-fhir
-              update:
-                applicationId: lab-update
+              aim:
+                applicationId: aim-lab-to-fhir
+              hl7:
+                applicationId: hl7-lab-to-fhir
             configuration:
               compression.type: gzip
               max.request.size: 5242880
@@ -57,7 +55,10 @@ fhir:
   generateNarrative: false
 
 mapping:
-  format: hl7 # hl7 » aim
+  aim:
+    enabled: true
+  hl7:
+    enabled: true
   loinc:
     version: "3.0.1"
     credentials:

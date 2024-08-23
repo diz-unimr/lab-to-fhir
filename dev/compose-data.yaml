@@ -7,7 +7,7 @@ services:
     image: confluentinc/cp-kafkacat:7.0.1
     entrypoint: ["/bin/bash", "-c"]
     command: >
-      "kafkacat -b localhost:9092 -K: -t laboratory -P -l /data/lab-data.ndjson"
+      "kafkacat -b localhost:9092 -K: -t aim-lab -P -l /data/lab-data.ndjson"
     volumes:
       - ./lab-data.ndjson:/data/lab-data.ndjson:ro
     network_mode: host

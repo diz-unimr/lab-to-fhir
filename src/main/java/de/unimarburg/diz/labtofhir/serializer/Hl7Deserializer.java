@@ -7,7 +7,7 @@ import ca.uhn.hl7v2.model.Message;
 import java.nio.charset.StandardCharsets;
 import org.apache.kafka.common.serialization.Deserializer;
 
-public class Hl7Deserializer implements Deserializer<Message> {
+public class Hl7Deserializer<T extends Message> implements Deserializer<T> {
 
     private final HapiContext ctx;
 
@@ -15,17 +15,19 @@ public class Hl7Deserializer implements Deserializer<Message> {
         this.ctx = new DefaultHapiContext();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Message deserialize(String topic, byte[] data) {
+    public T deserialize(String topic, byte[] data) {
         if (data == null) {
             return null;
         }
 
         try {
-            return ctx.getPipeParser()
+            return (T) ctx.getGenericParser()
                 .parse(new String(data, StandardCharsets.UTF_8));
         } catch (HL7Exception e) {
-            return null;
+            throw new RuntimeException(e);
         }
+
     }
 }
