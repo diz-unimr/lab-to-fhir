@@ -9,19 +9,9 @@ import org.springframework.validation.annotation.Validated;
 public class FhirProperties {
 
     private final Systems systems = new Systems();
-    @NotNull
-    private Boolean generateNarrative;
 
     public Systems getSystems() {
         return systems;
-    }
-
-    public Boolean getGenerateNarrative() {
-        return generateNarrative;
-    }
-
-    public void setGenerateNarrative(Boolean generateNarrative) {
-        this.generateNarrative = generateNarrative;
     }
 
     public static class Systems {

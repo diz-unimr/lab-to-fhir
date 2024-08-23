@@ -66,7 +66,7 @@ update consumer group is deleted.
 On startup, the application checks the configured mapping version and
 determines a diff between the mappings of the current and the last used
 mapping version. This data is stored in the Kafka topic `mapping` with the key
-`lab-update`.
+`aim-lab-update`.
 
 In case there are no changes or the mapping versions used are equal, the
 update processor is not started.
@@ -104,8 +104,8 @@ tags can be found at the [Container Registry](https://github.com/orgs/diz-unimr/
 
 ## Development
 
-A [test setup](dev/compose.yaml) and [test data provider](dev/compose-data.yaml)
-is available for development purposes.
+A [test setup](dev/compose.yaml) with test data is available for development
+purposes.
 
 ### Builds
 

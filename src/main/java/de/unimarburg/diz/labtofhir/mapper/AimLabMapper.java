@@ -4,10 +4,6 @@ import ca.uhn.fhir.context.FhirContext;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.util.TimestampPrefixedId;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hl7.fhir.r4.model.Bundle;
@@ -25,19 +21,21 @@ import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.InstantType;
 import org.hl7.fhir.r4.model.Meta;
-import org.hl7.fhir.r4.model.Narrative.NarrativeStatus;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.Type;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -46,27 +44,8 @@ import org.springframework.stereotype.Service;
 public class AimLabMapper extends BaseMapper<LaboratoryReport> {
 
     public AimLabMapper(FhirContext fhirContext, FhirProperties fhirProperties,
-        LoincMapper loincMapper) {
+                        LoincMapper loincMapper) {
         super(fhirContext, fhirProperties, loincMapper);
-    }
-
-    private <T extends Resource> T createWithId(Class<T> resourceType,
-        String id) throws NoSuchMethodException, IllegalAccessException,
-        InvocationTargetException, InstantiationException {
-        var resource = resourceType.getConstructor()
-            .newInstance();
-        resource.setId(resourceType.getSimpleName() + "/" + id);
-
-        return resource;
-    }
-
-    private <T extends DomainResource> void setNarrative(T resource) {
-        var narrative = fhirParser().setPrettyPrint(true)
-            .encodeResourceToString(resource);
-        resource.getText()
-            .setStatus(NarrativeStatus.GENERATED);
-        resource.getText()
-            .setDivAsString(narrative);
     }
 
     @Override
@@ -76,8 +55,8 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
         Bundle bundle = new Bundle();
         try {
 
-            // set meta information
-            bundle.setId(report.getReportIdentifierValue());
+            // set meta information (with valid id)
+            bundle.setId(report.getValidReportId());
             bundle.setType(BundleType.TRANSACTION);
 
             processMetaResults(report)
@@ -97,7 +76,9 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                     // add to bundle
                     .peek(o -> addResourceToBundle(bundle, o))
                     // set result references
-                    .map(Reference::new)).collect(Collectors.toList()));
+                    .map(o -> new Reference(
+                        getConditionalReference(ResourceType.Observation,
+                            o.getId())))).collect(Collectors.toList()));
 
             if (mappedReport.getResult()
                 .isEmpty()) {
@@ -111,12 +92,6 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
 
             setPatient(report, bundle);
             setEncounter(report, bundle);
-
-            if (fhirProperties().getGenerateNarrative()) {
-                generateNarratives(bundle);
-            }
-
-
         } catch (Exception e) {
             log.error(
                 "Mapping failed for LaboratoryReport with id {} and order "
@@ -161,18 +136,9 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
         return this;
     }
 
-    private void generateNarratives(Bundle bundle) {
-        bundle.getEntry()
-            .stream()
-            .map(BundleEntryComponent::getResource)
-            .filter(DomainResource.class::isInstance)
-            .map(DomainResource.class::cast)
-            .forEach(this::setNarrative);
-    }
-
 
     private DiagnosticReport mapDiagnosticReport(DiagnosticReport labReport,
-        Bundle bundle) {
+                                                 Bundle bundle) {
         var identifierType = new CodeableConcept().addCoding(
             new Coding().setSystem(
                     "http://terminology.hl7.org/CodeSystem/v2-0203")
@@ -181,6 +147,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
             .getValue();
 
         var report = new DiagnosticReport();
+
         // id
         report.setId(identifierValue);
         // meta data
@@ -195,13 +162,15 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                 .setSystem(fhirProperties().getSystems()
                     .getDiagnosticReportId())
                 .setValue(identifierValue)
-                .setAssigner(new Reference().setIdentifier(identifierAssigner()))))
+                .setAssigner(
+                    new Reference().setIdentifier(identifierAssigner()))))
 
             // basedOn
-            .setBasedOn(List.of(new Reference("ServiceRequest/" + createId(
-                fhirProperties().getSystems()
-                    .getServiceRequestId(), identifierValue,
-                labReport.getEffectiveDateTimeType()))))
+            .setBasedOn(List.of(new Reference(
+                getConditionalReference(ResourceType.ServiceRequest, createId(
+                    fhirProperties().getSystems()
+                        .getServiceRequestId(), identifierValue,
+                    labReport.getEffectiveDateTimeType())))))
 
             // status
             .setStatus(labReport.getStatus())
@@ -210,6 +179,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
             .setCategory(List.of(new CodeableConcept().addCoding(
                     new Coding().setSystem("http://loinc.org")
                         .setCode("26436-6"))
+
                 .addCoding(new Coding().setSystem(
                         "http://terminology.hl7.org/CodeSystem/v2-0074")
                     .setCode("LAB"))
@@ -259,7 +229,8 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                 .setSystem(fhirProperties().getSystems()
                     .getObservationId())
                 .setValue(identifierValue)
-                .setAssigner(new Reference().setIdentifier(identifierAssigner())))
+                .setAssigner(new Reference()
+                    .setIdentifier(identifierAssigner())))
 
             // status
             .setStatus(source.getStatus())
@@ -288,8 +259,9 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                     // set system on each coding
                     cc.getCoding()
                         .stream()
-                        .map(c -> c.setSystem("http://terminology.hl7"
-                            + ".org/CodeSystem/v3-ObservationInterpretation"))
+                        .map(c -> c.setSystem(
+                            "http://terminology.hl7.org/CodeSystem/v3"
+                                + "-ObservationInterpretation"))
                         .collect(Collectors.toList())))
                 .collect(Collectors.toList()))
             // map reference range to simple quantity with value only
@@ -353,7 +325,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
 
 
     public AimLabMapper mapServiceRequest(DiagnosticReport report,
-        Bundle bundle) {
+                                          Bundle bundle) {
         // TODO clarify intention: using this as a wrapper resource in order
         //  to be conform to MII profiles
         var identifierType = new CodeableConcept(new Coding().setSystem(
@@ -378,7 +350,8 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                         .getServiceRequestId())
                 .setType(identifierType)
                 .setValue(identifierValue)
-                .setAssigner(new Reference().setIdentifier(identifierAssigner()))))
+                .setAssigner(
+                    new Reference().setIdentifier(identifierAssigner()))))
 
             // authoredOn
             // uses report effective (date)
@@ -440,7 +413,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
     }
 
     private String getConditionalReference(ResourceType resourceType,
-        String id) {
+                                           String id) {
 
         String idSystem;
         switch (resourceType) {
@@ -498,7 +471,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
     }
 
     public <T> List<T> getBundleEntryResources(Bundle bundle,
-        Class<T> domainType) {
+                                               Class<T> domainType) {
         return bundle.getEntry()
             .stream()
             .map(BundleEntryComponent::getResource)
@@ -513,7 +486,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
     }
 
     private String createId(String idSystem, String id,
-        DateTimeType dateTimeType) {
+                            DateTimeType dateTimeType) {
         return TimestampPrefixedId.createNewIdentityValue(dateTimeType,
             hasher().apply(idSystem + "|" + id));
     }

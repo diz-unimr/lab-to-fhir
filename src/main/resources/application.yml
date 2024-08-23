@@ -52,7 +52,6 @@ fhir:
     laboratorySystem: "https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code"
     laboratoryUnitSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-unit"
     labReportMetaSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/lab-report-meta-code"
-  generateNarrative: false
 
 mapping:
   aim:

@@ -2,10 +2,8 @@ FROM eclipse-temurin:17.0.11_9-jdk-jammy AS build
 WORKDIR /home/gradle/src
 ENV GRADLE_USER_HOME=/gradle
 
-COPY build.gradle settings.gradle gradlew ./
-COPY gradle/ ./gradle/
-
-RUN ./gradlew build --info && \
+COPY . .
+RUN ./gradlew clean build --info && \
     java -Djarmode=layertools -jar build/libs/*.jar extract
 
 FROM gcr.io/distroless/java17:nonroot

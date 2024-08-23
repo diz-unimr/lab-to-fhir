@@ -88,16 +88,28 @@ public class LaboratoryReport implements Serializable {
     }
 
     private void sanitizeIdentifierValue(DiagnosticReport resource) {
-        var identifierValue = resource.getIdentifierFirstRep().getValue();
+        var identifierValue = resource.getIdentifierFirstRep()
+            .getValue();
         var idPart =
             StringUtils.substringAfterLast(identifierValue, "SWISSLAB_");
         if (StringUtils.isNotBlank(idPart)) {
-            resource.getIdentifierFirstRep().setValue(idPart);
+            resource.getIdentifierFirstRep()
+                .setValue(idPart);
         }
     }
 
     public String getReportIdentifierValue() {
-        return resource.getIdentifierFirstRep().getValue();
+        return resource.getIdentifierFirstRep()
+            .getValue();
+    }
+
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public String getValidReportId() {
+        // replace invalid characters with "-"
+        var replaced =
+            getReportIdentifierValue().replaceAll("[^A-Za-z0-9\\-\\.]", "-");
+        // max 64 characters
+        return replaced.substring(0, Math.min(replaced.length(), 64));
     }
 
     public String getMetaCode() {
