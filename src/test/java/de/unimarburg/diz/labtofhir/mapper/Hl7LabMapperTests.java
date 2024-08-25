@@ -45,7 +45,7 @@ public class Hl7LabMapperTests {
 
     private Message getTestReport(Resource testReport)
         throws IOException, HL7Exception {
-        
+
         try (var ctx = new DefaultHapiContext()) {
             return ctx.getGenericParser()
                 .parse(testReport.getContentAsString(StandardCharsets.UTF_8));
