@@ -7,10 +7,13 @@ import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.MetaCode;
 import org.apache.kafka.streams.kstream.ValueMapper;
 import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Identifier;
 
 import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -27,6 +30,8 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
         i -> Hashing.sha256().hashString(i, StandardCharsets.UTF_8).toString();
     private final Identifier identifierAssigner;
     private final LoincMapper loincMapper;
+    private final List<CodeableConcept> serviceRequestCategory;
+    private final CodeableConcept serviceRequestCode;
 
     BaseMapper(FhirContext fhirContext, FhirProperties fhirProperties,
                LoincMapper loincMapper) {
@@ -36,6 +41,18 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
         identifierAssigner = new Identifier()
             .setSystem(fhirProperties.getSystems().getAssignerId())
             .setValue(fhirProperties.getSystems().getAssignerCode());
+        serviceRequestCategory = initServiceRequestCategory();
+        serviceRequestCode = initServiceRequestCode();
+    }
+
+    private CodeableConcept initServiceRequestCode() {
+        return new CodeableConcept().setCoding(List.of(
+            new Coding().setSystem("http://snomed.info/sct")
+                .setCode("59615004")));
+    }
+
+    protected List<CodeableConcept> getServiceRequestCategory() {
+        return serviceRequestCategory;
     }
 
     protected Function<String, String> hasher() {
@@ -56,5 +73,16 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
 
     protected LoincMapper loincMapper() {
         return loincMapper;
+    }
+
+    private List<CodeableConcept> initServiceRequestCategory() {
+        return List.of(new CodeableConcept(new Coding().setSystem(
+                "http://terminology.hl7"
+                    + ".org/CodeSystem/observation-category")
+            .setCode("laboratory")));
+    }
+
+    public CodeableConcept getServiceRequestCode() {
+        return serviceRequestCode;
     }
 }

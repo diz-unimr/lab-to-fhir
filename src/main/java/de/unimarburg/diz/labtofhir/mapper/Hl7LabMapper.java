@@ -114,15 +114,10 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
             .setIntent(ServiceRequest.ServiceRequestIntent.ORDER)
 
             // category
-            .setCategory(List.of(new CodeableConcept(new Coding().setSystem(
-                    "http://terminology.hl7"
-                        + ".org/CodeSystem/observation-category")
-                .setCode("laboratory"))))
+            .setCategory(getServiceRequestCategory())
 
             // code
-            .setCode(new CodeableConcept().setCoding(List.of(
-                new Coding().setSystem("http://snomed.info/sct")
-                    .setCode("59615004"))));
+            .setCode(getServiceRequestCode());
 
         return request;
     }
