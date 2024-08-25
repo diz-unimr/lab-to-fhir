@@ -64,7 +64,15 @@ public class Hl7DeserializerTests {
 
             assertThat(actual).isInstanceOfSatisfying(ORU_R01.class, oruReq);
         }
-
     }
 
+    @Test
+    public void deserializeNull() {
+        try (var deserializer = new Hl7Deserializer<>()) {
+            var actual = deserializer.deserialize(null,
+                null);
+
+            assertThat(actual).isNull();
+        }
+    }
 }
