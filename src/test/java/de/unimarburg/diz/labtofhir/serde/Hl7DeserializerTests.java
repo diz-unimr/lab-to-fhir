@@ -46,8 +46,8 @@ public class Hl7DeserializerTests {
             OBR|11|20220702_88888888|||||20220702120811||||||||||||||||||F\r
             OBX|1|NM|USg^Harndichte (Stix)||1.022|g/cm3|1.002 - 1.040||||F\r""";
 
-        try (var message = new Hl7Deserializer<>()) {
-            message.deserialize(null,
+        try (var deserializer = new Hl7Deserializer<>()) {
+            var actual = deserializer.deserialize(null,
                 msg.getBytes(StandardCharsets.UTF_8));
 
             Consumer<ORU_R01> oruReq = oru -> {
@@ -62,7 +62,7 @@ public class Hl7DeserializerTests {
                     .getValue()).isEqualTo("20220702_88888888");
             };
 
-            assertThat(message).isInstanceOfSatisfying(ORU_R01.class, oruReq);
+            assertThat(actual).isInstanceOfSatisfying(ORU_R01.class, oruReq);
         }
 
     }
