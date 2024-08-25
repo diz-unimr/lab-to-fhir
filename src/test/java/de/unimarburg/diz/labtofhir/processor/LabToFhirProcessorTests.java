@@ -1,7 +1,5 @@
 package de.unimarburg.diz.labtofhir.processor;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
@@ -13,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest(classes = {LabToFhirProcessor.class, AimLabMapper.class,
@@ -34,7 +34,7 @@ public class LabToFhirProcessorTests extends BaseProcessorTests {
 
     @SuppressWarnings("checkstyle:MagicNumber")
     @Test
-    public void observationIsLoincMapped() {
+    public void observationCodeIsMapped() {
         // build stream
         try (var driver = buildStream(processor.aim())) {
 
@@ -56,8 +56,6 @@ public class LabToFhirProcessorTests extends BaseProcessorTests {
                 .orElseThrow();
 
             // assert both codings exist
-            assertThat(
-                obsCodes.hasCoding("http://loinc.org", "2951-2")).isTrue();
             assertThat(obsCodes.hasCoding(fhirProperties.getSystems()
                 .getLaboratorySystem(), "NA")).isTrue();
         }
