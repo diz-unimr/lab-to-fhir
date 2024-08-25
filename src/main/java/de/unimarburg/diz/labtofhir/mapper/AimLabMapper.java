@@ -31,7 +31,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -56,9 +55,9 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
             bundle.setId(report.getValidReportId());
             bundle.setType(BundleType.TRANSACTION);
 
-            processMetaResults(report)
-                // service request
-                .mapServiceRequest(report.getResource(), bundle);
+
+            // service request
+            mapServiceRequest(report.getResource(), bundle);
 
             // diagnostic report
             var mappedReport = mapDiagnosticReport(report.getResource(), bundle)
@@ -103,33 +102,6 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
             fhirParser().encodeResourceToString(bundle));
 
         return bundle;
-    }
-
-    private AimLabMapper processMetaResults(LaboratoryReport report) {
-        var metaObs = report.getObservations()
-            .stream()
-            .filter(x -> META_CODES.contains(x.getCode()
-                .getCoding()
-                .stream()
-                .findFirst()
-                .orElse(new Coding())
-                .getCode()))
-            .toList();
-
-        if (!metaObs.isEmpty()) {
-            // only one meta code currently supported
-            var firstMetaObs = metaObs.get(0);
-            if (firstMetaObs.hasValueStringType()) {
-                report.setMetaCode(firstMetaObs.getValueStringType()
-                    .getValue());
-            }
-
-            // remove from DiagnosticReport
-            report.getObservations()
-                .removeIf(x -> Objects.equals(x, firstMetaObs));
-        }
-
-        return this;
     }
 
 

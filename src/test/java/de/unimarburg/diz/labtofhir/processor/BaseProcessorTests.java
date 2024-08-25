@@ -4,9 +4,6 @@ import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.serde.JsonSerdes;
 import de.unimarburg.diz.labtofhir.serializer.FhirDeserializer;
 import de.unimarburg.diz.labtofhir.serializer.FhirSerializer;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Stream;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -30,6 +27,10 @@ import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Reference;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 @SuppressWarnings("checkstyle:LineLength")
 abstract class BaseProcessorTests {

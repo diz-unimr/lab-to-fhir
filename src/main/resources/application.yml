@@ -58,13 +58,6 @@ mapping:
     enabled: true
   hl7:
     enabled: true
-  loinc:
-    version: "3.0.1"
-    credentials:
-      user:
-      password:
-    proxy:
-    local:
 
 management:
   server:

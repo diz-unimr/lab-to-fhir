@@ -4,7 +4,6 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import com.google.common.hash.Hashing;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
-import de.unimarburg.diz.labtofhir.model.MetaCode;
 import org.apache.kafka.streams.kstream.ValueMapper;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.CodeableConcept;
@@ -14,17 +13,10 @@ import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.ResourceType;
 
 import java.nio.charset.StandardCharsets;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
-
-    public static final Set<String> META_CODES =
-        EnumSet.allOf(MetaCode.class).stream().map(Enum::toString)
-            .collect(Collectors.toSet());
 
     private final IParser fhirParser;
     private final FhirProperties fhirProperties;

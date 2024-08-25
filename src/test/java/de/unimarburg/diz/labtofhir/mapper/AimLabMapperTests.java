@@ -5,7 +5,6 @@ import ca.uhn.fhir.validation.ValidationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
-import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
@@ -24,27 +23,19 @@ import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.StringType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
-import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = {AimLabMapper.class, FhirConfiguration.class,
-    LoincMapper.class, MappingConfiguration.class})
-@TestPropertySource(properties = {"mapping.loinc.local=mapping-swl-loinc.zip"})
+@SpringBootTest(classes = {AimLabMapper.class, FhirConfiguration.class})
 public class AimLabMapperTests {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -59,10 +50,6 @@ public class AimLabMapperTests {
     private AimLabMapper mapper;
     @Autowired
     private FhirContext fhirContext;
-
-    private static Stream<Arguments> metaCodesAreSetAndFilteredArgs() {
-        return AimLabMapper.META_CODES.stream().map(Arguments::of);
-    }
 
     @Disabled("TODO move validation to processor tests")
     @Test
@@ -104,24 +91,6 @@ public class AimLabMapperTests {
             .ignoringExpectedNullFields()
             .isEqualTo(new Quantity(42.0)
                 .setComparator(QuantityComparator.fromCode("<")));
-    }
-
-    @ParameterizedTest
-    @MethodSource("metaCodesAreSetAndFilteredArgs")
-    public void metaCodesAreSetAndFiltered(String code) {
-        var report = createDummyReport();
-        report.setObservations(new ArrayList<>(List.of(new Observation()
-            .setCode(
-                new CodeableConcept().addCoding(new Coding().setCode(code)))
-            .setValue(new StringType("metaCode")))));
-
-        // act
-        var result = mapper.apply(report);
-
-        // assert
-        assertThat(report.getMetaCode()).isEqualTo("metaCode");
-        assertThat(report.getObservations()).isEmpty();
-        assertThat(result).isNull();
     }
 
     private LaboratoryReport getTestReport(Resource testReport,
