@@ -8,15 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
-import org.hl7.fhir.r4.model.Bundle.BundleEntryRequestComponent;
 import org.hl7.fhir.r4.model.Bundle.BundleType;
-import org.hl7.fhir.r4.model.Bundle.HTTPVerb;
 import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.InstantType;
@@ -43,9 +40,9 @@ import java.util.stream.Collectors;
     matchIfMissing = true)
 public class AimLabMapper extends BaseMapper<LaboratoryReport> {
 
-    public AimLabMapper(FhirContext fhirContext, FhirProperties fhirProperties,
-                        LoincMapper loincMapper) {
-        super(fhirContext, fhirProperties, loincMapper);
+    public AimLabMapper(FhirContext fhirContext,
+                        FhirProperties fhirProperties) {
+        super(fhirContext, fhirProperties);
     }
 
     @Override
@@ -71,7 +68,6 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                     .stream()
                     // map observations
                     .map(this::mapObservation)
-                    .map(o -> loincMapper().map(o, report.getMetaCode()))
 
                     // add to bundle
                     .peek(o -> addResourceToBundle(bundle, o))
@@ -412,29 +408,6 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                     encounterId)));
     }
 
-    private String getConditionalReference(ResourceType resourceType,
-                                           String id) {
-
-        String idSystem;
-        switch (resourceType) {
-            case Patient -> idSystem = fhirProperties().getSystems()
-                .getPatientId();
-            case Encounter -> idSystem = fhirProperties().getSystems()
-                .getEncounterId();
-            case ServiceRequest -> idSystem = fhirProperties().getSystems()
-                .getServiceRequestId();
-            case DiagnosticReport -> idSystem = fhirProperties().getSystems()
-                .getDiagnosticReportId();
-            case Observation -> idSystem = fhirProperties().getSystems()
-                .getObservationId();
-            default -> throw new IllegalArgumentException(
-                "Unsupported resource type when building conditional "
-                    + "reference");
-        }
-
-        return String.format("%s?identifier=%s|%s", resourceType, idSystem, id);
-    }
-
     /**
      * Set the subject reference for {@link DiagnosticReport} and
      * {@link Observation}
@@ -489,19 +462,6 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                             DateTimeType dateTimeType) {
         return TimestampPrefixedId.createNewIdentityValue(dateTimeType,
             hasher().apply(idSystem + "|" + id));
-    }
-
-    private void addResourceToBundle(Bundle bundle, DomainResource resource) {
-        var idElement = resource.getIdElement()
-            .getValue();
-        bundle.addEntry()
-            .setFullUrl(resource.getResourceType()
-                .name() + "/" + idElement)
-            .setResource(resource)
-            .setRequest(
-                new BundleEntryRequestComponent().setMethod(HTTPVerb.PUT)
-                    .setUrl(getConditionalReference(resource.getResourceType(),
-                        idElement)));
     }
 
 }

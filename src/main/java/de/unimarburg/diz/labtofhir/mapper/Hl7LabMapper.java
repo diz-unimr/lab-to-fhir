@@ -24,11 +24,9 @@ import java.util.List;
     matchIfMissing = true)
 public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
-    Hl7LabMapper(FhirContext fhirContext, FhirProperties fhirProperties,
-                 LoincMapper loincMapper) {
-        super(fhirContext, fhirProperties, loincMapper);
+    Hl7LabMapper(FhirContext fhirContext, FhirProperties fhirProperties) {
+        super(fhirContext, fhirProperties);
     }
-
 
     @Override
     public Bundle apply(ORU_R01 msg) {
@@ -53,6 +51,8 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
             var request = createServiceRequest(msg);
 
+
+            addResourceToBundle(bundle, request);
 
         } catch (Exception e) {
             log.error("Mapping failed for HL7 message with id:{} and order "

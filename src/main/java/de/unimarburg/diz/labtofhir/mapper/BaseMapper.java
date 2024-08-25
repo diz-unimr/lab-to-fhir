@@ -9,7 +9,9 @@ import org.apache.kafka.streams.kstream.ValueMapper;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.ResourceType;
 
 import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
@@ -29,14 +31,11 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
     private final Function<String, String> hasher =
         i -> Hashing.sha256().hashString(i, StandardCharsets.UTF_8).toString();
     private final Identifier identifierAssigner;
-    private final LoincMapper loincMapper;
     private final List<CodeableConcept> serviceRequestCategory;
     private final CodeableConcept serviceRequestCode;
 
-    BaseMapper(FhirContext fhirContext, FhirProperties fhirProperties,
-               LoincMapper loincMapper) {
+    BaseMapper(FhirContext fhirContext, FhirProperties fhirProperties) {
         this.fhirProperties = fhirProperties;
-        this.loincMapper = loincMapper;
         fhirParser = fhirContext.newJsonParser();
         identifierAssigner = new Identifier()
             .setSystem(fhirProperties.getSystems().getAssignerId())
@@ -71,9 +70,6 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
         return fhirProperties;
     }
 
-    protected LoincMapper loincMapper() {
-        return loincMapper;
-    }
 
     private List<CodeableConcept> initServiceRequestCategory() {
         return List.of(new CodeableConcept(new Coding().setSystem(
@@ -82,7 +78,44 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
             .setCode("laboratory")));
     }
 
-    public CodeableConcept getServiceRequestCode() {
+    protected CodeableConcept getServiceRequestCode() {
         return serviceRequestCode;
+    }
+
+    protected void addResourceToBundle(Bundle bundle, DomainResource resource) {
+        var idElement = resource.getIdElement()
+            .getValue();
+        bundle.addEntry()
+            .setFullUrl(resource.getResourceType()
+                .name() + "/" + idElement)
+            .setResource(resource)
+            .setRequest(
+                new Bundle.BundleEntryRequestComponent().setMethod(
+                        Bundle.HTTPVerb.PUT)
+                    .setUrl(getConditionalReference(resource.getResourceType(),
+                        idElement)));
+    }
+
+    protected String getConditionalReference(ResourceType resourceType,
+                                             String id) {
+
+        String idSystem;
+        switch (resourceType) {
+            case Patient -> idSystem = fhirProperties().getSystems()
+                .getPatientId();
+            case Encounter -> idSystem = fhirProperties().getSystems()
+                .getEncounterId();
+            case ServiceRequest -> idSystem = fhirProperties().getSystems()
+                .getServiceRequestId();
+            case DiagnosticReport -> idSystem = fhirProperties().getSystems()
+                .getDiagnosticReportId();
+            case Observation -> idSystem = fhirProperties().getSystems()
+                .getObservationId();
+            default -> throw new IllegalArgumentException(
+                "Unsupported resource type when building conditional "
+                    + "reference");
+        }
+
+        return String.format("%s?identifier=%s|%s", resourceType, idSystem, id);
     }
 }
