@@ -1,18 +1,20 @@
 package de.unimarburg.diz.labtofhir.serde;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.v22.message.ORU_R01;
 import de.unimarburg.diz.labtofhir.serializer.Hl7Deserializer;
+import org.junit.jupiter.api.Test;
+
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
-import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class Hl7DeserializerTests {
 
+
+    @SuppressWarnings("checkstyle:LineLength")
     @Test
-    public void deserializeHl7() throws HL7Exception {
+    public void deserializeHl7() {
         var msg = """
             MSH|^~\\&|SWISSLAB|KLIN|DBSERV||20220702120811|LAB|ORU^R01|test-msg.000010|P|2.2|||AL|NE\r
             PID|||123456||Tester^Test||19811029000000|M\r
@@ -44,22 +46,24 @@ public class Hl7DeserializerTests {
             OBR|11|20220702_88888888|||||20220702120811||||||||||||||||||F\r
             OBX|1|NM|USg^Harndichte (Stix)||1.022|g/cm3|1.002 - 1.040||||F\r""";
 
-        var message = new Hl7Deserializer().deserialize(null,
-            msg.getBytes(StandardCharsets.UTF_8));
+        try (var message = new Hl7Deserializer<>()) {
+            message.deserialize(null,
+                msg.getBytes(StandardCharsets.UTF_8));
 
-        Consumer<ORU_R01> oruReq = oru -> {
-            assertThat(oru.getMSH()
-                .getMsh10_MessageControlID()
-                .getValue()).isEqualTo("test-msg.000010");
-            assertThat(oru.getPATIENT_RESULT()
-                .getORDER_OBSERVATION()
-                .getOBR()
-                .getPlacerOrderNumber()
-                .getCm_placer1_UniquePlacerId()
-                .getValue()).isEqualTo("20220702_88888888");
-        };
+            Consumer<ORU_R01> oruReq = oru -> {
+                assertThat(oru.getMSH()
+                    .getMsh10_MessageControlID()
+                    .getValue()).isEqualTo("test-msg.000010");
+                assertThat(oru.getPATIENT_RESULT()
+                    .getORDER_OBSERVATION()
+                    .getOBR()
+                    .getPlacerOrderNumber()
+                    .getCm_placer1_UniquePlacerId()
+                    .getValue()).isEqualTo("20220702_88888888");
+            };
 
-        assertThat(message).isInstanceOfSatisfying(ORU_R01.class, oruReq);
+            assertThat(message).isInstanceOfSatisfying(ORU_R01.class, oruReq);
+        }
 
     }
 

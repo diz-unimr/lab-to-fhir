@@ -1,7 +1,5 @@
 package de.unimarburg.diz.labtofhir.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.validation.ValidationResult;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -10,12 +8,6 @@ import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
 import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.Bundle.HTTPVerb;
 import org.hl7.fhir.r4.model.CodeableConcept;
@@ -41,10 +33,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.TestPropertySource;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest(classes = {AimLabMapper.class, FhirConfiguration.class,
     LoincMapper.class, MappingConfiguration.class})
 @TestPropertySource(properties = {"mapping.loinc.local=mapping-swl-loinc.zip"})
-public class MiiLabReportMapperTests {
+public class AimLabMapperTests {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -100,8 +101,9 @@ public class MiiLabReportMapperTests {
                 .map(Observation.class::cast).findFirst().orElseThrow();
 
         assertThat(obs.getValueQuantity()).usingRecursiveComparison()
-            .ignoringExpectedNullFields().isEqualTo(
-                new Quantity(42.0).setComparator(QuantityComparator.fromCode("<")));
+            .ignoringExpectedNullFields()
+            .isEqualTo(new Quantity(42.0)
+                .setComparator(QuantityComparator.fromCode("<")));
     }
 
     @ParameterizedTest
@@ -123,7 +125,8 @@ public class MiiLabReportMapperTests {
     }
 
     private LaboratoryReport getTestReport(Resource testReport,
-        Resource testObservations) throws IOException {
+                                           Resource testObservations)
+        throws IOException {
         var parser = fhirContext.newJsonParser();
         var diagnosticReport = parser.parseResource(DiagnosticReport.class,
             testReport.getInputStream());
