@@ -3,16 +3,13 @@ package de.unimarburg.diz.labtofhir.mapper;
 import ca.uhn.fhir.context.FhirContext;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
-import de.unimarburg.diz.labtofhir.util.TimestampPrefixedId;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.Bundle.BundleType;
 import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Identifier;
@@ -45,14 +42,20 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
     }
 
     @Override
+    String getMapperName() {
+        return "aim-lab-mapper";
+    }
+
+    @Override
     public Bundle apply(LaboratoryReport report) {
+
         log.debug("Mapping LaboratoryReport with id:{} and order number:{}",
             report.getId(), report.getReportIdentifierValue());
         Bundle bundle = new Bundle();
         try {
 
             // set meta information (with valid id)
-            bundle.setId(report.getValidReportId());
+            bundle.setId(sanitizeId(report.getReportIdentifierValue()));
             bundle.setType(BundleType.TRANSACTION);
 
 
@@ -117,12 +120,13 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
         var report = new DiagnosticReport();
 
         // id
-        report.setId(identifierValue);
+        report.setId(sanitizeId(identifierValue));
         // meta data
         report.setMeta(new Meta().setProfile(List.of(new CanonicalType(
                 "https://www.medizininformatik-initiative"
                     + ".de/fhir/core/modul-labor/StructureDefinition"
                     + "/DiagnosticReportLab")))
+            .addTag(getMapperTag())
             .setSource("#swisslab"));
 
         // identifier
@@ -190,6 +194,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                 "https://www.medizininformatik-initiative"
                     + ".de/fhir/core/modul-labor/StructureDefinition"
                     + "/ObservationLab")))
+            .addTag(getMapperTag())
             .setSource("#swisslab"));
 
         // identifier
@@ -202,6 +207,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
 
             // status
             .setStatus(source.getStatus())
+
             // category
             .setCategory(List.of(new CodeableConcept().addCoding(
                     new Coding().setSystem("http://loinc.org")
@@ -292,25 +298,23 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
     }
 
 
-    public AimLabMapper mapServiceRequest(DiagnosticReport report,
-                                          Bundle bundle) {
-        // TODO clarify intention: using this as a wrapper resource in order
-        //  to be conform to MII profiles
+    public void mapServiceRequest(DiagnosticReport report,
+                                  Bundle bundle) {
         var identifierType = new CodeableConcept(new Coding().setSystem(
                 "http://terminology.hl7.org/CodeSystem/v2-0203")
             .setCode("PLAC"));
-        var identifierValue = createId(fhirProperties().getSystems()
-            .getServiceRequestId(), report.getIdentifierFirstRep()
-            .getValue(), report.getEffectiveDateTimeType());
+        var identifierValue = report.getIdentifierFirstRep()
+            .getValue();
 
         var serviceRequest = new ServiceRequest();
         // id
-        serviceRequest.setId(identifierValue);
+        serviceRequest.setId(sanitizeId(identifierValue));
         // meta
         serviceRequest.setMeta(new Meta().addProfile(
                 "https://www.medizininformatik-initiative"
                     + ".de/fhir/core/modul-labor/StructureDefinition"
                     + "/ServiceRequestLab")
+            .addTag(getMapperTag())
             .setSource("#swisslab"));
 
         serviceRequest.setIdentifier(List.of(new Identifier().setSystem(
@@ -342,7 +346,6 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
 
         // add to bundle
         addResourceToBundle(bundle, serviceRequest);
-        return this;
     }
 
 
@@ -366,18 +369,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
             .getResource()).getIdentifierFirstRep()
             .getValue();
 
-        getBundleEntryResources(bundle, ServiceRequest.class).forEach(
-            r -> r.getEncounter()
-                .setReference(getConditionalReference(ResourceType.Encounter,
-                    encounterId)));
-        getBundleEntryResources(bundle, DiagnosticReport.class).forEach(
-            r -> r.getEncounter()
-                .setReference(getConditionalReference(ResourceType.Encounter,
-                    encounterId)));
-        getBundleEntryResources(bundle, Observation.class).forEach(
-            o -> o.getEncounter()
-                .setReference(getConditionalReference(ResourceType.Encounter,
-                    encounterId)));
+        setEncounter(encounterId, bundle);
     }
 
     /**
@@ -400,41 +392,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
             .getResource()).getIdentifierFirstRep()
             .getValue();
 
-        getBundleEntryResources(bundle, ServiceRequest.class).forEach(
-            r -> r.getSubject()
-                .setReference(
-                    getConditionalReference(ResourceType.Patient, patientId)));
-        getBundleEntryResources(bundle, DiagnosticReport.class).forEach(
-            r -> r.getSubject()
-                .setReference(
-                    getConditionalReference(ResourceType.Patient, patientId)));
-        getBundleEntryResources(bundle, Observation.class).forEach(
-            o -> o.getSubject()
-                .setReference(
-                    getConditionalReference(ResourceType.Patient, patientId)));
-
+        setPatient(patientId, bundle);
     }
-
-    public <T> List<T> getBundleEntryResources(Bundle bundle,
-                                               Class<T> domainType) {
-        return bundle.getEntry()
-            .stream()
-            .map(BundleEntryComponent::getResource)
-            .filter(domainType::isInstance)
-            .map(domainType::cast)
-            .collect(Collectors.toList());
-    }
-
-    private String createId(Identifier identifier, DateTimeType dateTimeType) {
-        return createId(identifier.getSystem(), identifier.getValue(),
-            dateTimeType);
-    }
-
-    private String createId(String idSystem, String id,
-                            DateTimeType dateTimeType) {
-        return TimestampPrefixedId.createNewIdentityValue(dateTimeType,
-            hasher().apply(idSystem + "|" + id));
-    }
-
 }
 

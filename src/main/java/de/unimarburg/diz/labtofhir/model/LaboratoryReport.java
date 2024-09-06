@@ -8,12 +8,13 @@ import de.unimarburg.diz.labtofhir.serializer.FhirSerializer;
 import de.unimarburg.diz.labtofhir.serializer.InstantDeserializer;
 import de.unimarburg.diz.labtofhir.serializer.ObservationListDeserializer;
 import de.unimarburg.diz.labtofhir.serializer.ObservationListSerializer;
-import java.io.Serializable;
-import java.time.Instant;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Observation;
+
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.List;
 
 public class LaboratoryReport implements Serializable {
 
@@ -101,15 +102,6 @@ public class LaboratoryReport implements Serializable {
     public String getReportIdentifierValue() {
         return resource.getIdentifierFirstRep()
             .getValue();
-    }
-
-    @SuppressWarnings("checkstyle:MagicNumber")
-    public String getValidReportId() {
-        // replace invalid characters with "-"
-        var replaced =
-            getReportIdentifierValue().replaceAll("[^A-Za-z0-9\\-\\.]", "-");
-        // max 64 characters
-        return replaced.substring(0, Math.min(replaced.length(), 64));
     }
 
     public String getMetaCode() {

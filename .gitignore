@@ -41,4 +41,4 @@ node_modules/
 
 application-dev.yml
 
-hl7server/
+/dev/hl7server/
