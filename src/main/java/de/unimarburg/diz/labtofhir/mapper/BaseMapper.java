@@ -13,6 +13,7 @@ import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.Meta;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ResourceType;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
 
+    private static final int MAX_IDENTIFIER_LENGTH = 64;
     private final IParser fhirParser;
     private final FhirProperties fhirProperties;
     private final Function<String, String> hasher =
@@ -45,6 +47,24 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
         this.mapperTag = new Coding().setSystem(
                 fhirProperties().getSystems().getMapperTagSystem())
             .setCode(getMapperName());
+    }
+
+    protected List<CodeableConcept> getReportCategory() {
+        return List.of(new CodeableConcept()
+            .addCoding(
+                new Coding().setSystem("http://loinc.org").setCode("26436-6"))
+            .addCoding(new Coding().setSystem(
+                    "http://terminology.hl7.org/CodeSystem/v2-0074")
+                .setCode("LAB")));
+    }
+
+    protected Meta getMeta(String resourceType) {
+        return new Meta().addProfile(
+                "https://www.medizininformatik-initiative"
+                    + ".de/fhir/core/modul-labor/StructureDefinition/"
+                    + resourceType + "Lab")
+            .addTag(getMapperTag())
+            .setSource("#swisslab");
     }
 
     abstract String getMapperName();
@@ -74,7 +94,6 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
     protected FhirProperties fhirProperties() {
         return fhirProperties;
     }
-
 
     private List<CodeableConcept> initServiceRequestCategory() {
         return List.of(new CodeableConcept(new Coding().setSystem(
@@ -129,7 +148,8 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
         var replaced =
             id.replaceAll("[^A-Za-z0-9\\-\\.]", "-");
         // max 64 characters
-        return replaced.substring(0, Math.min(replaced.length(), 64));
+        return replaced.substring(0,
+            Math.min(replaced.length(), MAX_IDENTIFIER_LENGTH));
     }
 
     protected Coding getMapperTag() {

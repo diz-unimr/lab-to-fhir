@@ -13,14 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hl7.fhir.r4.model.Annotation;
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.InstantType;
-import org.hl7.fhir.r4.model.Meta;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Reference;
@@ -138,12 +136,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
             // id
             obs.setId(identifierValue);
             // meta data
-            obs.setMeta(new Meta().setProfile(List.of(new CanonicalType(
-                    "https://www.medizininformatik-initiative"
-                        + ".de/fhir/core/modul-labor/StructureDefinition"
-                        + "/ObservationLab")))
-                .addTag(getMapperTag())
-                .setSource("#swisslab"));
+            obs.setMeta(getMeta(ResourceType.Observation.name()));
 
             // identifier
             obs.addIdentifier(new Identifier().setType(identifierType)
@@ -318,12 +311,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
         // id and meta data
         report.setId(sanitizeId(reportId))
-            .setMeta(new Meta().addProfile(
-                    "https://www.medizininformatik-initiative"
-                        + ".de/fhir/core/modul-labor/StructureDefinition"
-                        + "/DiagnosticReportLab")
-                .addTag(getMapperTag())
-                .setSource("#swisslab"));
+            .setMeta(getMeta(ResourceType.DiagnosticReport.name()));
         report.addIdentifier(
                 new Identifier().setType(new CodeableConcept().setCoding(
                         List.of(new Coding().setSystem(
@@ -343,14 +331,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
             .setStatus(parseResultStatus(msg))
 
             // category
-            .setCategory(List.of(new CodeableConcept()
-                .addCoding(
-                    new Coding().setSystem("http://loinc.org")
-                        .setCode("26436-6"))
-
-                .addCoding(new Coding().setSystem(
-                        "http://terminology.hl7.org/CodeSystem/v2-0074")
-                    .setCode("LAB"))))
+            .setCategory(getReportCategory())
 
             // code
             .setCode(new CodeableConcept(new Coding("http://loinc.org",
@@ -388,12 +369,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
         // id and meta data
         request.setId(sanitizeId(requestId))
-            .setMeta(new Meta().addProfile(
-                    "https://www.medizininformatik-initiative"
-                        + ".de/fhir/core/modul-labor/StructureDefinition"
-                        + "/ServiceRequestLab")
-                .addTag(getMapperTag())
-                .setSource("#swisslab"));
+            .setMeta(getMeta(ResourceType.ServiceRequest.name()));
         request.addIdentifier(
                 new Identifier().setType(new CodeableConcept().setCoding(
                         List.of(new Coding().setSystem(

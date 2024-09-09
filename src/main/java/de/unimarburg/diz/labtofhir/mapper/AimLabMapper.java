@@ -7,14 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleType;
-import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Encounter;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.InstantType;
-import org.hl7.fhir.r4.model.Meta;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.r4.model.Patient;
@@ -122,12 +120,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
         // id
         report.setId(sanitizeId(identifierValue));
         // meta data
-        report.setMeta(new Meta().setProfile(List.of(new CanonicalType(
-                "https://www.medizininformatik-initiative"
-                    + ".de/fhir/core/modul-labor/StructureDefinition"
-                    + "/DiagnosticReportLab")))
-            .addTag(getMapperTag())
-            .setSource("#swisslab"));
+        report.setMeta(getMeta(ResourceType.DiagnosticReport.name()));
 
         // identifier
         report.setIdentifier(List.of(new Identifier().setType(identifierType)
@@ -148,16 +141,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
             .setStatus(labReport.getStatus())
 
             // category
-            .setCategory(List.of(new CodeableConcept().addCoding(
-                    new Coding().setSystem("http://loinc.org")
-                        .setCode("26436-6"))
-
-                .addCoding(new Coding().setSystem(
-                        "http://terminology.hl7.org/CodeSystem/v2-0074")
-                    .setCode("LAB"))
-                // with local category
-                .addCoding(labReport.getCategoryFirstRep()
-                    .getCodingFirstRep())))
+            .setCategory(getReportCategory())
 
             // code
             .setCode(labReport.getCode())
@@ -190,12 +174,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
         // id
         obs.setId(identifierValue);
         // meta data
-        obs.setMeta(new Meta().setProfile(List.of(new CanonicalType(
-                "https://www.medizininformatik-initiative"
-                    + ".de/fhir/core/modul-labor/StructureDefinition"
-                    + "/ObservationLab")))
-            .addTag(getMapperTag())
-            .setSource("#swisslab"));
+        obs.setMeta(getMeta(ResourceType.Observation.name()));
 
         // identifier
         obs.addIdentifier(new Identifier().setType(identifierType)
@@ -310,12 +289,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
         // id
         serviceRequest.setId(sanitizeId(identifierValue));
         // meta
-        serviceRequest.setMeta(new Meta().addProfile(
-                "https://www.medizininformatik-initiative"
-                    + ".de/fhir/core/modul-labor/StructureDefinition"
-                    + "/ServiceRequestLab")
-            .addTag(getMapperTag())
-            .setSource("#swisslab"));
+        serviceRequest.setMeta(getMeta(ResourceType.ServiceRequest.name()));
 
         serviceRequest.setIdentifier(List.of(new Identifier().setSystem(
                     fhirProperties().getSystems()
