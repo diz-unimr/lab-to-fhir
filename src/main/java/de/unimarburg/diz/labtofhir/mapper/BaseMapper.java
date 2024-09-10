@@ -18,6 +18,7 @@ import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Meta;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Quantity;
+import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
@@ -257,5 +258,26 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
         }
 
         return null;
+    }
+
+    protected Observation createObservation(String id) {
+        var identifierType = new CodeableConcept().addCoding(
+            new Coding().setSystem(
+                    "http://terminology.hl7.org/CodeSystem/v2-0203")
+                .setCode("OBI"));
+
+        var obs = new Observation();
+        // id
+        obs.setId(id);
+        // meta data
+        obs.setMeta(getMeta(ResourceType.Observation.name()));
+
+        // identifier
+        return obs.addIdentifier(new Identifier().setType(identifierType)
+            .setSystem(fhirProperties().getSystems()
+                .getObservationId())
+            .setValue(id)
+            .setAssigner(new Reference()
+                .setIdentifier(identifierAssigner())));
     }
 }

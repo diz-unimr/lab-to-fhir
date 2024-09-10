@@ -106,11 +106,6 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
     private List<Observation> mapObservations(ORU_R01 msg) throws HL7Exception {
 
-        var identifierType = new CodeableConcept().addCoding(
-            new Coding().setSystem(
-                    "http://terminology.hl7.org/CodeSystem/v2-0203")
-                .setCode("OBI"));
-
         var result = new ArrayList<Observation>();
 
         var orderObs = msg.getPATIENT_RESULT().getORDER_OBSERVATIONAll();
@@ -141,23 +136,10 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                 createObsId(msg.getMSH().getSendingApplication().getValue(),
                     getRequestNumber(msg), code, effective);
 
-            var obs = new Observation();
-            // id
-            obs.setId(identifierValue);
-            // meta data
-            obs.setMeta(getMeta(ResourceType.Observation.name()));
+            var obs = createObservation(identifierValue);
 
-            // identifier
-            obs.addIdentifier(new Identifier().setType(identifierType)
-                    .setSystem(fhirProperties().getSystems()
-                        .getObservationId())
-                    .setValue(identifierValue)
-                    .setAssigner(new Reference()
-                        .setIdentifier(identifierAssigner())))
-
-                // status
-                .setStatus(parseObservationStatus(obx))
-
+            // status
+            obs.setStatus(parseObservationStatus(obx))
 
                 // category
                 .setCategory(List.of(getObservationCategory()

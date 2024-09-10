@@ -44,7 +44,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
 
     @Override
     public Bundle apply(LaboratoryReport report) {
-        
+
         Bundle bundle = new Bundle();
         try {
 
@@ -159,29 +159,14 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
     }
 
     private Observation mapObservation(Observation source) {
-        var identifierType = new CodeableConcept().addCoding(
-            new Coding().setSystem(
-                    "http://terminology.hl7.org/CodeSystem/v2-0203")
-                .setCode("OBI"));
+
         var identifierValue = createId(source.getIdentifierFirstRep(),
             source.getEffectiveDateTimeType());
 
-        var obs = new Observation();
-        // id
-        obs.setId(identifierValue);
-        // meta data
-        obs.setMeta(getMeta(ResourceType.Observation.name()));
+        var obs = createObservation(identifierValue);
 
-        // identifier
-        obs.addIdentifier(new Identifier().setType(identifierType)
-                .setSystem(fhirProperties().getSystems()
-                    .getObservationId())
-                .setValue(identifierValue)
-                .setAssigner(new Reference()
-                    .setIdentifier(identifierAssigner())))
-
-            // status
-            .setStatus(source.getStatus())
+        // status
+        obs.setStatus(source.getStatus())
 
             // category
             .setCategory(List.of(getObservationCategory()
