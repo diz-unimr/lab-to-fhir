@@ -5,6 +5,8 @@ import ca.uhn.fhir.parser.IParser;
 import com.google.common.hash.Hashing;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.util.TimestampPrefixedId;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.kafka.streams.kstream.ValueMapper;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.CodeableConcept;
@@ -15,6 +17,7 @@ import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Meta;
 import org.hl7.fhir.r4.model.Observation;
+import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
@@ -67,6 +70,15 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
             .setSource("#swisslab");
     }
 
+    protected CodeableConcept getObservationCategory() {
+        return new CodeableConcept().addCoding(
+                new Coding().setSystem("http://loinc.org")
+                    .setCode("26436-6"))
+            .addCoding(new Coding().setSystem("http://terminology.hl7"
+                    + ".org/CodeSystem/observation-category")
+                .setCode("laboratory"));
+    }
+
     abstract String getMapperName();
 
     private CodeableConcept initServiceRequestCode() {
@@ -106,7 +118,9 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
         return serviceRequestCode;
     }
 
-    protected void addResourceToBundle(Bundle bundle, DomainResource resource) {
+    protected void addResourceToBundle(Bundle bundle, DomainResource resource,
+                                       Identifier identifier) {
+
         var idElement = resource.getIdElement()
             .getValue();
         bundle.addEntry()
@@ -117,11 +131,11 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
                 new Bundle.BundleEntryRequestComponent().setMethod(
                         Bundle.HTTPVerb.PUT)
                     .setUrl(getConditionalReference(resource.getResourceType(),
-                        idElement)));
+                        identifier)));
     }
 
     protected String getConditionalReference(ResourceType resourceType,
-                                             String id) {
+                                             String identifierValue) {
 
         String idSystem;
         switch (resourceType) {
@@ -140,7 +154,16 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
                     + "reference");
         }
 
-        return String.format("%s?identifier=%s|%s", resourceType, idSystem, id);
+        return getConditionalReference(resourceType,
+            new Identifier().setSystem(idSystem).setValue(identifierValue));
+    }
+
+    protected String getConditionalReference(ResourceType resourceType,
+                                             Identifier identifier) {
+
+        return String.format("%s?identifier=%s|%s", resourceType,
+            identifier.getSystem(),
+            identifier.getValue());
     }
 
     protected String sanitizeId(String id) {
@@ -209,5 +232,30 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
             o -> o.getEncounter()
                 .setReference(getConditionalReference(ResourceType.Encounter,
                     encounterId)));
+    }
+
+    protected Quantity parseQuantity(String value) {
+        if (StringUtils.isBlank(value)) {
+            return null;
+        }
+
+        if (NumberUtils.isCreatable(value)) {
+            return new Quantity(
+                NumberUtils.createDouble(value));
+        }
+
+        // check first character for comparator value
+        var comp = value.charAt(0);
+        var valuePart = value.substring(1)
+            .trim();
+
+        if ((comp == '<' || comp == '>') && NumberUtils.isCreatable(
+            valuePart)) {
+            return new Quantity(
+                NumberUtils.createDouble(valuePart)).setComparator(
+                Quantity.QuantityComparator.fromCode(String.valueOf(comp)));
+        }
+
+        return null;
     }
 }

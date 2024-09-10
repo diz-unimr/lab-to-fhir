@@ -103,12 +103,4 @@ public class LaboratoryReport implements Serializable {
         return resource.getIdentifierFirstRep()
             .getValue();
     }
-
-    public String getMetaCode() {
-        return this.metaCode;
-    }
-
-    public void setMetaCode(String code) {
-        this.metaCode = code;
-    }
 }

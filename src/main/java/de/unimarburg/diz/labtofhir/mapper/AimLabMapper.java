@@ -4,7 +4,6 @@ import ca.uhn.fhir.context.FhirContext;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleType;
 import org.hl7.fhir.r4.model.CodeableConcept;
@@ -17,7 +16,6 @@ import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Observation.ObservationReferenceRangeComponent;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Quantity;
-import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
@@ -46,9 +44,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
 
     @Override
     public Bundle apply(LaboratoryReport report) {
-
-        log.debug("Mapping LaboratoryReport with id:{} and order number:{}",
-            report.getId(), report.getReportIdentifierValue());
+        
         Bundle bundle = new Bundle();
         try {
 
@@ -70,7 +66,8 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                     .map(this::mapObservation)
 
                     // add to bundle
-                    .peek(o -> addResourceToBundle(bundle, o))
+                    .peek(o -> addResourceToBundle(bundle, o,
+                        o.getIdentifierFirstRep()))
                     // set result references
                     .map(o -> new Reference(
                         getConditionalReference(ResourceType.Observation,
@@ -81,7 +78,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                 // report contains no observations
                 log.info(
                     "No Observations after mapping for LaboratoryReport with "
-                        + "id {} and order number {}. Discarding.",
+                        + "[id={}] and [order-number={}]. Discarding.",
                     report.getId(), report.getReportIdentifierValue());
                 return null;
             }
@@ -90,14 +87,15 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
             setEncounter(report, bundle);
         } catch (Exception e) {
             log.error(
-                "Mapping failed for LaboratoryReport with id {} and order "
-                    + "number {}", report.getId(),
+                "Mapping failed for LaboratoryReport with [id={}], "
+                    + "[order-number={}]", report.getId(),
                 report.getReportIdentifierValue(), e);
             // TODO add metrics
             return null;
         }
 
-        log.debug("Mapped successfully to FHIR bundle: id:{}, order number:{}",
+        log.debug(
+            "Mapped successfully to FHIR bundle: [id={}], [order-number={}]",
             report.getId(), report.getReportIdentifierValue());
         log.trace("FHIR bundle: {}",
             fhirParser().encodeResourceToString(bundle));
@@ -132,10 +130,8 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
 
             // basedOn
             .setBasedOn(List.of(new Reference(
-                getConditionalReference(ResourceType.ServiceRequest, createId(
-                    fhirProperties().getSystems()
-                        .getServiceRequestId(), identifierValue,
-                    labReport.getEffectiveDateTimeType())))))
+                getConditionalReference(ResourceType.ServiceRequest,
+                    identifierValue))))
 
             // status
             .setStatus(labReport.getStatus())
@@ -157,7 +153,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                 new InstantType(labReport.getEffectiveDateTimeType()));
 
         // add to bundle
-        addResourceToBundle(bundle, report);
+        addResourceToBundle(bundle, report, report.getIdentifierFirstRep());
 
         return report;
     }
@@ -188,12 +184,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
             .setStatus(source.getStatus())
 
             // category
-            .setCategory(List.of(new CodeableConcept().addCoding(
-                    new Coding().setSystem("http://loinc.org")
-                        .setCode("26436-6"))
-                .addCoding(new Coding().setSystem("http://terminology.hl7"
-                        + ".org/CodeSystem/observation-category")
-                    .setCode("laboratory"))
+            .setCategory(List.of(getObservationCategory()
                 // with local category
                 .addCoding(source.getCategoryFirstRep()
                     .getCodingFirstRep())))
@@ -245,16 +236,9 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
             var valueString = obs.getValueStringType()
                 .getValue();
 
-            // check first character for comparator value
-            var comp = valueString.charAt(0);
-            var valuePart = valueString.substring(1)
-                .trim();
-
-            if ((comp == '<' || comp == '>') && NumberUtils.isCreatable(
-                valuePart)) {
-                return new Quantity(
-                    NumberUtils.createDouble(valuePart)).setComparator(
-                    QuantityComparator.fromCode(String.valueOf(comp)));
+            var quantity = parseQuantity(valueString);
+            if (quantity != null) {
+                return quantity;
             }
         } else if (obs.hasValueQuantity()) {
             ensureCodeIsSet(obs.getValueQuantity());
@@ -319,7 +303,8 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                     .setCode("59615004"))));
 
         // add to bundle
-        addResourceToBundle(bundle, serviceRequest);
+        addResourceToBundle(bundle, serviceRequest,
+            serviceRequest.getIdentifierFirstRep());
     }
 
 

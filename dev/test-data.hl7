@@ -1,6 +1,6 @@
 test-msg.000010:MSH|^~\&|SWISSLAB|KLIN|DBSERV||20220702120811|LAB|ORU^R01|test-msg.000010|P|2.2|||AL|NE
 PID|||123456||Tester^Test||19811029000000|M
-PV1|||GYN||||||||||||||||23651159
+PV1|||GYN||||||||||||||||22222222
 ORC|RE|20220702_88888888|||IP||||20220702120811
 OBR|1|20220702_88888888|||||20220702120811||||||||||||||||||F
 OBX|1|ST|USTA^Urinstatus||||||||F
@@ -27,3 +27,18 @@ OBR|10|20220702_88888888|||||20220702120811||||||||||||||||||F
 OBX|1|ST|UBIL^Bilirubin (Stix)||negativ||negativ||||F
 OBR|11|20220702_88888888|||||20220702120811||||||||||||||||||F
 OBX|1|NM|USg^Harndichte (Stix)||1.022|g/cm3|1.002 - 1.040||||F
+#test-msg.000042:MSH|^~\&|SWISSLAB|INFD|DBSERV||20190417111500|LAB|ORU^R01|test-msg.000042|P|2.2|||AL|NE
+PID|||789012||Mustermann^Erika||19810211000000|W
+PV1|||NEU||||||||||||||||33333333
+ORC|RE|20190417_55555555|||IP||||20190417111000
+OBR|1|20190417_55555555|||||20190417111000||||||||||||||||||F
+OBX|1|NM|CMG^Cytomegalievirus IgG||0.1~negativ|AU/ml| - <6||||F
+OBR|2|20190417_55555555|||||20190417111000||||||||||||||||||F
+OBX|1|NM|CMM^Cytomegalievirus IgM||0.1~negativ|Index| - <1.00||||F
+OBR|3|20190417_55555555|||||20190417111000||||||||||||||||||F
+OBX|1|NM|EBMA^Epstein-Barr-Virus IgM||0.12~negativ|S/CO|0.50 - <1.00|L|||F
+OBR|4|20190417_55555555|||||20190417111000||||||||||||||||||F
+OBX|1|NM|EBVA^Epstein-Barr-Virus VCA-IgG||40.56~positiv|S/CO|0.75 - <1.00|H|||F
+OBR|5|20190417_55555555|||||20190417111000||||||||||||||||||F
+OBX|1|NM|EBEA^Epstein-Barr-Virus EBNA IgG||20.95~positiv|S/CO|0.50 - <1.00|H|||F
+NTE|1||Beurteilung: abgelaufene Infektion

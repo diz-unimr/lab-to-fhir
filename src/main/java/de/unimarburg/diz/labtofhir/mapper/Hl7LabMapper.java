@@ -45,6 +45,7 @@ import java.util.Optional;
     matchIfMissing = true)
 public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
+    private static final int OBX_OBSERVATION_VALUE_SEGMENT = 5;
     private final Map<String, String> categoryMap;
 
     Hl7LabMapper(FhirContext fhirContext, FhirProperties fhirProperties,
@@ -66,36 +67,36 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
         var orderId = getOrderNumber(msg);
 
-        log.debug("Mapping HL7 message with id:{} and order number:{}", msgId,
-            orderId);
-
         var bundle = new Bundle();
         try {
 
             // set meta information (with valid id)
-            bundle.setId(msgId);
+            bundle.setId(sanitizeId(msgId));
             bundle.setType(Bundle.BundleType.TRANSACTION);
 
             var request = mapServiceRequest(msg);
             var report = mapDiagnosticReport(msg);
             var obs = mapObservations(msg);
 
-            addResourceToBundle(bundle, request);
-            addResourceToBundle(bundle, report);
-            obs.forEach(o -> addResourceToBundle(bundle, o));
+            addResourceToBundle(bundle, request,
+                request.getIdentifierFirstRep());
+            addResourceToBundle(bundle, report, report.getIdentifierFirstRep());
+            obs.forEach(
+                o -> addResourceToBundle(bundle, o, o.getIdentifierFirstRep()));
 
             mapPatient(msg, bundle);
             mapEncounter(msg, bundle);
 
         } catch (Exception e) {
-            log.error("Mapping failed for HL7 message with id:{} and order "
-                + "number:{}", msgId, orderId);
+            log.error(
+                "Mapping failed for HL7 message with [id={}], "
+                    + "[order-number={}]", msgId, orderId);
 
             return null;
         }
 
         log.debug(
-            "Mapped successfully to FHIR bundle: [id={}], [order number={}]",
+            "Mapped successfully to FHIR bundle: [id={}], [order-number={}]",
             msgId, orderId);
         log.trace("FHIR bundle: {}",
             fhirParser().encodeResourceToString(bundle));
@@ -120,8 +121,16 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
             var obx = order.getOBSERVATION().getOBX();
             var nte = order.getOBSERVATION().getNTE();
 
+            // code
             var code =
                 obx.getObservationIdentifier().getCe1_Identifier().getValue();
+            var codeCoding = new CodeableConcept()
+                .addCoding(
+                    new Coding(fhirProperties().getSystems()
+                        .getLaboratorySystem(),
+                        code,
+                        obx.getObservationIdentifier().getCe2_Text()
+                            .getValue()));
 
             var effective =
                 new DateTimeType(obr.getObservationDateTime().getTimeOfAnEvent()
@@ -151,29 +160,19 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
 
                 // category
-                .setCategory(List.of(new CodeableConcept().addCoding(
-                        new Coding().setSystem("http://loinc.org")
-                            .setCode("26436-6"))
-                    .addCoding(new Coding()
-                        .setSystem("http://terminology.hl7"
-                            + ".org/CodeSystem/observation-category")
-                        .setCode("laboratory"))
+                .setCategory(List.of(getObservationCategory()
                     // with local category
                     .addCoding(mapReportCategory(code))
                 ))
 
                 // code
-                .setCode(new CodeableConcept()
-                    .addCoding(
-                        new Coding(fhirProperties().getSystems()
-                            .getLaboratorySystem(),
-                            code,
-                            obx.getObservationIdentifier().getCe2_Text()
-                                .getValue())))
+                .setCode(codeCoding)
                 // effective
                 .setEffective(effective)
                 // value
                 .setValue(parseValue(obx))
+                // secondary value in component
+                .setComponent(parseRepeatingValue(obx, codeCoding))
                 // interpretation
                 .setInterpretation(parseInterpretation(obx))
                 // map reference range to simple quantity with value only
@@ -190,6 +189,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         return result;
     }
 
+
     @SuppressWarnings("checkstyle:LineLength")
     private List<Observation.ObservationReferenceRangeComponent> parseReferenceRange(
         OBX obx, Type value) {
@@ -198,28 +198,31 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         if (rangeString == null) {
             return List.of();
         }
+        var refRange =
+            new Observation.ObservationReferenceRangeComponent().setText(
+                rangeString);
 
         var parts = rangeString.split(" - ", 2);
 
         if (parts.length == 2 && value instanceof Quantity q) {
             // set code and system according to its quantity value
-            var low = new SimpleQuantity().setCode(q.getCode())
-                .setSystem(q.getSystem())
-                .setValue(NumberUtils.createDouble(parts[0]));
+            var low = parseQuantity(parts[0]);
+            var high = parseQuantity(parts[1]);
 
-            var high = new SimpleQuantity().setCode(q.getCode())
-                .setSystem(q.getSystem())
-                .setValue(NumberUtils.createDouble(parts[0]));
-
-            return List.of(
-                new Observation.ObservationReferenceRangeComponent()
-                    .setLow(low)
-                    .setHigh(high));
+            // SimpleQuantity does not allow comparator (sqty-1)
+            if (low != null) {
+                refRange.setLow(new SimpleQuantity().setValue(low.getValue())
+                    .setSystem(q.getSystem()).setCode(q.getCode())
+                    .setUnit(q.getUnit()));
+            }
+            if (high != null) {
+                refRange.setHigh(new SimpleQuantity().setValue(high.getValue())
+                    .setSystem(q.getSystem()).setCode(q.getCode())
+                    .setUnit(q.getUnit()));
+            }
         }
 
-        return List.of(
-            new Observation.ObservationReferenceRangeComponent().setText(
-                parts[0]));
+        return List.of(refRange);
     }
 
     private List<CodeableConcept> parseInterpretation(OBX obx) {
@@ -237,6 +240,38 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         ).toList();
     }
 
+    /*
+        Parse repeating OBX-5 values. This is not part of HL7 v2.2 but used
+        anyway, so we are mapping those values to Observation.component
+     */
+    private List<Observation.ObservationComponentComponent> parseRepeatingValue(
+        OBX obx, CodeableConcept code) {
+
+        var reps = getObservationValueReps(obx);
+        if (reps == null) {
+            return null;
+        }
+
+        var components =
+            new ArrayList<Observation.ObservationComponentComponent>();
+
+        for (var rep : reps) {
+            // parse value
+            Type valueType;
+            if (NumberUtils.isCreatable(rep)) {
+                valueType = new Quantity(NumberUtils.createDouble(rep));
+            } else {
+                valueType = new StringType(rep);
+            }
+
+            components.add(
+                new Observation.ObservationComponentComponent(code).setValue(
+                    valueType));
+        }
+
+        return components;
+    }
+
     private Type parseValue(OBX obx) throws HL7Exception {
 
         var valueType = obx.getValueType();
@@ -252,7 +287,8 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                 var valueNumeric = (NM) value.getData();
                 yield new Quantity(
                     NumberUtils.createDouble(valueNumeric.getValue()))
-                    .setUnit(unit);
+                    .setUnit(unit).setSystem(fhirProperties().getSystems()
+                        .getLaboratoryUnitSystem()).setCode(unit);
             }
             case "ST" -> {
                 var valueString = ((ST) value.getData()).getValue();
@@ -266,8 +302,10 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                     valuePart)) {
                     yield new Quantity(
                         NumberUtils.createDouble(valuePart)).setComparator(
-                        Quantity.QuantityComparator.fromCode(
-                            String.valueOf(comp))).setUnit(unit);
+                            Quantity.QuantityComparator.fromCode(
+                                String.valueOf(comp))).setUnit(unit)
+                        .setSystem(fhirProperties().getSystems()
+                            .getLaboratoryUnitSystem()).setCode(unit);
                 }
 
                 yield new StringType(valueString);
@@ -465,5 +503,26 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         // Filler Order Number seems to be empty
         return Optional.ofNullable(orderId.getValue())
             .orElse(getRequestNumber(msg));
+    }
+
+    List<String> getObservationValueReps(OBX obx) {
+
+        try {
+            if (obx.getField(OBX_OBSERVATION_VALUE_SEGMENT).length < 2) {
+                // only repeated values are handled here
+                return null;
+            }
+
+            var result = new ArrayList<String>();
+
+            var obx5 = obx.getField(OBX_OBSERVATION_VALUE_SEGMENT);
+            for (int i = 1; i < obx5.length; i++) {
+                result.add(obx5[i].encode());
+            }
+            return result;
+
+        } catch (HL7Exception e) {
+            return null;
+        }
     }
 }
