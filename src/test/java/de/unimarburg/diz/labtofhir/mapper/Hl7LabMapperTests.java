@@ -40,7 +40,7 @@ public class Hl7LabMapperTests {
                 .filter(ServiceRequest.class::isInstance)
                 .map(ServiceRequest.class::cast).findFirst().orElseThrow();
 
-        assertThat(mapped.getId()).isEqualTo("20220702_88888888");
+        assertThat(mapped.getId()).isEqualTo("20220702-88888888");
     }
 
     private Message getTestReport(Resource testReport)
