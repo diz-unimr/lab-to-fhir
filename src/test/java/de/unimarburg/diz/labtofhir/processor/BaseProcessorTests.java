@@ -1,9 +1,12 @@
 package de.unimarburg.diz.labtofhir.processor;
 
+import ca.uhn.hl7v2.model.v22.message.ORU_R01;
+import de.unimarburg.diz.labtofhir.configuration.KafkaConfiguration;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.serde.JsonSerdes;
 import de.unimarburg.diz.labtofhir.serializer.FhirDeserializer;
 import de.unimarburg.diz.labtofhir.serializer.FhirSerializer;
+import de.unimarburg.diz.labtofhir.serializer.Hl7Serializer;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -49,10 +52,16 @@ abstract class BaseProcessorTests {
             .map(Observation::getCode);
     }
 
-    TestInputTopic<String, LaboratoryReport> createInputTopic(
+    TestInputTopic<String, LaboratoryReport> createAimInputTopic(
         TopologyTestDriver driver) {
         return driver.createInputTopic("lab", new StringSerializer(),
             new JsonSerializer<>());
+    }
+
+    TestInputTopic<String, ORU_R01> createHl7InputTopic(
+        TopologyTestDriver driver) {
+        return driver.createInputTopic("lab", new StringSerializer(),
+            new Hl7Serializer<>());
     }
 
     TestOutputTopic<String, Bundle> createOutputTopic(
@@ -61,12 +70,29 @@ abstract class BaseProcessorTests {
             new FhirDeserializer<>(Bundle.class));
     }
 
-    TopologyTestDriver buildStream(
+    TopologyTestDriver buildAimStream(
         Function<KStream<String, LaboratoryReport>, KStream<String, Bundle>> processor) {
         var builder = new StreamsBuilder();
         final KStream<String, LaboratoryReport> labStream = builder.stream(
             "lab",
             Consumed.with(Serdes.String(), JsonSerdes.laboratoryReport()));
+
+        processor
+            .apply(labStream)
+            .to("lab-mapped", Produced.with(Serdes.String(),
+                Serdes.serdeFrom(new FhirSerializer<>(),
+                    new FhirDeserializer<>(Bundle.class))));
+
+        return new TopologyTestDriver(builder.build());
+    }
+
+    TopologyTestDriver buildHl7Stream(
+        Function<KStream<String, ORU_R01>, KStream<String, Bundle>> processor) {
+        var builder = new StreamsBuilder();
+        final KStream<String, ORU_R01> labStream = builder.stream(
+            "lab",
+            Consumed.with(Serdes.String(),
+                new KafkaConfiguration().hl7Serde()));
 
         processor
             .apply(labStream)
