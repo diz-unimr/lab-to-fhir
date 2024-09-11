@@ -421,9 +421,6 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     }
 
     private ServiceRequest.ServiceRequestStatus parseOrderStatus(ORU_R01 msg) {
-        // see also
-        // https://smilecdr.com/docs/hl7_v2x_support/table_definitions.html#0038
-
 
         return switch (msg.getPATIENT_RESULT().getORDER_OBSERVATION().getORC()
             .getOrderStatus().getValue()) {
@@ -439,31 +436,32 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
     private DiagnosticReport.DiagnosticReportStatus parseResultStatus(
         ORU_R01 msg) {
-        // see also
-        // https://smilecdr.com/docs/hl7_v2x_support/table_definitions.html#0123
 
         return switch (msg.getPATIENT_RESULT().getORDER_OBSERVATION().getOBR()
             .getResultStatus().getValue()) {
-            case "O" -> DiagnosticReport.DiagnosticReportStatus.REGISTERED;
-            case "P", "I" -> DiagnosticReport.DiagnosticReportStatus.PARTIAL;
+            case "O", "I", "S" ->
+                DiagnosticReport.DiagnosticReportStatus.REGISTERED;
+            case "P" -> DiagnosticReport.DiagnosticReportStatus.PRELIMINARY;
             case "F" -> DiagnosticReport.DiagnosticReportStatus.FINAL;
             case "C" -> DiagnosticReport.DiagnosticReportStatus.CORRECTED;
+            case "R" -> DiagnosticReport.DiagnosticReportStatus.PARTIAL;
             case "X" -> DiagnosticReport.DiagnosticReportStatus.CANCELLED;
 
             default -> DiagnosticReport.DiagnosticReportStatus.UNKNOWN;
         };
     }
 
+    @SuppressWarnings("checkstyle:LineLength")
     private Observation.ObservationStatus parseObservationStatus(
         OBX obx) {
-        // see also
-        // https://smilecdr.com/docs/hl7_v2x_support/table_definitions.html#0085
 
         return switch (obx.getObservationResultStatus().getValue()) {
-            case "O" -> Observation.ObservationStatus.REGISTERED;
-            case "P", "I" -> Observation.ObservationStatus.PRELIMINARY;
-            case "F" -> Observation.ObservationStatus.FINAL;
+
             case "C" -> Observation.ObservationStatus.CORRECTED;
+            case "D" -> Observation.ObservationStatus.ENTEREDINERROR;
+            case "F", "U" -> Observation.ObservationStatus.FINAL;
+            case "I" -> Observation.ObservationStatus.REGISTERED;
+            case "P", "R" -> Observation.ObservationStatus.PRELIMINARY;
             case "X" -> Observation.ObservationStatus.CANCELLED;
 
             default -> Observation.ObservationStatus.UNKNOWN;
