@@ -1,12 +1,11 @@
 package de.unimarburg.diz.labtofhir.processor;
 
 import ca.uhn.hl7v2.model.v22.message.ORU_R01;
-import de.unimarburg.diz.labtofhir.configuration.KafkaConfiguration;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
-import de.unimarburg.diz.labtofhir.serde.JsonSerdes;
 import de.unimarburg.diz.labtofhir.serializer.FhirDeserializer;
 import de.unimarburg.diz.labtofhir.serializer.FhirSerializer;
 import de.unimarburg.diz.labtofhir.serializer.Hl7Serializer;
+import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -70,29 +69,13 @@ abstract class BaseProcessorTests {
             new FhirDeserializer<>(Bundle.class));
     }
 
-    TopologyTestDriver buildAimStream(
-        Function<KStream<String, LaboratoryReport>, KStream<String, Bundle>> processor) {
+    <T> TopologyTestDriver buildStream(
+        Function<KStream<String, T>, KStream<String, Bundle>> processor,
+        Serde<T> serde) {
         var builder = new StreamsBuilder();
-        final KStream<String, LaboratoryReport> labStream = builder.stream(
+        final KStream<String, T> labStream = builder.stream(
             "lab",
-            Consumed.with(Serdes.String(), JsonSerdes.laboratoryReport()));
-
-        processor
-            .apply(labStream)
-            .to("lab-mapped", Produced.with(Serdes.String(),
-                Serdes.serdeFrom(new FhirSerializer<>(),
-                    new FhirDeserializer<>(Bundle.class))));
-
-        return new TopologyTestDriver(builder.build());
-    }
-
-    TopologyTestDriver buildHl7Stream(
-        Function<KStream<String, ORU_R01>, KStream<String, Bundle>> processor) {
-        var builder = new StreamsBuilder();
-        final KStream<String, ORU_R01> labStream = builder.stream(
-            "lab",
-            Consumed.with(Serdes.String(),
-                new KafkaConfiguration().hl7Serde()));
+            Consumed.with(Serdes.String(), serde));
 
         processor
             .apply(labStream)

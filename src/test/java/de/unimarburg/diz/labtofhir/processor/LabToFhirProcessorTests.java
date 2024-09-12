@@ -4,8 +4,10 @@ import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.v22.message.ORU_R01;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
+import de.unimarburg.diz.labtofhir.configuration.KafkaConfiguration;
 import de.unimarburg.diz.labtofhir.mapper.AimLabMapper;
 import de.unimarburg.diz.labtofhir.mapper.Hl7LabMapper;
+import de.unimarburg.diz.labtofhir.serde.JsonSerdes;
 import org.hl7.fhir.r4.model.Coding;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,8 @@ public class LabToFhirProcessorTests extends BaseProcessorTests {
     @Test
     public void observationCodeIsMapped() {
         // build stream
-        try (var driver = buildAimStream(processor.aim())) {
+        try (var driver = buildStream(processor.aim(),
+            JsonSerdes.laboratoryReport())) {
 
             var labTopic = createAimInputTopic(driver);
             var outputTopic = createOutputTopic(driver);
@@ -60,7 +63,8 @@ public class LabToFhirProcessorTests extends BaseProcessorTests {
     @Test
     public void hl7streamFiltersNull() throws HL7Exception, IOException {
         // build stream
-        try (var driver = buildHl7Stream(processor.hl7())) {
+        try (var driver = buildStream(processor.hl7(),
+            new KafkaConfiguration().hl7Serde())) {
 
             var labTopic = createHl7InputTopic(driver);
             var outputTopic = createOutputTopic(driver);
