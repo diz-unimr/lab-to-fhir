@@ -28,6 +28,7 @@ import org.hl7.fhir.r4.model.SimpleQuantity;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.codesystems.V3ObservationInterpretation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Slf4j
 @Service
@@ -49,8 +51,10 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     private final Map<String, String> categoryMap;
 
     Hl7LabMapper(FhirContext fhirContext, FhirProperties fhirProperties,
+                 @Autowired(required = false) @Qualifier("hl7Filter")
+                 DateFilter filter,
                  @Qualifier("categoryMap") Map<String, String> categoryMap) {
-        super(fhirContext, fhirProperties);
+        super(fhirContext, fhirProperties, filter);
         this.categoryMap = categoryMap;
     }
 
@@ -60,7 +64,20 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     }
 
     @Override
-    public Bundle apply(ORU_R01 msg) {
+    protected Predicate<ORU_R01> createFilter(DateFilter filter) {
+
+        return msg -> {
+            try {
+                return createDateTimeFilter(
+                    new DateTimeType(getOrderDate(msg)), filter);
+            } catch (DataTypeException e) {
+                throw new RuntimeException(e);
+            }
+        };
+    }
+
+    @Override
+    Bundle map(ORU_R01 msg) {
 
         var msgId = msg.getMSH()
             .getMsh10_MessageControlID().getValue();
@@ -80,9 +97,11 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
             addResourceToBundle(bundle, request,
                 request.getIdentifierFirstRep());
-            addResourceToBundle(bundle, report, report.getIdentifierFirstRep());
+            addResourceToBundle(bundle, report,
+                report.getIdentifierFirstRep());
             obs.forEach(
-                o -> addResourceToBundle(bundle, o, o.getIdentifierFirstRep()));
+                o -> addResourceToBundle(bundle, o,
+                    o.getIdentifierFirstRep()));
 
             mapPatient(msg, bundle);
             mapEncounter(msg, bundle);
@@ -104,7 +123,8 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         return bundle;
     }
 
-    private List<Observation> mapObservations(ORU_R01 msg) throws HL7Exception {
+    private List<Observation> mapObservations(ORU_R01 msg) throws
+        HL7Exception {
 
         var result = new ArrayList<Observation>();
 
@@ -118,7 +138,8 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
             // code
             var code =
-                obx.getObservationIdentifier().getCe1_Identifier().getValue();
+                obx.getObservationIdentifier().getCe1_Identifier()
+                    .getValue();
             var codeCoding = new CodeableConcept()
                 .addCoding(
                     new Coding(fhirProperties().getSystems()
@@ -128,8 +149,9 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                             .getValue()));
 
             var effective =
-                new DateTimeType(obr.getObservationDateTime().getTimeOfAnEvent()
-                    .getValueAsDate());
+                new DateTimeType(
+                    obr.getObservationDateTime().getTimeOfAnEvent()
+                        .getValueAsDate());
 
             // identifier
             var identifierValue =
@@ -162,7 +184,8 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
                 // note
                 .setNote(Arrays.stream(nte.getComment())
-                    .map(n -> new Annotation().setText(n.getValue())).toList());
+                    .map(n -> new Annotation().setText(n.getValue()))
+                    .toList());
 
             result.add(obs);
 
@@ -173,7 +196,8 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
 
     @SuppressWarnings("checkstyle:LineLength")
-    private List<Observation.ObservationReferenceRangeComponent> parseReferenceRange(
+    private List<Observation.ObservationReferenceRangeComponent>
+    parseReferenceRange(
         OBX obx, Type value) {
 
         var rangeString = obx.getReferencesRange().getValue();
@@ -193,14 +217,16 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
             // SimpleQuantity does not allow comparator (sqty-1)
             if (low != null) {
-                refRange.setLow(new SimpleQuantity().setValue(low.getValue())
-                    .setSystem(q.getSystem()).setCode(q.getCode())
-                    .setUnit(q.getUnit()));
+                refRange.setLow(
+                    new SimpleQuantity().setValue(low.getValue())
+                        .setSystem(q.getSystem()).setCode(q.getCode())
+                        .setUnit(q.getUnit()));
             }
             if (high != null) {
-                refRange.setHigh(new SimpleQuantity().setValue(high.getValue())
-                    .setSystem(q.getSystem()).setCode(q.getCode())
-                    .setUnit(q.getUnit()));
+                refRange.setHigh(
+                    new SimpleQuantity().setValue(high.getValue())
+                        .setSystem(q.getSystem()).setCode(q.getCode())
+                        .setUnit(q.getUnit()));
             }
         }
 
@@ -226,7 +252,8 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         Parse repeating OBX-5 values. This is not part of HL7 v2.2 but used
         anyway, so we are mapping those values to Observation.component
      */
-    private List<Observation.ObservationComponentComponent> parseRepeatingValue(
+    private List<Observation.ObservationComponentComponent>
+    parseRepeatingValue(
         OBX obx, CodeableConcept code) {
 
         var reps = getObservationValueReps(obx);
@@ -247,7 +274,8 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
             }
 
             components.add(
-                new Observation.ObservationComponentComponent(code).setValue(
+                new Observation.ObservationComponentComponent(
+                    code).setValue(
                     valueType));
         }
 
@@ -297,7 +325,8 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         };
     }
 
-    private String createObsId(String sendingApplication, String requestNumber,
+    private String createObsId(String sendingApplication, String
+        requestNumber,
                                String code, DateTimeType effective) {
         // conforms to id generation from Synedra AIM FHIR mapping
         // i.e. msg.get('MSH.3')+'_'+msg.get('OBR.2') + "_" + msg.get("OBX.3.1")
@@ -420,9 +449,11 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         return request;
     }
 
-    private ServiceRequest.ServiceRequestStatus parseOrderStatus(ORU_R01 msg) {
+    private ServiceRequest.ServiceRequestStatus parseOrderStatus(ORU_R01
+                                                                     msg) {
 
-        return switch (msg.getPATIENT_RESULT().getORDER_OBSERVATION().getORC()
+        return switch (msg.getPATIENT_RESULT().getORDER_OBSERVATION()
+            .getORC()
             .getOrderStatus().getValue()) {
             case "A", "IP" -> ServiceRequest.ServiceRequestStatus.ACTIVE;
             case "CM", "DC" -> ServiceRequest.ServiceRequestStatus.COMPLETED;
@@ -437,7 +468,8 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     private DiagnosticReport.DiagnosticReportStatus parseResultStatus(
         ORU_R01 msg) {
 
-        return switch (msg.getPATIENT_RESULT().getORDER_OBSERVATION().getOBR()
+        return switch (msg.getPATIENT_RESULT().getORDER_OBSERVATION()
+            .getOBR()
             .getResultStatus().getValue()) {
             case "O", "I", "S" ->
                 DiagnosticReport.DiagnosticReportStatus.REGISTERED;

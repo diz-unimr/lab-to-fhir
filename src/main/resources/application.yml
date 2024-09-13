@@ -57,8 +57,10 @@ fhir:
 mapping:
   aim:
     enabled: true
+    filter: # e.g. "<2024-01-01"
   hl7:
     enabled: true
+    filter: # e.g. ">=2024-01-01"
 
 management:
   server:

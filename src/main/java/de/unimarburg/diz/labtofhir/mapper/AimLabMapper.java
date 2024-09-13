@@ -20,10 +20,13 @@ import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 import org.hl7.fhir.r4.model.Type;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,8 +36,10 @@ import java.util.stream.Collectors;
 public class AimLabMapper extends BaseMapper<LaboratoryReport> {
 
     public AimLabMapper(FhirContext fhirContext,
-                        FhirProperties fhirProperties) {
-        super(fhirContext, fhirProperties);
+                        FhirProperties fhirProperties,
+                        @Autowired(required = false) @Qualifier("aimFilter")
+                        DateFilter filter) {
+        super(fhirContext, fhirProperties, filter);
     }
 
     @Override
@@ -43,7 +48,14 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
     }
 
     @Override
-    public Bundle apply(LaboratoryReport report) {
+    protected Predicate<LaboratoryReport> createFilter(DateFilter filter) {
+
+        return r -> createDateTimeFilter(
+            r.getResource().getEffectiveDateTimeType(), filter);
+    }
+
+    @Override
+    Bundle map(LaboratoryReport report) {
 
         Bundle bundle = new Bundle();
         try {

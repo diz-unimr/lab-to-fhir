@@ -24,8 +24,10 @@ import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
 
 import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
@@ -39,8 +41,10 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
     private final List<CodeableConcept> serviceRequestCategory;
     private final CodeableConcept serviceRequestCode;
     private final Coding mapperTag;
+    private final Predicate<T> filter;
 
-    BaseMapper(FhirContext fhirContext, FhirProperties fhirProperties) {
+    BaseMapper(FhirContext fhirContext, FhirProperties fhirProperties,
+               DateFilter dateFilter) {
         this.fhirProperties = fhirProperties;
         fhirParser = fhirContext.newJsonParser();
         identifierAssigner = new Identifier()
@@ -51,6 +55,7 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
         this.mapperTag = new Coding().setSystem(
                 fhirProperties().getSystems().getMapperTagSystem())
             .setCode(getMapperName());
+        this.filter = dateFilter != null ? createFilter(dateFilter) : null;
     }
 
     protected List<CodeableConcept> getReportCategory() {
@@ -81,6 +86,42 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
     }
 
     abstract String getMapperName();
+
+    @Override
+    public final Bundle apply(T report) {
+
+        if (filter == null || filter.test(report)) {
+            return map(report);
+        }
+
+        // skip
+        return null;
+    }
+
+    abstract Bundle map(T report);
+
+    abstract Predicate<T> createFilter(DateFilter filter);
+
+    protected boolean createDateTimeFilter(DateTimeType date,
+                                           DateFilter filter) {
+
+        var targetDate = date.getValue().toInstant().atZone(
+            ZoneId.systemDefault()).toLocalDate();
+        var threshold = filter.date();
+
+
+        return switch (filter.comparator()) {
+            case "<" -> targetDate.isBefore(threshold);
+            case "<=" -> targetDate.isBefore(threshold)
+                || targetDate.isEqual(threshold);
+            case ">" -> targetDate.isAfter(threshold);
+            case ">=" -> targetDate.isAfter(threshold)
+                || targetDate.equals(threshold);
+            case "=" -> targetDate.isEqual(threshold);
+            default -> throw new IllegalStateException(
+                "Unexpected filter comparator: " + filter.comparator());
+        };
+    }
 
     private CodeableConcept initServiceRequestCode() {
         return new CodeableConcept().setCoding(List.of(

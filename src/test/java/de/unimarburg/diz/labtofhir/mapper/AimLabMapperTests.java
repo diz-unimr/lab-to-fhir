@@ -5,6 +5,7 @@ import ca.uhn.fhir.validation.ValidationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
+import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
@@ -35,7 +36,8 @@ import java.util.stream.StreamSupport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = {AimLabMapper.class, FhirConfiguration.class})
+@SpringBootTest(classes = {AimLabMapper.class, FhirConfiguration.class,
+    MappingConfiguration.class})
 public class AimLabMapperTests {
 
     private final ObjectMapper objectMapper = new ObjectMapper();

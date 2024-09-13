@@ -4,12 +4,13 @@ import ca.uhn.hl7v2.model.v22.message.ORU_R01;
 import de.unimarburg.diz.labtofhir.mapper.AimLabMapper;
 import de.unimarburg.diz.labtofhir.mapper.Hl7LabMapper;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
-import java.util.function.Function;
 import org.apache.kafka.streams.kstream.KStream;
 import org.hl7.fhir.r4.model.Bundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+
+import java.util.function.Function;
 
 @Service
 public class LabToFhirProcessor {
@@ -19,7 +20,7 @@ public class LabToFhirProcessor {
 
     @Autowired
     public LabToFhirProcessor(AimLabMapper reportMapper,
-        Hl7LabMapper hl7Mapper) {
+                              Hl7LabMapper hl7Mapper) {
         this.aimMapper = reportMapper;
         this.hl7Mapper = hl7Mapper;
     }
