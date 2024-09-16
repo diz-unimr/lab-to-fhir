@@ -63,7 +63,7 @@ public class MappingConfiguration {
         return createDateFilter(filterExpression);
     }
 
-    private DateFilter createDateFilter(String filterExpression) {
+    DateFilter createDateFilter(String filterExpression) {
         var pattern =
             Pattern.compile("^(<|>|<=|>=|=)(\\d{4}-\\d{2}-\\d{2})$");
 
