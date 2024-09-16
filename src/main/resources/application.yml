@@ -55,7 +55,6 @@ fhir:
     assignerCode: "UKMR"
     laboratorySystem: "https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code"
     laboratoryUnitSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-unit"
-    labReportMetaSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/lab-report-meta-code"
     mapperTagSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/mapper"
 
 mapping:
