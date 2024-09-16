@@ -1,7 +1,5 @@
 package de.unimarburg.diz.labtofhir.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.validation.ValidationResult;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -10,12 +8,6 @@ import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
 import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
 import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.Bundle.HTTPVerb;
 import org.hl7.fhir.r4.model.CodeableConcept;
@@ -32,19 +24,21 @@ import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.StringType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
-import org.springframework.test.context.TestPropertySource;
 
-@SpringBootTest(classes = {MiiLabReportMapper.class, FhirConfiguration.class,
-    LoincMapper.class, MappingConfiguration.class})
-@TestPropertySource(properties = {"mapping.loinc.local=mapping-swl-loinc.zip"})
-public class MiiLabReportMapperTests {
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(classes = {AimLabMapper.class, FhirConfiguration.class,
+    MappingConfiguration.class})
+public class AimLabMapperTests {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -55,15 +49,9 @@ public class MiiLabReportMapperTests {
     private Resource testObservations;
 
     @Autowired
-    private MiiLabReportMapper mapper;
+    private AimLabMapper mapper;
     @Autowired
     private FhirContext fhirContext;
-
-    private static Stream<Arguments> metaCodesAreSetAndFilteredArgs() {
-        return MiiLabReportMapper.META_CODES
-            .stream()
-            .map(Arguments::of);
-    }
 
     @Disabled("TODO move validation to processor tests")
     @Test
@@ -74,9 +62,7 @@ public class MiiLabReportMapperTests {
 
         var bundle = mapper.apply(report);
 
-        var validations = bundle
-            .getEntry()
-            .stream()
+        var validations = bundle.getEntry().stream()
             .map(x -> validator.validateWithResult(x.getResource()))
             .collect(Collectors.toList());
 
@@ -90,58 +76,34 @@ public class MiiLabReportMapperTests {
     public void parseValueConvertsNumericWithComparator() {
         // arrange
         var report = createDummyReport();
-        report.setObservations(List.of(new Observation()
-            .setValue(new StringType("<42"))
-            .setCode(
+        report.setObservations(List.of(
+            new Observation().setValue(new StringType("<42")).setCode(
                 new CodeableConcept().addCoding(new Coding().setCode("LEU")))));
 
         // act
         var result = mapper.apply(report);
 
         // assert
-        var obs = result
-            .getEntry()
-            .stream()
-            .map(BundleEntryComponent::getResource)
-            .filter(Observation.class::isInstance)
-            .map(Observation.class::cast)
-            .findFirst()
-            .orElseThrow();
+        var obs =
+            result.getEntry().stream().map(BundleEntryComponent::getResource)
+                .filter(Observation.class::isInstance)
+                .map(Observation.class::cast).findFirst().orElseThrow();
 
-        assertThat(obs.getValueQuantity())
-            .usingRecursiveComparison()
+        assertThat(obs.getValueQuantity()).usingRecursiveComparison()
             .ignoringExpectedNullFields()
-            .isEqualTo(new Quantity(42.0).setComparator(
-                QuantityComparator.fromCode("<")));
-    }
-
-    @ParameterizedTest
-    @MethodSource("metaCodesAreSetAndFilteredArgs")
-    public void metaCodesAreSetAndFiltered(String code) {
-        var report = createDummyReport();
-        report.setObservations(new ArrayList<>(List.of(new Observation()
-            .setCode(
-                new CodeableConcept().addCoding(new Coding().setCode(code)))
-            .setValue(new StringType("metaCode")))));
-
-        // act
-        var result = mapper.apply(report);
-
-        // assert
-        assertThat(report.getMetaCode()).isEqualTo("metaCode");
-        assertThat(report.getObservations()).isEmpty();
-        assertThat(result).isNull();
+            .isEqualTo(new Quantity(42.0)
+                .setComparator(QuantityComparator.fromCode("<")));
     }
 
     private LaboratoryReport getTestReport(Resource testReport,
-        Resource testObservations) throws IOException {
+                                           Resource testObservations)
+        throws IOException {
         var parser = fhirContext.newJsonParser();
         var diagnosticReport = parser.parseResource(DiagnosticReport.class,
             testReport.getInputStream());
 
         var node = objectMapper.readTree(testObservations.getInputStream());
-        var observations = StreamSupport
-            .stream(node.spliterator(), false)
+        var observations = StreamSupport.stream(node.spliterator(), false)
             .map(JsonNode::toString)
             .map(s -> parser.parseResource(Observation.class, s))
             .collect(Collectors.toList());
@@ -163,21 +125,20 @@ public class MiiLabReportMapperTests {
 
         // assert entries
         assertThat(result.getEntry())
-            .extracting(BundleEntryComponent::getRequest)
-            .allSatisfy(x -> assertThat(x)
-                .satisfies(
-                    y -> assertThat(y.getMethod()).isEqualTo(HTTPVerb.PUT))
-                .satisfies(z -> assertThat(z.getUrl()).isNotBlank()));
+            .extracting(BundleEntryComponent::getRequest).allSatisfy(
+                x -> assertThat(x).satisfies(
+                        y -> assertThat(y.getMethod()).isEqualTo(HTTPVerb.PUT))
+                    .satisfies(z -> assertThat(z.getUrl()).isNotBlank()));
     }
 
     private LaboratoryReport createDummyReport() {
         var report = new LaboratoryReport();
         report.setResource(new DiagnosticReport()
-            .addIdentifier(new Identifier().setValue("reportId"))
-            .setSubject(new Reference(
-                new Patient().addIdentifier(new Identifier().setValue("test"))))
-            .setEncounter(new Reference(new Encounter().addIdentifier(
-                new Identifier().setValue("encounterId"))))
+            .addIdentifier(new Identifier().setValue("reportId")).setSubject(
+                new Reference(new Patient().addIdentifier(
+                    new Identifier().setValue("test")))).setEncounter(
+                new Reference(new Encounter().addIdentifier(
+                    new Identifier().setValue("encounterId"))))
             .setEffective(DateTimeType.now()));
         report.setObservations(List.of());
         return report;

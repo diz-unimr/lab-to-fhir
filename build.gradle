@@ -48,6 +48,10 @@ dependencies {
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation:$hapiFhirVersion"
     implementation "ca.uhn.hapi.fhir:hapi-fhir-validation-resources-r4:$hapiFhirVersion"
 
+    // hapi hl7v2
+    implementation "ca.uhn.hapi:hapi-base:2.5.1"
+    implementation "ca.uhn.hapi:hapi-structures-v22:2.5.1"
+
     // mapper
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.16.1'
 
@@ -60,6 +64,12 @@ dependencies {
     }
     testImplementation "org.springframework.kafka:spring-kafka-test:$springKafkaVersion"
     testImplementation 'org.assertj:assertj-core:3.25.3'
+
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.34'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 
 }
 

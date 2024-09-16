@@ -12,35 +12,37 @@ spring:
 
   cloud:
     function:
-      definition: process;update
+      definition: aim;hl7
     stream:
       bindings:
-        process-in-0:
-          destination: ${INPUT_TOPIC:aim-lab}
+        # aim source
+        aim-in-0:
+          destination: ${AIM_TOPIC:aim-lab}
           consumer:
-            auto-startup: false
-        process-out-0:
+            concurrency: ${CONSUMER_CONCURRENCY:3}
+        aim-out-0:
           destination: ${OUTPUT_TOPIC:lab-fhir-idat}
-        update-in-0:
-          destination: ${INPUT_TOPIC:aim-lab}
+        # hl7 source
+        hl7-in-0:
+          destination: ${HL7_TOPIC:hl7-lab}
           consumer:
-            auto-startup: false
-        update-out-0:
+            concurrency: ${CONSUMER_CONCURRENCY:3}
+        hl7-out-0:
           destination: ${OUTPUT_TOPIC:lab-fhir-idat}
       kafka:
         streams:
           binder:
             functions:
-              process:
+              aim:
                 applicationId: aim-lab-to-fhir
-              update:
-                applicationId: aim-lab-update
+              hl7:
+                applicationId: hl7-lab-to-fhir
             configuration:
               compression.type: gzip
               max.request.size: 5242880
               spring.json.use.type.headers: "false"
-            replicationFactor: 3
-            minPartitionCount: 3
+            replicationFactor: ${REPLICATION_FACTOR:3}
+            minPartitionCount: ${MIN_PARTITION_COUNT:3}
 
 fhir:
   systems:
@@ -53,16 +55,15 @@ fhir:
     assignerCode: "UKMR"
     laboratorySystem: "https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code"
     laboratoryUnitSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-unit"
-    labReportMetaSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/lab-report-meta-code"
+    mapperTagSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/mapper"
 
 mapping:
-  loinc:
-    version: "3.0.1"
-    credentials:
-      user:
-      password:
-    proxy:
-    local:
+  aim:
+    enabled: true
+    filter: # e.g. "<2024-01-01"
+  hl7:
+    enabled: true
+    filter: # e.g. ">=2024-01-01"
 
 management:
   server:

@@ -40,3 +40,6 @@ out/
 node_modules/
 
 application-dev.yml
+
+/dev/hl7server/
+id_file

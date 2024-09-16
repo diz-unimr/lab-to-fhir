@@ -3,7 +3,6 @@ package de.unimarburg.diz.labtofhir;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.unimarburg.diz.labtofhir.processor.LabToFhirProcessor;
-import de.unimarburg.diz.labtofhir.processor.LabUpdateProcessor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,13 +24,9 @@ public class LabToFhirConfigurationTests {
     @Autowired
     private LabToFhirProcessor labProcessor;
 
-    @Autowired
-    private LabUpdateProcessor updateProcessor;
-
     @Test
     void contexLoads() {
         assertThat(labProcessor).isNotNull();
-        assertThat(updateProcessor).isNotNull();
     }
 
 }

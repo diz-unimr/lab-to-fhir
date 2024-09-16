@@ -1,0 +1,3073 @@
+ANALYTCODE;KATEGORIE
+NA;Klinische Chemie
+K;Klinische Chemie
+CA;Klinische Chemie
+CAIO;Klinische Chemie
+MG;Klinische Chemie
+PHOS;Klinische Chemie
+CL;Klinische Chemie
+AST25;Klinische Chemie
+AST;Klinische Chemie
+ALT25;Klinische Chemie
+ALT;Klinische Chemie
+AP25;Klinische Chemie
+AP;Klinische Chemie
+APIS;Klinische Chemie
+APFV;Klinische Chemie
+APK;Klinische Chemie
+APL;Klinische Chemie
+API;Klinische Chemie
+APG;Klinische Chemie
+GGT25;Klinische Chemie
+GGT;Klinische Chemie
+LDH25;Klinische Chemie
+LDH;Klinische Chemie
+LDHI;Klinische Chemie
+LDH1;Klinische Chemie
+LDH2;Klinische Chemie
+LDH3;Klinische Chemie
+LDH4;Klinische Chemie
+LDH5;Klinische Chemie
+HBDH25;Klinische Chemie
+xHBDH;Klinische Chemie
+g-HBDH-S;Klinische Chemie
+CK25;Klinische Chemie
+CK;Klinische Chemie
+CKMB25;Klinische Chemie
+CKMB;Klinische Chemie
+CKP;Klinische Chemie
+CKIS;Klinische Chemie
+CKFV;Klinische Chemie
+CMME;Klinische Chemie
+CMBE;Klinische Chemie
+CBBE;Klinische Chemie
+CMA1;Klinische Chemie
+CMA2;Klinische Chemie
+TNI;Klinische Chemie
+TNI+;Klinische Chemie
+TNI+E;Klinische Chemie
+TNIhs;Klinische Chemie
+AMYL;Klinische Chemie
+GAMY;Klinische Chemie
+LIP;Klinische Chemie
+GLDH25;Klinische Chemie
+GLDH;Klinische Chemie
+g-GLDH-S;Klinische Chemie
+PCHE25;Klinische Chemie
+PCHE;Klinische Chemie
+PCHEF;Klinische Chemie
+DIZA;Klinische Chemie
+SPH;Klinische Chemie
+PKENZ;Klinische Chemie
+ACE;Klinische Chemie
+g-ACE;Klinische Chemie
+LACE;Klinische Chemie
+TBIL;Klinische Chemie
+CBIL;Klinische Chemie
+IBIL;Klinische Chemie
+NBIL;Klinische Chemie
+BC;Klinische Chemie
+GLUC;Klinische Chemie
+G6PD;Klinische Chemie
+G6PDE;Klinische Chemie
+GLUF;Klinische Chemie
+HGLU;Klinische Chemie
+HBA1;Klinische Chemie
+HBA1c;Klinische Chemie
+HBA1D;Klinische Chemie
+HBA1cD;Klinische Chemie
+Fruk;Klinische Chemie
+TP;Klinische Chemie
+STP;Klinische Chemie
+KREA;Klinische Chemie
+KRCL;Klinische Chemie
+GFR;Klinische Chemie
+NGALalt;Klinische Chemie
+NGAL;Klinische Chemie
+HST;Klinische Chemie
+HS;Klinische Chemie
+CHOL;Klinische Chemie
+HDL;Klinische Chemie
+NHDLC;Klinische Chemie
+LDL;Klinische Chemie
+ALPA1;Klinische Chemie
+ALPB;Klinische Chemie
+ALPBA1Q;Klinische Chemie
+lpho;Klinische Chemie
+TRI;Klinische Chemie
+LPA;Klinische Chemie
+g-LP-A-S;Klinische Chemie
+FE;Klinische Chemie
+g-GALS;Klinische Chemie
+LA;Klinische Chemie
+NH3;Klinische Chemie
+OSMO;Klinische Chemie
+BOSM;Klinische Chemie
+OLU;Klinische Chemie
+STUDS;Klinische Chemie
+HBF;Klinische Chemie
+HBFQ;Klinische Chemie
+g-HBFZ;Klinische Chemie
+UHAEM;Klinische Chemie
+HEVYAK;Klinische Chemie
+HEVYAL;Klinische Chemie
+HEVYAR;Klinische Chemie
+HEVYGK;Klinische Chemie
+HEVYGL;Klinische Chemie
+HEVYGR;Klinische Chemie
+HEVYMK;Klinische Chemie
+HEVYML;Klinische Chemie
+HEVYMR;Klinische Chemie
+AMYMA;Klinische Chemie
+LIPMA;Klinische Chemie
+BZ1;Blutzucker Tagesprofil
+BZ2;Blutzucker Tagesprofil
+BZ3;Blutzucker Tagesprofil
+BZ4;Blutzucker Tagesprofil
+BZ5;Blutzucker Tagesprofil
+KBB;Hämatologie
+LEU;Hämatologie
+ERY;Hämatologie
+HB;Hämatologie
+HK;Hämatologie
+MCV;Hämatologie
+MCH;Hämatologie
+MCHC;Hämatologie
+THRO;Hämatologie
+THROC;Hämatologie
+GRBBIND;Hämatologie
+DIFFART;Hämatologie
+NEUTd;Hämatologie
+SEG;Hämatologie
+STAB;Hämatologie
+EOSd;Hämatologie
+BASOd;Hämatologie
+MONOd;Hämatologie
+LYMPG;Hämatologie
+LYMPd;Hämatologie
+ATLYR;Hämatologie
+ATLYN;Hämatologie
+ATLYD;Hämatologie
+LGL;Hämatologie
+PLAS;Hämatologie
+IMGRd;Hämatologie
+META;Hämatologie
+MYEL;Hämatologie
+PROM;Hämatologie
+BLAS;Hämatologie
+KERNS;Hämatologie
+UNKL;Hämatologie
+NRBC;Hämatologie
+NEUTad;Hämatologie
+SEGa;Hämatologie
+STABa;Hämatologie
+EOSad;Hämatologie
+BASOad;Hämatologie
+MONOad;Hämatologie
+LYMPGa;Hämatologie
+LYMPad;Hämatologie
+ATLYRa;Hämatologie
+ATLYNa;Hämatologie
+ATLYDa;Hämatologie
+LGLa;Hämatologie
+PLASa;Hämatologie
+IMGRad;Hämatologie
+METAa;Hämatologie
+MYELa;Hämatologie
+PROMa;Hämatologie
+BLASa;Hämatologie
+UNKLa;Hämatologie
+NRBCa;Hämatologie
+ATLYM;Hämatologie
+NORM;Hämatologie
+ALYM;Hämatologie
+PFEI;Hämatologie
+STECH;Hämatologie
+TRAEN;Hämatologie
+SPHAER;Hämatologie
+ELLIPT;Hämatologie
+STOMA;Hämatologie
+PAPPK;Hämatologie
+ANULO;Hämatologie
+ANIS;Hämatologie
+POI;Hämatologie
+POLY;Hämatologie
+JOLL;Hämatologie
+FRAG;Hämatologie
+AKANT;Hämatologie
+MEGA;Hämatologie
+MIKZ;Hämatologie
+MAKZ;Hämatologie
+TARZ;Hämatologie
+TOX;Hämatologie
+BTUE;Hämatologie
+HYPO;Hämatologie
+KOMM01;Hämatologie
+KOMM02;Hämatologie
+KOMM03;Hämatologie
+KOMM04;Hämatologie
+KOMM05;Hämatologie
+FRAGQ;Hämatologie
+RETI;Hämatologie
+RETIa;Hämatologie
+DAUS;Hämatologie
+DAUSG;Hämatologie
+VTK;Hämatologie
+MAS;Hämatologie
+MALA;Hämatologie
+DTRO;Hämatologie
+MAPV;Hämatologie
+MAPF;Hämatologie
+MALAPCR;Hämatologie
+BSG;Hämatologie
+MOTE;Hämatologie
+xLAGW;Liquor
+LAUS;Liquor
+LHB;Liquor
+LZEL;Liquor
+LZD;Liquor
+LLEUK;Liquor
+LMN;Liquor
+LPMN;Liquor
+LEO;Liquor
+LTC-HF;Liquor
+DRZEL;Liquor
+DRZD;Liquor
+DRLEUK;Liquor
+DRMN;Liquor
+DRPMN;Liquor
+DREO;Liquor
+DRTC-HF;Liquor
+LLYM;Liquor
+LGRA;Liquor
+LMON;Liquor
+LSID;Liquor
+LTUM;Liquor
+xLERY;Liquor
+LERYT;Liquor
+DRERYT;Liquor
+LBAK;Liquor
+LGLU;Liquor
+LLDH;Liquor
+LLDH25;Liquor
+LLAK;Liquor
+LCL;Liquor
+LTP;Liquor
+LALB;Liquor
+LPRA;Liquor
+LIGG;Liquor
+LIGA;Liquor
+yLIGA;Liquor
+LIGM;Liquor
+RALB;Liquor
+RIGG;Liquor
+RIGA;Liquor
+RIGM;Liquor
+IGGIT;Liquor
+IGAIT;Liquor
+IGMIT;Liquor
+REIBQ;Liquor
+DELPQ;Liquor
+OLIGO;Liquor
+OLIGOS;Liquor
+DZEL;Dialysat (Konzentration)
+DZD;Dialysat (Konzentration)
+DLEUK;Dialysat (Konzentration)
+DMN;Dialysat (Konzentration)
+DPMN;Dialysat (Konzentration)
+DEO;Dialysat (Konzentration)
+DTC-HF;Dialysat (Konzentration)
+DERYT;Dialysat (Konzentration)
+xDLEU;Dialysat (Konzentration)
+DLEK;Dialysat (Konzentration)
+DLYM;Dialysat (Konzentration)
+DGRA;Dialysat (Konzentration)
+DNA;Dialysat (Konzentration)
+DK;Dialysat (Konzentration)
+DCL;Dialysat (Konzentration)
+DGLU;Dialysat (Konzentration)
+xDALB;Dialysat (Konzentration)
+xDA2M;Dialysat (Konzentration)
+DCA;Dialysat (Konzentration)
+DHS;Dialysat (Konzentration)
+DHST;Dialysat (Konzentration)
+xDYIGG;Dialysat (Konzentration)
+DKRE;Dialysat (Konzentration)
+DPHO;Dialysat (Konzentration)
+xDPRO;Dialysat (Konzentration)
+BFINDD;Dialysat (Konzentration)
+DSAM;Dialysat (Volumen)
+xDSTD;Dialysat (Volumen)
+Dna;Dialysat (Volumen)
+Dk;Dialysat (Volumen)
+Dcl;Dialysat (Volumen)
+Dglu;Dialysat (Volumen)
+xDalb;Dialysat (Volumen)
+xDa2m;Dialysat (Volumen)
+Dca;Dialysat (Volumen)
+xDhs;Dialysat (Volumen)
+Dhst;Dialysat (Volumen)
+xDYigg;Dialysat (Volumen)
+Dkre;Dialysat (Volumen)
+Dpho;Dialysat (Volumen)
+xDpro;Dialysat (Volumen)
+PFA;Punktate/Sondermat.
+PTRB;Punktate/Sondermat.
+PZEL;Punktate/Sondermat.
+PZD;Punktate/Sondermat.
+PLEUK;Punktate/Sondermat.
+PMN;Punktate/Sondermat.
+PPMN;Punktate/Sondermat.
+PEO;Punktate/Sondermat.
+PTC-HF;Punktate/Sondermat.
+xPERY;Punktate/Sondermat.
+PERYT;Punktate/Sondermat.
+xPLEU;Punktate/Sondermat.
+PGRA;Punktate/Sondermat.
+PLYM;Punktate/Sondermat.
+PAUS;Punktate/Sondermat.
+AZEL;Punktate/Sondermat.
+AZD;Punktate/Sondermat.
+ALEUK;Punktate/Sondermat.
+AMN;Punktate/Sondermat.
+APMN;Punktate/Sondermat.
+AEO;Punktate/Sondermat.
+ATC-HF;Punktate/Sondermat.
+AERYT;Punktate/Sondermat.
+PTP;Punktate/Sondermat.
+PCHO;Punktate/Sondermat.
+PFNC;Punktate/Sondermat.
+PLDH;Punktate/Sondermat.
+PLDH25;Punktate/Sondermat.
+PALB;Punktate/Sondermat.
+PIGG;Punktate/Sondermat.
+PIGA;Punktate/Sondermat.
+PIGM;Punktate/Sondermat.
+PCRP;Punktate/Sondermat.
+PGLU;Punktate/Sondermat.
+PTRI;Punktate/Sondermat.
+PKRE;Punktate/Sondermat.
+PHS;Punktate/Sondermat.
+PHST;Punktate/Sondermat.
+PNA;Punktate/Sondermat.
+PK;Punktate/Sondermat.
+PCA;Punktate/Sondermat.
+PBIL;Punktate/Sondermat.
+PLA;Punktate/Sondermat.
+PAML;Punktate/Sondermat.
+PLIP;Punktate/Sondermat.
+PAP25;Punktate/Sondermat.
+PAP;Punktate/Sondermat.
+PCEA;Punktate/Sondermat.
+PAFP;Punktate/Sondermat.
+P199;Punktate/Sondermat.
+P125;Punktate/Sondermat.
+P153;Punktate/Sondermat.
+P724;Punktate/Sondermat.
+PHCG;Punktate/Sondermat.
+PPSA;Punktate/Sondermat.
+PNSE;Punktate/Sondermat.
+PSCCC;Punktate/Sondermat.
+PCFN;Punktate/Sondermat.
+BFINDP;Punktate/Sondermat.
+TPZKC;Gerinnung
+PTTKC;Gerinnung
+TZKC;Gerinnung
+AT3KC;Gerinnung
+INRKC;Gerinnung
+FIBKC;Gerinnung
+TPZ;Gerinnung
+PTT;Gerinnung
+TZ;Gerinnung
+FIBR;Gerinnung
+AT3;Gerinnung
+D-DI;Gerinnung
+DDI;Gerinnung
+INR;Gerinnung
+BEGERT;Gerinnung
+APCR;Gerinnung
+PROC;Gerinnung
+PROS;Gerinnung
+g-TPZ;Gerinnung
+g-INR;Gerinnung
+g-PTT;Gerinnung
+g-TZ;Gerinnung
+g-HQIR;Gerinnung
+g-AT3;Gerinnung
+g-FIBG;Gerinnung
+g-DDI;Gerinnung
+g-C1ES;Gerinnung
+BAO;Magensaft
+PAO;Magensaft
+MAO;Magensaft
+USTA;Urinstatus
+ULEU;Urinstatus
+UNIT;Urinstatus
+UPH;Urinstatus
+UTP;Urinstatus
+UZ;Urinstatus
+UKET;Urinstatus
+URO;Urinstatus
+UHB;Urinstatus
+UBIL;Urinstatus
+USg;Urinstatus
+USG10;Urinstatus
+UERYP;Urin-Partikel/Sediment
+LEUKP;Urin-Partikel/Sediment
+BAKTP;Urin-Partikel/Sediment
+RUEPP;Urin-Partikel/Sediment
+HEFEP;Urin-Partikel/Sediment
+KRISTP;Urin-Partikel/Sediment
+EPZP;Urin-Partikel/Sediment
+ZYLP;Urin-Partikel/Sediment
+PZYLP;Urin-Partikel/Sediment
+SCHLP;Urin-Partikel/Sediment
+UERYS;Urin-Partikel/Sediment
+LEUKS;Urin-Partikel/Sediment
+PLEPS;Urin-Partikel/Sediment
+RUEPS;Urin-Partikel/Sediment
+HZYLS;Urin-Partikel/Sediment
+GZYLS;Urin-Partikel/Sediment
+EZYLS;Urin-Partikel/Sediment
+LZYLS;Urin-Partikel/Sediment
+WZYLS;Urin-Partikel/Sediment
+BAKTS;Urin-Partikel/Sediment
+HEFES;Urin-Partikel/Sediment
+MYZES;Urin-Partikel/Sediment
+SCHLS;Urin-Partikel/Sediment
+SPERMS;Urin-Partikel/Sediment
+CAOXS;Urin-Partikel/Sediment
+HSRS;Urin-Partikel/Sediment
+URATS;Urin-Partikel/Sediment
+TRIPS;Urin-Partikel/Sediment
+APHOS;Urin-Partikel/Sediment
+SED;Urin-Partikel/Sediment
+EMOR;Urin-Partikel/Sediment
+USGSU;Urin-Partikel/Sediment
+HAST;Urin-Partikel/Sediment
+STEIN1;Urin-Partikel/Sediment
+STEIN2;Urin-Partikel/Sediment
+STEIN3;Urin-Partikel/Sediment
+UERZ;Urin-Partikel/Sediment
+ULEZ;Urin-Partikel/Sediment
+USAM;Urin (Konzentration)
+USTD;Urin (Konzentration)
+UJOD;Urin (Konzentration)
+UNA;Urin (Konzentration)
+UNASP;Urin (Konzentration)
+UNASPQ;Urin (Konzentration)
+FeNa;Urin (Konzentration)
+UK;Urin (Konzentration)
+UKSP;Urin (Konzentration)
+UKSPQ;Urin (Konzentration)
+UCA;Urin (Konzentration)
+UCASP;Urin (Konzentration)
+UCASPQ;Urin (Konzentration)
+UCITRSP;Urin (Konzentration)
+UCL;Urin (Konzentration)
+UCLSP;Urin (Konzentration)
+UCLSPQ;Urin (Konzentration)
+UMG;Urin (Konzentration)
+UMGSP;Urin (Konzentration)
+UPHO;Urin (Konzentration)
+UPHOSP;Urin (Konzentration)
+UPHOSPQ;Urin (Konzentration)
+UOSM;Urin (Konzentration)
+UOSMSP;Urin (Konzentration)
+UKRE;Urin (Konzentration)
+UGLU;Urin (Konzentration)
+UGLUP;Urin (Konzentration)
+UHST;Urin (Konzentration)
+UHS;Urin (Konzentration)
+UHSP;Urin (Konzentration)
+UPRO;Urin (Konzentration)
+UPROSP;Urin (Konzentration)
+UPROSPQ;Urin (Konzentration)
+UNEO;Urin (Konzentration)
+UA2M;Urin (Konzentration)
+UA2MP;Urin (Konzentration)
+UIGG;Urin (Konzentration)
+UALB;Urin (Konzentration)
+UALBSP;Urin (Konzentration)
+UB2MSP;Urin (Konzentration)
+UKRESP;Urin (Konzentration)
+UAKQ;Urin (Konzentration)
+UB2M;Urin (Konzentration)
+UA1M;Urin (Konzentration)
+UA1MP;Urin (Konzentration)
+UAML;Urin (Konzentration)
+UAMLP;Urin (Konzentration)
+UREL;Urin (Konzentration)
+UBJ;Urin (Konzentration)
+xUKAP;Urin (Konzentration)
+UKAPF;Urin (Konzentration)
+xULAM;Urin (Konzentration)
+ULAMBF;Urin (Konzentration)
+UKLQ;Urin (Konzentration)
+UKLFQ;Urin (Konzentration)
+UMYO;Urin (Konzentration)
+UFE;Urin (Konzentration)
+UFED;Urin (Konzentration)
+xUCU;Urin (Konzentration)
+UCUFV;Urin (Konzentration)
+UADR;Urin (Konzentration)
+UNOR;Urin (Konzentration)
+UDOP;Urin (Konzentration)
+UVMA;Urin (Konzentration)
+UHVA;Urin (Konzentration)
+UHIS;Urin (Konzentration)
+UMN;Urin (Konzentration)
+UNMN;Urin (Konzentration)
+UNAG;Urin (Konzentration)
+xUNAG;Urin (Konzentration)
+UPAPA;Urin (Konzentration)
+UFHB;Urin (Konzentration)
+UCOR;Urin (Konzentration)
+UA1M-KR;Urin (Konzentration)
+UALB-KR;Urin (Konzentration)
+UIGG-KR;Urin (Konzentration)
+UPRO-KR;Urin (Konzentration)
+Una;Urin (Tagesausscheidung)
+Uk;Urin (Tagesausscheidung)
+Uca;Urin (Tagesausscheidung)
+Umg;Urin (Tagesausscheidung)
+Ucl;Urin (Tagesausscheidung)
+Upho;Urin (Tagesausscheidung)
+Ukre;Urin (Tagesausscheidung)
+Uglu;Urin (Tagesausscheidung)
+Uhst;Urin (Tagesausscheidung)
+Uhs;Urin (Tagesausscheidung)
+Upro;Urin (Tagesausscheidung)
+yUpro;Urin (Tagesausscheidung)
+Uigg;Urin (Tagesausscheidung)
+Ualb;Urin (Tagesausscheidung)
+Ub2m;Urin (Tagesausscheidung)
+Ua1m;Urin (Tagesausscheidung)
+xUkap;Urin (Tagesausscheidung)
+Ulam;Urin (Tagesausscheidung)
+Ufe;Urin (Tagesausscheidung)
+Ucu;Urin (Tagesausscheidung)
+Ucufv;Urin (Tagesausscheidung)
+Upb;Urin (Tagesausscheidung)
+Uadr;Urin (Tagesausscheidung)
+Unor;Urin (Tagesausscheidung)
+Udop;Urin (Tagesausscheidung)
+Uvma;Urin (Tagesausscheidung)
+Uhva;Urin (Tagesausscheidung)
+Uhis;Urin (Tagesausscheidung)
+Umn;Urin (Tagesausscheidung)
+Unmn;Urin (Tagesausscheidung)
+Ucitr;Urin (Tagesausscheidung)
+OXAL;Urin (Tagesausscheidung)
+SVIS;Synovia-Diagnostik
+SKRI;Synovia-Diagnostik
+SZEL;Synovia-Diagnostik
+SZD;Synovia-Diagnostik
+SLEUK;Synovia-Diagnostik
+SMN;Synovia-Diagnostik
+SPMN;Synovia-Diagnostik
+SEO;Synovia-Diagnostik
+STC-HF;Synovia-Diagnostik
+SERYT;Synovia-Diagnostik
+SLEU;Synovia-Diagnostik
+SGRA;Synovia-Diagnostik
+SLYM;Synovia-Diagnostik
+SAUS;Synovia-Diagnostik
+SRAG;Synovia-Diagnostik
+SYGL;Synovia-Diagnostik
+SYTP;Synovia-Diagnostik
+SYLD;Synovia-Diagnostik
+SYAP;Synovia-Diagnostik
+SYLA;Synovia-Diagnostik
+SYHS;Synovia-Diagnostik
+SYIG;Synovia-Diagnostik
+SYRF;Synovia-Diagnostik
+SHYA;Synovia-Diagnostik
+SYAS;Synovia-Diagnostik
+SYCRP;Synovia-Diagnostik
+STBESCH;Stuhl
+A1CL;Stuhl
+CALx;Stuhl
+CAL;Stuhl
+CHYM;Stuhl
+FALB;Stuhl
+FETT;Stuhl
+OKKHB;Stuhl
+OKKHBx;Stuhl
+OKKHBHP;Stuhl
+OKK1;Stuhl
+OKK2;Stuhl
+OKK3;Stuhl
+PELA;Stuhl
+PELAx;Stuhl
+PANELA;Stuhl
+PANELAx;Stuhl
+STUG;Stuhl
+OKKHBF;Stuhl
+OKKHBFx;Stuhl
+UFED;Desferal-Test
+SGAT;Galaktose-Test
+SGAL;Galaktose-Test
+UGAT;Galaktose-Test
+UGAL;Galaktose-Test
+LAT1;Laktose-Test
+LAT2;Laktose-Test
+LAT3;Laktose-Test
+LAT4;Laktose-Test
+LAT5;Laktose-Test
+MGX1;MEGX-Test
+MGX2;MEGX-Test
+MGX3;MEGX-Test
+UXYT;Xylose-Test
+UXYL;Xylose-Test
+SXYL;Xylose-Test
+SXY1;Xylose-Test
+SXY2;Xylose-Test
+USULF;Stoffwechsel-Parameter
+URED;Stoffwechsel-Parameter
+UBRAND;Stoffwechsel-Parameter
+UDNPH;Stoffwechsel-Parameter
+AS;Stoffwechsel-Parameter
+UCYS;Stoffwechsel-Parameter
+UINT;Stoffwechsel-Parameter
+PHE;Stoffwechsel-Parameter
+PHEPKU;Stoffwechsel-Parameter
+TYR;Stoffwechsel-Parameter
+ASFV;Stoffwechsel-Parameter
+EPAAMI;Stoffwechsel-Parameter
+EPAAMS;Stoffwechsel-Parameter
+EPALAN;Stoffwechsel-Parameter
+EPANSE;Stoffwechsel-Parameter
+EPARGI;Stoffwechsel-Parameter
+EPASPA;Stoffwechsel-Parameter
+EPASPS;Stoffwechsel-Parameter
+EPBALA;Stoffwechsel-Parameter
+EPBAMB;Stoffwechsel-Parameter
+EPCARN;Stoffwechsel-Parameter
+EPCITR;Stoffwechsel-Parameter
+EPCYIO;Stoffwechsel-Parameter
+EPCYST;Stoffwechsel-Parameter
+EPETHA;Stoffwechsel-Parameter
+EPGAMB;Stoffwechsel-Parameter
+EPGLUS;Stoffwechsel-Parameter
+EPGLUT;Stoffwechsel-Parameter
+EPGLYC;Stoffwechsel-Parameter
+EPHIST;Stoffwechsel-Parameter
+EPHYDR;Stoffwechsel-Parameter
+EPHYPR;Stoffwechsel-Parameter
+EPISOL;Stoffwechsel-Parameter
+EPLEUC;Stoffwechsel-Parameter
+EPLYSI;Stoffwechsel-Parameter
+EPMETH;Stoffwechsel-Parameter
+EPORNI;Stoffwechsel-Parameter
+EPPALA;Stoffwechsel-Parameter
+EPPHET;Stoffwechsel-Parameter
+EPPHOS;Stoffwechsel-Parameter
+EPPROL;Stoffwechsel-Parameter
+EPSARC;Stoffwechsel-Parameter
+EPSERI;Stoffwechsel-Parameter
+EPTAU;Stoffwechsel-Parameter
+EPTHRE;Stoffwechsel-Parameter
+EPTRYP;Stoffwechsel-Parameter
+EPTYRO;Stoffwechsel-Parameter
+EPVALI;Stoffwechsel-Parameter
+EP1MET;Stoffwechsel-Parameter
+EP3MET;Stoffwechsel-Parameter
+EPINT;Stoffwechsel-Parameter
+UAS;Stoffwechsel-Parameter
+UASDC;Stoffwechsel-Parameter
+UASFV;Stoffwechsel-Parameter
+UPHOS;Stoffwechsel-Parameter
+UTAU;Stoffwechsel-Parameter
+UPHET;Stoffwechsel-Parameter
+UASPS;Stoffwechsel-Parameter
+UHYPR;Stoffwechsel-Parameter
+UTHRE;Stoffwechsel-Parameter
+USERI;Stoffwechsel-Parameter
+UASPA;Stoffwechsel-Parameter
+UGLUS;Stoffwechsel-Parameter
+UGLUT;Stoffwechsel-Parameter
+USARC;Stoffwechsel-Parameter
+UAAMS;Stoffwechsel-Parameter
+UPROL;Stoffwechsel-Parameter
+UGLYC;Stoffwechsel-Parameter
+UALAN;Stoffwechsel-Parameter
+UCITRU;Stoffwechsel-Parameter
+UAAMI;Stoffwechsel-Parameter
+UVALI;Stoffwechsel-Parameter
+UMETHI;Stoffwechsel-Parameter
+UCYIO;Stoffwechsel-Parameter
+UISOL;Stoffwechsel-Parameter
+ULEUC;Stoffwechsel-Parameter
+UTYRO;Stoffwechsel-Parameter
+UPALA;Stoffwechsel-Parameter
+UBALA;Stoffwechsel-Parameter
+UBAMB;Stoffwechsel-Parameter
+UGAMB;Stoffwechsel-Parameter
+UETHA;Stoffwechsel-Parameter
+UTRYP;Stoffwechsel-Parameter
+UHYDRO;Stoffwechsel-Parameter
+UORNI;Stoffwechsel-Parameter
+ULYSI;Stoffwechsel-Parameter
+U1MET;Stoffwechsel-Parameter
+UHIST;Stoffwechsel-Parameter
+U3MET;Stoffwechsel-Parameter
+UANSE;Stoffwechsel-Parameter
+UCARN;Stoffwechsel-Parameter
+UARGI;Stoffwechsel-Parameter
+UOROT;Stoffwechsel-Parameter
+LAS;Stoffwechsel-Parameter
+PYRU;Stoffwechsel-Parameter
+LACT;Stoffwechsel-Parameter
+LAPYQ;Stoffwechsel-Parameter
+xACAC;Stoffwechsel-Parameter
+x3OHB;Stoffwechsel-Parameter
+KETONK;Stoffwechsel-Parameter
+FFS;Stoffwechsel-Parameter
+LKF;Stoffwechsel-Parameter
+BEH;Stoffwechsel-Parameter
+CERO;Stoffwechsel-Parameter
+LIG;Stoffwechsel-Parameter
+C24C22;Stoffwechsel-Parameter
+C26C22;Stoffwechsel-Parameter
+PHYT;Stoffwechsel-Parameter
+PRIS;Stoffwechsel-Parameter
+BEFETT;Stoffwechsel-Parameter
+xUALS;Porphyriediagnostik
+xUPOR;Porphyriediagnostik
+UALS;Porphyriediagnostik
+UPOR;Porphyriediagnostik
+UPS;Porphyriediagnostik
+UURO;Porphyriediagnostik
+UHEPTA;Porphyriediagnostik
+UHEXA;Porphyriediagnostik
+UPENTA;Porphyriediagnostik
+UKOPRO;Porphyriediagnostik
+UTRI;Porphyriediagnostik
+UPROTO;Porphyriediagnostik
+STPORP;Porphyriediagnostik
+STURO;Porphyriediagnostik
+STHEPTA;Porphyriediagnostik
+STHEXA;Porphyriediagnostik
+STPENTA;Porphyriediagnostik
+STISO;Porphyriediagnostik
+STKOPRO;Porphyriediagnostik
+STTRI;Porphyriediagnostik
+STPROTO;Porphyriediagnostik
+UROP;Porphyriediagnostik
+KOPRO;Porphyriediagnostik
+PROTO;Porphyriediagnostik
+EYPORP;Porphyriediagnostik
+EYURO;Porphyriediagnostik
+EYKOPRO;Porphyriediagnostik
+EYPROTO;Porphyriediagnostik
+EYALAD;Porphyriediagnostik
+EYPBGD;Porphyriediagnostik
+EYUROD;Porphyriediagnostik
+PBGH;Porphyriediagnostik
+Ucopro1;Porphyriediagnostik
+UCOPRO3;Porphyriediagnostik
+ERYPO;Porphyriediagnostik
+STPORPH;Porphyriediagnostik
+HYMBSY;Porphyriediagnostik
+BEPOR;Porphyriediagnostik
+HPV;Porphyriediagnostik
+HPVLR;Porphyriediagnostik
+HPVHR;Porphyriediagnostik
+IGG;Protein- u. Immunchemie
+IGG1;Protein- u. Immunchemie
+IGG2;Protein- u. Immunchemie
+IGG3;Protein- u. Immunchemie
+IGG4;Protein- u. Immunchemie
+SIGG;Protein- u. Immunchemie
+IGG-S;Protein- u. Immunchemie
+IGA;Protein- u. Immunchemie
+IGAN;Protein- u. Immunchemie
+IGA1;Protein- u. Immunchemie
+IGA2;Protein- u. Immunchemie
+SIGA;Protein- u. Immunchemie
+IGA-S;Protein- u. Immunchemie
+IGM;Protein- u. Immunchemie
+SIGM;Protein- u. Immunchemie
+IGM-S;Protein- u. Immunchemie
+IGE;Protein- u. Immunchemie
+IGD;Protein- u. Immunchemie
+SBJ;Protein- u. Immunchemie
+A1AN;Protein- u. Immunchemie
+A1GL;Protein- u. Immunchemie
+A2MA;Protein- u. Immunchemie
+A1MI;Protein- u. Immunchemie
+ASA;Protein- u. Immunchemie
+UASA;Protein- u. Immunchemie
+BNP;Protein- u. Immunchemie
+PROBNP;Protein- u. Immunchemie
+EPROBNP;Protein- u. Immunchemie
+CRP;Protein- u. Immunchemie
+CRP-S;Protein- u. Immunchemie
+HSCRP;Protein- u. Immunchemie
+PCT;Protein- u. Immunchemie
+PCTQ;Protein- u. Immunchemie
+RF;Protein- u. Immunchemie
+SAA;Protein- u. Immunchemie
+MYOG;Protein- u. Immunchemie
+FER;Protein- u. Immunchemie
+FER-S;Protein- u. Immunchemie
+TRAN;Protein- u. Immunchemie
+TRAN-S;Protein- u. Immunchemie
+TFSA;Protein- u. Immunchemie
+STFR;Protein- u. Immunchemie
+HAPT;Protein- u. Immunchemie
+HAPT-S;Protein- u. Immunchemie
+ALB;Protein- u. Immunchemie
+ALB-S;Protein- u. Immunchemie
+PRAE;Protein- u. Immunchemie
+RETP;Protein- u. Immunchemie
+COE;Protein- u. Immunchemie
+FHB;Protein- u. Immunchemie
+g-HB-HP;Protein- u. Immunchemie
+FNC;Protein- u. Immunchemie
+CFN;Protein- u. Immunchemie
+C1E;Protein- u. Immunchemie
+LPX;Protein- u. Immunchemie
+B2MI;Protein- u. Immunchemie
+S100;Protein- u. Immunchemie
+KAPP;Protein- u. Immunchemie
+KAPPF;Protein- u. Immunchemie
+LAMB;Protein- u. Immunchemie
+LAMBF;Protein- u. Immunchemie
+LYSOZ;Protein- u. Immunchemie
+LLYSOZ;Protein- u. Immunchemie
+KLFQ;Protein- u. Immunchemie
+CH50;Protein- u. Immunchemie
+AH50;Protein- u. Immunchemie
+AH100;Protein- u. Immunchemie
+C1IF;Protein- u. Immunchemie
+C1IAG;Protein- u. Immunchemie
+C1Q;Protein- u. Immunchemie
+C3;Protein- u. Immunchemie
+C4;Protein- u. Immunchemie
+CYSC;Protein- u. Immunchemie
+CYSCH;Protein- u. Immunchemie
+ZIRK;Protein- u. Immunchemie
+C1QC;Protein- u. Immunchemie
+C3DC;Protein- u. Immunchemie
+ZIRKC;Protein- u. Immunchemie
+KRYOG;Protein- u. Immunchemie
+KRYOF;Protein- u. Immunchemie
+UDPD;Protein- u. Immunchemie
+OSTE;Protein- u. Immunchemie
+CROS;Protein- u. Immunchemie
+BABY;Protein- u. Immunchemie
+UHCG;Protein- u. Immunchemie
+INFO3;Protein- u. Immunchemie
+FLT1;Protein- u. Immunchemie
+PLGF;Protein- u. Immunchemie
+FLT1Q;Protein- u. Immunchemie
+SSW;Protein- u. Immunchemie
+CDTP;Protein- u. Immunchemie
+IFOC;Protein- u. Immunchemie
+EPO;Protein- u. Immunchemie
+g-EPO-S;Protein- u. Immunchemie
+NEOP;Protein- u. Immunchemie
+TNT;Protein- u. Immunchemie
+P3P;Protein- u. Immunchemie
+LAM;Protein- u. Immunchemie
+HA;Protein- u. Immunchemie
+STEA;Protein- u. Immunchemie
+IGGP;Protein- u. Immunchemie
+IGGT;Protein- u. Immunchemie
+LS100;Protein- u. Immunchemie
+LPHOTAU;Protein- u. Immunchemie
+LTAU;Protein- u. Immunchemie
+LAMY;Protein- u. Immunchemie
+LAMY40;Protein- u. Immunchemie
+LAMYQ;Protein- u. Immunchemie
+PRO14;Protein- u. Immunchemie
+ERYSTFV;Protein- u. Immunchemie
+PRPSC;Protein- u. Immunchemie
+UMYOG;Protein- u. Immunchemie
+PROKN;Protein- u. Immunchemie
+PGRP;Protein- u. Immunchemie
+VEGFFV;Protein- u. Immunchemie
+IL1B;Cytokine
+IL2R;Cytokine
+IL6;Cytokine
+UIL6;Cytokine
+IL8;Cytokine
+TNFA;Cytokine
+IL10;Cytokine
+ALBP;Serum-Elektrophorese
+A1P;Serum-Elektrophorese
+A2P;Serum-Elektrophorese
+BETAP;Serum-Elektrophorese
+GP;Serum-Elektrophorese
+LPHO;Lipidelektrophorese
+BEFRED;Lipidelektrophorese
+LPTRI;Lipidelektrophorese
+LPCHOL;Lipidelektrophorese
+ALIP;Lipidelektrophorese
+BLIP;Lipidelektrophorese
+PBLIP;Lipidelektrophorese
+AFP;Tumormarker
+CEA;Tumormarker
+CA19;Tumormarker
+CA50;Tumormarker
+PCA50;Tumormarker
+CA72;Tumormarker
+SCC;Tumormarker
+SCCC;Tumormarker
+UNMP22;Tumormarker
+NSE;Tumormarker
+LNSE;Tumormarker
+PSA;Tumormarker
+PSAS;Tumormarker
+PSAF;Tumormarker
+PSAQ;Tumormarker
+HCG;Tumormarker
+CA12;Tumormarker
+CA15;Tumormarker
+CYFR;Tumormarker
+TPS;Tumormarker
+g-TPA;Tumormarker
+TK;Tumormarker
+g-TK;Tumormarker
+TGUAE;Medikamente
+ACIC;Medikamente
+ADAL;Medikamente
+ADALAK;Medikamente
+ALPRA;Medikamente
+ALBEN;Medikamente
+AMIKFV;Medikamente
+AMIKA;Medikamente
+AMIO;Medikamente
+AMIT;Medikamente
+AMISU;Medikamente
+AMLO;Medikamente
+AMPH;Medikamente
+AMPI;Medikamente
+MSARPP;Medikamente
+ARPP;Medikamente
+AZA;Medikamente
+BAC;Medikamente
+BENP;Medikamente
+BENZO;Medikamente
+BRIVA;Medikamente
+BRO;Medikamente
+BROMA;Medikamente
+BUPR;Medikamente
+CARB;Medikamente
+CARBE;Medikamente
+CARBI;Medikamente
+CEFE;Medikamente
+CEFTA;Medikamente
+CHIN;Medikamente
+CHLORD;Medikamente
+CLPRO;Medikamente
+CLO;Medikamente
+COLIS;Medikamente
+CSA;Medikamente
+CSAMS;Medikamente
+MSCTL;Medikamente
+CTL;Medikamente
+CLINDA;Medikamente
+CLOBA;Medikamente
+CLOBAM;Medikamente
+CLOMI;Medikamente
+CLONA;Medikamente
+MSCLOZ;Medikamente
+CLOZA;Medikamente
+MSCLOZM;Medikamente
+NCLOZ;Medikamente
+DEAM;Medikamente
+DesfZ;Medikamente
+DESA;Medikamente
+DESI;Medikamente
+MESX;Medikamente
+DIAZ;Medikamente
+DIAZFV;Medikamente
+DDIAZFV;Medikamente
+DIAZMFV;Medikamente
+DIGI;Medikamente
+DIGO;Medikamente
+DOX;Medikamente
+DPHM;Medikamente
+DRONE;Medikamente
+MSDULO;Medikamente
+DULO;Medikamente
+ECTL;Medikamente
+ESL;Medikamente
+EVER;Medikamente
+EVERMS;Medikamente
+ETHA;Medikamente
+ETX;Medikamente
+F506;Medikamente
+F506MS;Medikamente
+FCLOX;Medikamente
+FLEC;Medikamente
+FLUCY;Medikamente
+FLUNI;Medikamente
+FLURA;Medikamente
+5FUFV;Medikamente
+MSFLUO;Medikamente
+MSFLUON;Medikamente
+MSFLUOUN;Medikamente
+FLUO;Medikamente
+FLUON;Medikamente
+FLUOUN;Medikamente
+FLUP;Medikamente
+MSFLUVO;Medikamente
+FLUVO;Medikamente
+FURO;Medikamente
+GABA;Medikamente
+GANC;Medikamente
+GENT;Medikamente
+MSHALO;Medikamente
+HALO;Medikamente
+HYDTH;Medikamente
+IBU;Medikamente
+IMI;Medikamente
+INFLIXI;Medikamente
+INFLIXIAK;Medikamente
+ISON;Medikamente
+KETA;Medikamente
+LACOS;Medikamente
+LAMO;Medikamente
+LEVE;Medikamente
+LI;Medikamente
+LIDO;Medikamente
+LINE;Medikamente
+LORA;Medikamente
+LMETH;Medikamente
+MAPRO;Medikamente
+MEDA;Medikamente
+MEROFV;Medikamente
+MERO;Medikamente
+METH;Medikamente
+METHUR;Medikamente
+METPH;Medikamente
+MIAN;Medikamente
+MIDA;Medikamente
+MIDAFV;Medikamente
+MSMIRT;Medikamente
+MIRT;Medikamente
+MSMIRTM;Medikamente
+MIRTM;Medikamente
+MPA;Medikamente
+NCLOM;Medikamente
+NDOXE;Medikamente
+NETI;Medikamente
+NICO;Medikamente
+NITRA;Medikamente
+NORDA;Medikamente
+NTRIP;Medikamente
+MSOLZ;Medikamente
+OLZ;Medikamente
+MSNOLZ;Medikamente
+NOLZ;Medikamente
+OPIP;Medikamente
+PA;Medikamente
+17PREG;Medikamente
+PARA;Medikamente
+MSPARO;Medikamente
+PARO;Medikamente
+PERA;Medikamente
+PERP;Medikamente
+PIPEFV;Medikamente
+PIPE;Medikamente
+PHEN;Medikamente
+PHENC;Medikamente
+PHNO;Medikamente
+PTN;Medikamente
+PIPA;Medikamente
+PREG;Medikamente
+PREGA;Medikamente
+PRIM;Medikamente
+PROME;Medikamente
+PROP;Medikamente
+PYRA;Medikamente
+PYRI;Medikamente
+OXAZ;Medikamente
+MSQUET;Medikamente
+QUET;Medikamente
+REBO;Medikamente
+PIRAC;Medikamente
+RIFA;Medikamente
+MSRISP;Medikamente
+RISP;Medikamente
+MSRISPM;Medikamente
+RISPM;Medikamente
+MSRISPUM;Medikamente
+RISPUM;Medikamente
+RITA;Medikamente
+RUFI;Medikamente
+SALI;Medikamente
+MSSERT;Medikamente
+SERT;Medikamente
+MSNSERT;Medikamente
+NSERT;Medikamente
+SIRO;Medikamente
+SIROMS;Medikamente
+STIRP;Medikamente
+STRM;Medikamente
+SULF;Medikamente
+SULP;Medikamente
+SULT;Medikamente
+TEIC;Medikamente
+TEMA;Medikamente
+TETRA;Medikamente
+TILI;Medikamente
+THEO;Medikamente
+THIOFV;Medikamente
+PENTOFV;Medikamente
+TOBR;Medikamente
+g-TOBR;Medikamente
+THEOB;Medikamente
+TOPI;Medikamente
+TORA;Medikamente
+TPMTA;Medikamente
+TRANY;Medikamente
+TRAZO;Medikamente
+TRIMI;Medikamente
+UCHLP;Medikamente
+VANC;Medikamente
+VALP;Medikamente
+MSVEN;Medikamente
+VEN;Medikamente
+MSVENM;Medikamente
+VENM;Medikamente
+MSVENUM;Medikamente
+VENUM;Medikamente
+VIGA;Medikamente
+VORI;Medikamente
+XyloZ;Medikamente
+ZIPR;Medikamente
+ZOPI;Medikamente
+ZUCL;Medikamente
+ZONI;Medikamente
+ALK;Toxikologie
+AMAN;Toxikologie
+AMSRE;Toxikologie
+UEGS;Toxikologie
+UEGB;Toxikologie
+METHA;Toxikologie
+BENZOL;Toxikologie
+SBAR;Toxikologie
+SBEN;Toxikologie
+TRIZ;Toxikologie
+OCBUM;Toxikologie
+OCB;Toxikologie
+HCB;Toxikologie
+COBS;Toxikologie
+COBE;Toxikologie
+COHB;Toxikologie
+CU;Toxikologie
+CUFV;Toxikologie
+CR;Toxikologie
+UCR;Toxikologie
+CYAN;Toxikologie
+THCY;Toxikologie
+MEHB;Toxikologie
+AL;Toxikologie
+OXY;Toxikologie
+ACET;Toxikologie
+CODEIN;Toxikologie
+DIHYCO;Toxikologie
+HYCO;Toxikologie
+HYMO;Toxikologie
+MAM6;Toxikologie
+MORP;Toxikologie
+OXMO;Toxikologie
+UAL;Toxikologie
+UALU;Toxikologie
+HG;Toxikologie
+UHG;Toxikologie
+UF;Toxikologie
+SE;Toxikologie
+SEFV;Toxikologie
+USE;Toxikologie
+PB;Toxikologie
+UPB;Toxikologie
+COFF;Toxikologie
+COF;Toxikologie
+INFO2;Toxikologie
+LEFL;Toxikologie
+UAMP;Toxikologie
+UMORP;Toxikologie
+UBAR;Toxikologie
+UBEN;Toxikologie
+UTCA;Toxikologie
+UCAN;Toxikologie
+UCOC;Toxikologie
+COTI;Toxikologie
+UNIC;Toxikologie
+UCOTI;Toxikologie
+UNICO;Toxikologie
+UANAB;Toxikologie
+U3OHCOTI;Toxikologie
+UFURO;Toxikologie
+UMET;Toxikologie
+MTDFV;Toxikologie
+UMEQ;Toxikologie
+UOP;Toxikologie
+UPHC;Toxikologie
+ARS;Toxikologie
+UARS;Toxikologie
+TL;Toxikologie
+UTL;Toxikologie
+CD;Toxikologie
+UCD;Toxikologie
+UCDKRQ;Toxikologie
+ZN;Toxikologie
+UPHI;Toxikologie
+UMAM;Toxikologie
+UKREAI;Toxikologie
+UTOXR;Toxikologie
+STOXR;Toxikologie
+TOL;Toxikologie
+XYL;Toxikologie
+HYDR;Toxikologie
+UHYDR;Toxikologie
+UKOB;Toxikologie
+SERT;Toxikologie
+NSERT;Toxikologie
+MSCLOZ;Toxikologie
+MSCLOZM;Toxikologie
+MN;Toxikologie
+B1;Vitamine
+B2;Vitamine
+B6;Vitamine
+B12;Vitamine
+yB12;Vitamine
+HOLOTC;Vitamine
+MMS;Vitamine
+FOL;Vitamine
+HCY;Vitamine
+VITA;Vitamine
+VITC;Vitamine
+VITAC;Vitamine
+VITE;Vitamine
+VITK;Vitamine
+UHYD;Vitamine
+HOLO;Vitamine
+BAG-I1;Allergologie
+BAG-I3;Allergologie
+CASTBAS;Allergologie
+BAG-C33;Allergologie
+BASFC;Allergologie
+BAG-CATR;Allergologie
+DIAM;Allergologie
+HISTA;Allergologie
+Umhista;Allergologie
+ECP;Allergologie
+TRYP;Allergologie
+c1IgE;Allergologie
+c202IgE;Allergologie
+c203IgE;Allergologie
+c204IgE;Allergologie
+c2IgE;Allergologie
+c5IgE;Allergologie
+c6IgE;Allergologie
+c7IgE;Allergologie
+c8IgE;Allergologie
+d1IgE;Allergologie
+d202IgE;Allergologie
+d203IgE;Allergologie
+d205IgE;Allergologie
+d2IgE;Allergologie
+d3IgE;Allergologie
+d70IgE;Allergologie
+d71IgE;Allergologie
+d72IgE;Allergologie
+d73IgE;Allergologie
+e101IgE;Allergologie
+e102IgE;Allergologie
+e1IgE;Allergologie
+e204IgE;Allergologie
+e205IgE;Allergologie
+e206IgE;Allergologie
+e211IgE;Allergologie
+e212IgE;Allergologie
+e218IgE;Allergologie
+e219IgE;Allergologie
+e220IgE;Allergologie
+e221IgE;Allergologie
+e222IgE;Allergologie
+e226IgE;Allergologie
+e227IgE;Allergologie
+e228IgE;Allergologie
+e2IgE;Allergologie
+e3IgE;Allergologie
+e4IgE;Allergologie
+e5IgE;Allergologie
+e6IgE;Allergologie
+e70IgE;Allergologie
+e72IgE;Allergologie
+e74IgE;Allergologie
+e77IgE;Allergologie
+e78IgE;Allergologie
+e79IgE;Allergologie
+e7IgE;Allergologie
+e80IgE;Allergologie
+e81IgE;Allergologie
+e82IgE;Allergologie
+e83IgE;Allergologie
+e84IgE;Allergologie
+e85IgE;Allergologie
+e86IgE;Allergologie
+e87IgE;Allergologie
+e88IgE;Allergologie
+e94IgE;Allergologie
+ex71IgE;Allergologie
+ex72IgE;Allergologie
+f10IgE;Allergologie
+f11IgE;Allergologie
+f12IgE;Allergologie
+f13IgE;Allergologie
+f14IgE;Allergologie
+f15IgE;Allergologie
+f17IgE;Allergologie
+f18IgE;Allergologie
+f1IgE;Allergologie
+f201IgE;Allergologie
+f202IgE;Allergologie
+f204IgE;Allergologie
+f205IgE;Allergologie
+f206IgE;Allergologie
+f208IgE;Allergologie
+f20IgE;Allergologie
+f209IgE;Allergologie
+f210IgE;Allergologie
+f212IgE;Allergologie
+f214IgE;Allergologie
+f218IgE;Allergologie
+f221IgE;Allergologie
+f23IgE;Allergologie
+f224IgE;Allergologie
+f225IgE;Allergologie
+f231IgE;Allergologie
+f333IgE;Allergologie
+f235IgE;Allergologie
+f242IgE;Allergologie
+f245IgE;Allergologie
+f247IgE;Allergologie
+f24IgE;Allergologie
+f253IgE;Allergologie
+f254IgE;Allergologie
+f256IgE;Allergologie
+f258IgE;Allergologie
+f25IgE;Allergologie
+f260IgE;Allergologie
+f262IgE;Allergologie
+f263IgE;Allergologie
+f266IgE;Allergologie
+f269IgE;Allergologie
+f26IgE;Allergologie
+f271IgE;Allergologie
+f272IgE;Allergologie
+f273IgE;Allergologie
+f274IgE;Allergologie
+f275IgE;Allergologie
+f276IgE;Allergologie
+f279IgE;Allergologie
+f27IgE;Allergologie
+f280IgE;Allergologie
+f281IgE;Allergologie
+f285IgE;Allergologie
+f288IgE;Allergologie
+f291IgE;Allergologie
+f299IgE;Allergologie
+f2IgE;Allergologie
+f302IgE;Allergologie
+f315IgE;Allergologie
+f316IgE;Allergologie
+f31IgE;Allergologie
+f320IgE;Allergologie
+f323IgE;Allergologie
+f324IgE;Allergologie
+f325IgE;Allergologie
+f328IgE;Allergologie
+f329IgE;Allergologie
+f33IgE;Allergologie
+f335IgE;Allergologie
+f343IgE;Allergologie
+f345IgE;Allergologie
+f351IgE;Allergologie
+f352IgE;Allergologie
+f353IgE;Allergologie
+f355IgE;Allergologie
+f35IgE;Allergologie
+f36IgE;Allergologie
+f3IgE;Allergologie
+f40IgE;Allergologie
+f413IgE;Allergologie
+f416IgE;Allergologie
+f419IgE;Allergologie
+f41IgE;Allergologie
+f420IgE;Allergologie
+f421IgE;Allergologie
+f422IgE;Allergologie
+f423IgE;Allergologie
+f424IgE;Allergologie
+f425IgE;Allergologie
+f426IgE;Allergologie
+f427IgE;Allergologie
+f428IgE;Allergologie
+f431IgE;Allergologie
+f432IgE;Allergologie
+f439IgE;Allergologie
+f440IgE;Allergologie
+f441IgE;Allergologie
+f442IgE;Allergologie
+f443IgE;Allergologie
+f44IgE;Allergologie
+f45IgE;Allergologie
+f47IgE;Allergologie
+f48IgE;Allergologie
+f49IgE;Allergologie
+f4IgE;Allergologie
+f56IgE;Allergologie
+f5IgE;Allergologie
+f6IgE;Allergologie
+f75IgE;Allergologie
+f76IgE;Allergologie
+f77IgE;Allergologie
+f78IgE;Allergologie
+f79IgE;Allergologie
+f7IgE;Allergologie
+f83IgE;Allergologie
+f84IgE;Allergologie
+f85IgE;Allergologie
+f87IgE;Allergologie
+f88IgE;Allergologie
+f89IgE;Allergologie
+f8IgE;Allergologie
+f92IgE;Allergologie
+f93IgE;Allergologie
+f94IgE;Allergologie
+f95IgE;Allergologie
+f9IgE;Allergologie
+fx15IgE;Allergologie
+fx1IgE;Allergologie
+fx5IgE;Allergologie
+fx70IgE;Allergologie
+fx71IgE;Allergologie
+fx72IgE;Allergologie
+g12IgE;Allergologie
+g14IgE;Allergologie
+g15IgE;Allergologie
+g1IgE;Allergologie
+g201IgE;Allergologie
+g205IgE;Allergologie
+g211IgE;Allergologie
+g214IgE;Allergologie
+g215IgE;Allergologie
+g4IgE;Allergologie
+g6IgE;Allergologie
+gx1IgE;Allergologie
+gx4IgE;Allergologie
+h1IgE;Allergologie
+h2IgE;Allergologie
+HUND;Allergologie
+hx2IgE;Allergologie
+i208IgE;Allergologie
+i209IgE;Allergologie
+i211IgE;Allergologie
+i214IgE;Allergologie
+i215IgE;Allergologie
+i216IgE;Allergologie
+i217IgE;Allergologie
+i5IgE;Allergologie
+i71IgE;Allergologie
+i73IgE;Allergologie
+ISAC;Allergologie
+k209IgE;Allergologie
+k212IgE;Allergologie
+k74IgE;Allergologie
+k75IgE;Allergologie
+k75IgG;Allergologie
+k76IgE;Allergologie
+k76IgG;Allergologie
+k77IgE;Allergologie
+k77IgG;Allergologie
+k78IgE;Allergologie
+k79IgE;Allergologie
+k80IgE;Allergologie
+k81IgE;Allergologie
+k85IgE;Allergologie
+k87IgE;Allergologie
+m10IgE;Allergologie
+m11IgE;Allergologie
+m12IgE;Allergologie
+m1IgE;Allergologie
+m218IgE;Allergologie
+m219IgE;Allergologie
+m220IgE;Allergologie
+m221IgE;Allergologie
+m222IgE;Allergologie
+m227IgE;Allergologie
+m229IgE;Allergologie
+m2IgE;Allergologie
+m3IgE;Allergologie
+m4IgE;Allergologie
+m5IgE;Allergologie
+m6IgE;Allergologie
+m8IgE;Allergologie
+m9IgE;Allergologie
+MILB;Allergologie
+mx1IgE;Allergologie
+mx2IgE;Allergologie
+mx4IgE;Allergologie
+o214IgE;Allergologie
+o215IgE;Allergologie
+u395IgE;Allergologie
+o70IgE;Allergologie
+p4IgE;Allergologie
+t12IgE;Allergologie
+t14IgE;Allergologie
+t15IgE;Allergologie
+t16IgE;Allergologie
+t1IgE;Allergologie
+t212IgE;Allergologie
+t224IgE;Allergologie
+t227IgE;Allergologie
+t240IgE;Allergologie
+t241IgE;Allergologie
+t2IgE;Allergologie
+t3IgE;Allergologie
+t4IgE;Allergologie
+t7IgE;Allergologie
+w19IgE;Allergologie
+w1IgE;Allergologie
+w20IgE;Allergologie
+w230IgE;Allergologie
+w231IgE;Allergologie
+w234IgE;Allergologie
+w6IgE;Allergologie
+w82IgE;Allergologie
+w8IgE;Allergologie
+w9IgE;Allergologie
+f124IgE;Allergologie
+f203IgE;Allergologie
+i1IgE;Allergologie
+i204IgE;Allergologie
+i205IgE;Allergologie
+i3IgE;Allergologie
+i70IgE;Allergologie
+i75IgE;Allergologie
+i77IgE;Allergologie
+k82IgE;Allergologie
+m207IgE;Allergologie
+sx1IgE;Allergologie
+t5IgE;Allergologie
+tx4IgE;Allergologie
+w10IgE;Allergologie
+t215IgE;Allergologie
+t216IgE;Allergologie
+t221IgE;Allergologie
+t220IgE;Allergologie
+t225IgE;Allergologie
+f233IgE;Allergologie
+f232IgE;Allergologie
+i210IgE;Allergologie
+k215IgE;Allergologie
+k217IgE;Allergologie
+k218IgE;Allergologie
+k220IgE;Allergologie
+k221IgE;Allergologie
+f354IgE;Allergologie
+i212IgE;Allergologie
+m6IgG;Allergologie
+m3IgG;Allergologie
+m207IgG;Allergologie
+m12IgG;Allergologie
+i1IgG;Allergologie
+i1IgG4;Allergologie
+t3IgG4;Allergologie
+m5IgG;Allergologie
+m2IgG;Allergologie
+d1IgG;Allergologie
+d1IgG4;Allergologie
+d2IgG;Allergologie
+d2IgG4;Allergologie
+e70IgG;Allergologie
+e85IgG;Allergologie
+e5IgG;Allergologie
+e201IgG;Allergologie
+e82IgG;Allergologie
+g6IgG4;Allergologie
+m22IgG;Allergologie
+mx7IgG;Allergologie
+m4IgG;Allergologie
+e92IgG;Allergologie
+m1IgG;Allergologie
+m11IgG;Allergologie
+mx6IgG;Allergologie
+m24IgG;Allergologie
+e93IgG;Allergologie
+e91IgG;Allergologie
+m23IgG;Allergologie
+e90IgG;Allergologie
+i3IgG;Allergologie
+i3IgG4;Allergologie
+k87IgG;Allergologie
+pax5IgG;Allergologie
+f245IgG;Allergologie
+ex71IgG;Allergologie
+k80IgG;Allergologie
+e219IgG;Allergologie
+ex72IgG;Allergologie
+k82IgG;Allergologie
+e6IgG;Allergologie
+f2IgG;Allergologie
+ex70IgG;Allergologie
+fx5IgG;Allergologie
+fx1IgG;Allergologie
+fx15IgG;Allergologie
+e213IgG;Allergologie
+k79IgG;Allergologie
+f5IgG;Allergologie
+e215IgG;Allergologie
+e79IgG;Allergologie
+SEA;Allergologie
+SEB;Allergologie
+SEC;Allergologie
+TSST1;Allergologie
+CAPKL;Allergologie
+IMSTAT;Zellulärer Immunstatus
+PTZ;Zellulärer Immunstatus
+STZ;Zellulärer Immunstatus
+THEZ;Zellulärer Immunstatus
+NKZ;Zellulärer Immunstatus
+PBZ;Zellulärer Immunstatus
+PTZa;Zellulärer Immunstatus
+STZa;Zellulärer Immunstatus
+THEZa;Zellulärer Immunstatus
+THEZR;Zellulärer Immunstatus
+NKZa;Zellulärer Immunstatus
+PBZa;Zellulärer Immunstatus
+HLADRI;Zellulärer Immunstatus
+IL2RI;Zellulärer Immunstatus
+HLADRIa;Zellulärer Immunstatus
+IL2RIa;Zellulärer Immunstatus
+NEUTa;Zellulärer Immunstatus
+LYMPa;Zellulärer Immunstatus
+MONOa;Zellulärer Immunstatus
+EOSa;Zellulärer Immunstatus
+BEIMMST;Zellulärer Immunstatus
+HLADRM;Zellulärer Immunstatus
+HLADRMa;Zellulärer Immunstatus
+PHAG;Zellulärer Immunstatus
+BURST;Zellulärer Immunstatus
+HLAB27;Zellulärer Immunstatus
+TSH;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+FT3;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+FT4;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+CTN;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+MELA;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+MELSAL;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+TG;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+TGAK;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+TGAK2;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+TPOAK;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+TPOAK2;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+TRAK;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+TGWF;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+TRH;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+TRAP;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+HGH;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+COR1;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+COR2;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+COR3;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+Ucor;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+SPCOR;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+INSU;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+CPEP;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+V25D;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+VD25;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+VITD;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+PTH;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+OPG;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+HOMA;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+PTRP;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+LEPT;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+HYCR;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+FGF23;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+UALD;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+xIGF1;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+IGF-1;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+IGF2;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+IGFBP3;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+IGF3;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+ACTH;Endokrinologie (ZIVD: in Kooperation mit Prof. Dr. Dr. P. H. Kann)
+INFO1;Gyn. Endokrinol. (ZIVD)
+SSW;Gyn. Endokrinol. (ZIVD)
+ZT;Gyn. Endokrinol. (ZIVD)
+ST;Gyn. Endokrinol. (ZIVD)
+GHCG;Gyn. Endokrinol. (ZIVD)
+EST;Gyn. Endokrinol. (ZIVD)
+FSH;Gyn. Endokrinol. (ZIVD)
+LH;Gyn. Endokrinol. (ZIVD)
+PRL;Gyn. Endokrinol. (ZIVD)
+PRLV;Gyn. Endokrinol. (ZIVD)
+MPRL;Gyn. Endokrinol. (ZIVD)
+MPRLQ;Gyn. Endokrinol. (ZIVD)
+MOPRLD;Gyn. Endokrinol. (ZIVD)
+PROG;Gyn. Endokrinol. (ZIVD)
+TESTO;Gyn. Endokrinol. (ZIVD)
+ANDRO;Gyn. Endokrinol. (ZIVD)
+DHEA;Gyn. Endokrinol. (ZIVD)
+DHEA2;Gyn. Endokrinol. (ZIVD)
+SHBG;Gyn. Endokrinol. (ZIVD)
+SHBG2;Gyn. Endokrinol. (ZIVD)
+PRO17;Gyn. Endokrinol. (ZIVD)
+TESTOF;Gyn. Endokrinol. (ZIVD)
+ESTF;Gyn. Endokrinol. (ZIVD)
+ESTR;Gyn. Endokrinol. (ZIVD)
+FLM;Gyn. Endokrinol. (ZIVD)
+FBIL;Gyn. Endokrinol. (ZIVD)
+HCGF;Gyn. Endokrinol. (ZIVD)
+PAPP;Gyn. Endokrinol. (ZIVD)
+EHCG;Gyn. Endokrinol. (ZIVD)
+AMUE;Gyn. Endokrinol. (ZIVD)
+INHB;Gyn. Endokrinol. (ZIVD)
+INHA;Gyn. Endokrinol. (ZIVD)
+COR4;ACTH-Stimulation
+COR5;ACTH-Stimulation
+COR6;Dexamethason Hemmtest
+COR7;Dexamethason Hemmtest
+LH1;GnRH-Stimulation
+LH2;GnRH-Stimulation
+FSH1;GnRH-Stimulation
+FSH2;GnRH-Stimulation
+PRL1;Paspertin-Stimulation
+PRL2;Paspertin-Stimulation
+AIINF;Autoimmundiagnostik
+FREMDU;Fremdversand
+FREMDOE;Fremdversand
+FREMDBIO;Fremdversand
+_K01;Fremdversand
+_K02;Fremdversand
+_K03;Fremdversand
+_K04;Fremdversand
+_K05;Fremdversand
+_K06;Fremdversand
+_K07;Fremdversand
+_K08;Fremdversand
+_K16;Fremdversand
+_K20;Fremdversand
+_K26;Fremdversand
+_K27;Fremdversand
+_K28;Fremdversand
+_K29;Fremdversand
+ACTH;Fremdversand
+CRH;Fremdversand
+xIGF1;Fremdversand
+IGF-1;Fremdversand
+IGF2;Fremdversand
+IGF3;Fremdversand
+IGFBP3;Fremdversand
+PRIN;Fremdversand
+IAK;Fremdversand
+-KIAA;Fremdversand
+GCN;Fremdversand
+GCNFV;Fremdversand
+GAST;Fremdversand
+SERO;Fremdversand
+CRA;Fremdversand
+CROMA;Fremdversand
+CCK;Fremdversand
+VIP;Fremdversand
+VIPFV;Fremdversand
+PP;Fremdversand
+PPFV;Fremdversand
+PTRP;Fremdversand
+COLP;Fremdversand
+ADR;Fremdversand
+NOR;Fremdversand
+DOP;Fremdversand
+REN;Fremdversand
+ALDO;Fremdversand
+ALDOQ;Fremdversand
+UALD;Fremdversand
+ADH;Fremdversand
+CTPAV;Fremdversand
+GAD;Fremdversand
+RANKL;Fremdversand
+OPG;Fremdversand
+EMN;Fremdversand
+ENMN;Fremdversand
+FUN2;Fremdversand
+QR01;Fremdversand
+HGHM30;Fremdversand
+HGH0;Fremdversand
+HGH30;Fremdversand
+HGH60;Fremdversand
+HGH90;Fremdversand
+HGH120;Fremdversand
+IGF10;Fremdversand
+LH0;Fremdversand
+LH30;Fremdversand
+FSH0;Fremdversand
+FSH60;Fremdversand
+EST0;Fremdversand
+PROG0;Fremdversand
+TESTO0;Fremdversand
+SHBG0;Fremdversand
+PRL0;Fremdversand
+PRL30;Fremdversand
+PRL60;Fremdversand
+ACTH15;Fremdversand
+ACTH0;Fremdversand
+ACTH30;Fremdversand
+COR0;Fremdversand
+COR30;Fremdversand
+COR60;Fremdversand
+TSH0;Fremdversand
+TSH30;Fremdversand
+FT30;Fremdversand
+FT40;Fremdversand
+GLUC0;Fremdversand
+FUN1;Fremdversand
+FUN3;Fremdversand
+GLUF0;Fremdversand
+SHBG2_0;Fremdversand
+FUN4;Fremdversand
+GLUCM30;Fremdversand
+GLUFM30;Fremdversand
+GLUF15;Fremdversand
+GLUC30;Fremdversand
+GLUF30;Fremdversand
+GLUC60;Fremdversand
+GLUF60;Fremdversand
+GLUC90;Fremdversand
+GLUF90;Fremdversand
+GLUC120;Fremdversand
+GLUF120;Fremdversand
+FUN5;Fremdversand
+HGH15;Fremdversand
+FUN6;Fremdversand
+QN01;Fremdversand
+HGH150;Fremdversand
+HGH180;Fremdversand
+GLUC150;Fremdversand
+GLUC180;Fremdversand
+GLUF150;Fremdversand
+GLUF180;Fremdversand
+FUN7;Fremdversand
+HC11;Fremdversand
+ACTHd1;Fremdversand
+ACTHd2;Fremdversand
+CORd1;Fremdversand
+CORd2;Fremdversand
+CORd2_hilf;Fremdversand
+FUN8;Fremdversand
+QT01;Fremdversand
+ACTHd3;Fremdversand
+ACTHd4;Fremdversand
+ACTHd5;Fremdversand
+CORd3;Fremdversand
+CORd4;Fremdversand
+CORd5;Fremdversand
+FUN9;Fremdversand
+QW01;Fremdversand
+FUN10;Fremdversand
+QJ01;Fremdversand
+ACTHh8;Fremdversand
+CORh8;Fremdversand
+CORh12;Fremdversand
+CORh18;Fremdversand
+FUN11;Fremdversand
+QH01;Fremdversand
+HGH45;Fremdversand
+HGH75;Fremdversand
+FUN12;Fremdversand
+QA01;Fremdversand
+FUN13;Fremdversand
+FUN14;Fremdversand
+QI01;Fremdversand
+GLUC15;Fremdversand
+GLUC75;Fremdversand
+FUN15;Fremdversand
+FUN16;Fremdversand
+HC08;Fremdversand
+HGH10;Fremdversand
+HGH20;Fremdversand
+HGH40;Fremdversand
+FUN17;Fremdversand
+FUN18;Fremdversand
+HC02;Fremdversand
+HGH210;Fremdversand
+HGH240;Fremdversand
+HGH270;Fremdversand
+HGH300;Fremdversand
+QO01;Fremdversand
+FUN19;Fremdversand
+FUN20;Fremdversand
+QB01;Fremdversand
+LHd1;Fremdversand
+LHd2;Fremdversand
+LHd3;Fremdversand
+LHd4;Fremdversand
+FSHd1;Fremdversand
+FSHd2;Fremdversand
+FSHd3;Fremdversand
+FSHd4;Fremdversand
+ESTd1;Fremdversand
+ESTd2;Fremdversand
+ESTd3;Fremdversand
+ESTd4;Fremdversand
+PROGd1;Fremdversand
+PROGd2;Fremdversand
+PROGd3;Fremdversand
+PROGd4;Fremdversand
+TESTOd1;Fremdversand
+TESTOd2;Fremdversand
+TESTOd3;Fremdversand
+TESTOd4;Fremdversand
+SHBGd1;Fremdversand
+SHBGd2;Fremdversand
+SHBGd3;Fremdversand
+SHBGd4;Fremdversand
+FUN21;Fremdversand
+QK01;Fremdversand
+FUN22;Fremdversand
+QD01;Fremdversand
+FUN23;Fremdversand
+QE01;Fremdversand
+PRLM30;Fremdversand
+PRL20;Fremdversand
+PRL45;Fremdversand
+FUN24;Fremdversand
+FUN25;Fremdversand
+QF01;Fremdversand
+PRL120;Fremdversand
+PRL180;Fremdversand
+PRL240;Fremdversand
+PRL300;Fremdversand
+FUN26;Fremdversand
+FUN27;Fremdversand
+HC07;Fremdversand
+CTPAV0;Fremdversand
+CTPAV120;Fremdversand
+CTPAV240;Fremdversand
+CTPAV360;Fremdversand
+CTPAV480;Fremdversand
+NA0;Fremdversand
+NA120;Fremdversand
+NA240;Fremdversand
+NA360;Fremdversand
+NA480;Fremdversand
+GLUP0;Fremdversand
+GLUP120;Fremdversand
+GLUP240;Fremdversand
+GLUP360;Fremdversand
+GLUP480;Fremdversand
+HST0;Fremdversand
+HST120;Fremdversand
+HST240;Fremdversand
+HST360;Fremdversand
+HST480;Fremdversand
+OSMO0;Fremdversand
+OSMO120;Fremdversand
+OSMO240;Fremdversand
+OSMO360;Fremdversand
+OSMO480;Fremdversand
+UOSM0;Fremdversand
+UOSM120;Fremdversand
+UOSM240;Fremdversand
+UOSM360;Fremdversand
+UOSM480;Fremdversand
+FUN29;Fremdversand
+FUN30;Fremdversand
+TESTO30;Fremdversand
+TESTO60;Fremdversand
+PRO170;Fremdversand
+PRO1730;Fremdversand
+PRO1760;Fremdversand
+ANDRO0;Fremdversand
+ANDRO30;Fremdversand
+ANDRO60;Fremdversand
+DHEA2_0;Fremdversand
+DHEA2_30;Fremdversand
+DHEA2_60;Fremdversand
+FUN31;Fremdversand
+QV01;Fremdversand
+FUN32;Fremdversand
+PRO17d1;Fremdversand
+PRO17d2;Fremdversand
+DHEA2_d1;Fremdversand
+DHEA2_d2;Fremdversand
+ANDROd1;Fremdversand
+ANDROd2;Fremdversand
+FUN33;Fremdversand
+QU01;Fremdversand
+REN0;Fremdversand
+ALDO0;Fremdversand
+REN180;Fremdversand
+ALDO180;Fremdversand
+FUN34;Fremdversand
+QL01;Fremdversand
+ADRM30;Fremdversand
+ADR0;Fremdversand
+ADR180;Fremdversand
+NORM30;Fremdversand
+NOR0;Fremdversand
+NOR180;Fremdversand
+DOPM30;Fremdversand
+DOP0;Fremdversand
+DOP180;Fremdversand
+EMNM30;Fremdversand
+EMN0;Fremdversand
+EMN180;Fremdversand
+ENMNM30;Fremdversand
+ENMN0;Fremdversand
+ENMN180;Fremdversand
+FUN35;Fremdversand
+QM01;Fremdversand
+CTNM5;Fremdversand
+CTN0;Fremdversand
+CTN2;Fremdversand
+CTN5;Fremdversand
+CTN10;Fremdversand
+FUN36;Fremdversand
+QS01;Fremdversand
+BZ1;Fremdversand
+BZ2;Fremdversand
+BZ3;Fremdversand
+BZ4;Fremdversand
+BZ5;Fremdversand
+FUN37;Fremdversand
+BL1;Fremdversand
+BL2;Fremdversand
+BL3;Fremdversand
+BL4;Fremdversand
+FUN38;Fremdversand
+HC03;Fremdversand
+CPEP0;Fremdversand
+INSU0;Fremdversand
+PRIN0;Fremdversand
+CPEP30;Fremdversand
+INSU30;Fremdversand
+PRIN30;Fremdversand
+CPEP60;Fremdversand
+INSU60;Fremdversand
+PRIN60;Fremdversand
+CPEP90;Fremdversand
+INSU90;Fremdversand
+PRIN90;Fremdversand
+CPEP120;Fremdversand
+INSU120;Fremdversand
+PRIN120;Fremdversand
+CPEP150;Fremdversand
+INSU150;Fremdversand
+PRIN150;Fremdversand
+CPEP180;Fremdversand
+INSU180;Fremdversand
+PRIN180;Fremdversand
+CPEP210;Fremdversand
+GLUC210;Fremdversand
+GLUF210;Fremdversand
+INSU210;Fremdversand
+PRIN210;Fremdversand
+CPEP240;Fremdversand
+GLUC240;Fremdversand
+GLUF240;Fremdversand
+INSU240;Fremdversand
+PRIN240;Fremdversand
+CPEP270;Fremdversand
+GLUC270;Fremdversand
+GLUF270;Fremdversand
+INSU270;Fremdversand
+PRIN270;Fremdversand
+CPEP300;Fremdversand
+GLUC300;Fremdversand
+GLUF300;Fremdversand
+INSU300;Fremdversand
+PRIN300;Fremdversand
+FUN39;Fremdversand
+GLUC5;Fremdversand
+GLUF5;Fremdversand
+INSU5;Fremdversand
+CPEP5;Fremdversand
+FUN40;Fremdversand
+HC10;Fremdversand
+CPEP10;Fremdversand
+GLUC10;Fremdversand
+INSU10;Fremdversand
+CPEP20;Fremdversand
+GLUC20;Fremdversand
+INSU20;Fremdversand
+CPEP40;Fremdversand
+GLUC40;Fremdversand
+INSU40;Fremdversand
+FUN41;Fremdversand
+CPEP360;Fremdversand
+GLUC360;Fremdversand
+GLUF360;Fremdversand
+INSU360;Fremdversand
+PRIN360;Fremdversand
+CPEP480;Fremdversand
+GLUC480;Fremdversand
+GLUF480;Fremdversand
+INSU480;Fremdversand
+PRIN480;Fremdversand
+FUN42;Fremdversand
+CPEPM10;Fremdversand
+GLUCM10;Fremdversand
+GLUFM10;Fremdversand
+CPEPM5;Fremdversand
+GLUCM5;Fremdversand
+GLUFM5;Fremdversand
+GLUF10;Fremdversand
+CPEP15;Fremdversand
+GLUF20;Fremdversand
+CPEP45;Fremdversand
+GLUC45;Fremdversand
+GLUF45;Fremdversand
+FUN43;Fremdversand
+QP01;Fremdversand
+GASTM15;Fremdversand
+GAST0;Fremdversand
+GAST2;Fremdversand
+GAST5;Fremdversand
+GAST10;Fremdversand
+GAST15;Fremdversand
+GAST20;Fremdversand
+GAST30;Fremdversand
+FUN44;Fremdversand
+HC05;Fremdversand
+GAST45;Fremdversand
+GAST60;Fremdversand
+GAST90;Fremdversand
+GAST120;Fremdversand
+GAST150;Fremdversand
+GAST180;Fremdversand
+FUN45;Fremdversand
+PRL90;Fremdversand
+ACTHM30;Fremdversand
+ACTH60;Fremdversand
+ACTH90;Fremdversand
+ACTH120;Fremdversand
+CORM30;Fremdversand
+COR90;Fremdversand
+COR120;Fremdversand
+ADR30;Fremdversand
+ADR60;Fremdversand
+ADR90;Fremdversand
+ADR120;Fremdversand
+NOR30;Fremdversand
+NOR60;Fremdversand
+NOR90;Fremdversand
+NOR120;Fremdversand
+DOP30;Fremdversand
+DOP60;Fremdversand
+DOP90;Fremdversand
+DOP120;Fremdversand
+CPEPM30;Fremdversand
+FUN46;Fremdversand
+HC06;Fremdversand
+PTHv1;Fremdversand
+PTHv2;Fremdversand
+PTH2;Fremdversand
+PTH4;Fremdversand
+PTH6;Fremdversand
+PTH8;Fremdversand
+PTH10;Fremdversand
+PTHn1;Fremdversand
+PTHn2;Fremdversand
+FUN47;Fremdversand
+HC21;Fremdversand
+FUN48;Fremdversand
+QC01;Fremdversand
+FUN49;Fremdversand
+QQ01;Fremdversand
+FSH30;Fremdversand
+FUN50;Fremdversand
+PRL25;Fremdversand
+FUN54;Fremdversand
+QX01;Fremdversand
+ALDO120;Fremdversand
+ALDO240;Fremdversand
+K0;Fremdversand
+K240;Fremdversand
+K120;Fremdversand
+COR240;Fremdversand
+FUN55;Fremdversand
+QY01;Fremdversand
+TSHM30;Fremdversand
+TSH60;Fremdversand
+TSH120;Fremdversand
+TSH180;Fremdversand
+TSH240;Fremdversand
+FT3M30;Fremdversand
+FT330;Fremdversand
+FT360;Fremdversand
+FT3120;Fremdversand
+FT3180;Fremdversand
+FT3240;Fremdversand
+FT4M30;Fremdversand
+FT430;Fremdversand
+FT460;Fremdversand
+FT4120;Fremdversand
+FT4180;Fremdversand
+FT4240;Fremdversand
+FUN56;Fremdversand
+FUN57;Fremdversand
+FUN58;Fremdversand
+QZ01;Fremdversand
+LA0;Fremdversand
+LA15;Fremdversand
+LA30;Fremdversand
+LA60;Fremdversand
+LA90;Fremdversand
+NH30;Fremdversand
+NH315;Fremdversand
+NH330;Fremdversand
+NH360;Fremdversand
+NH390;Fremdversand
+FUN59;Fremdversand
+HC01;Fremdversand
+ALDO60;Fremdversand
+K60;Fremdversand
+REN60;Fremdversand
+REN120;Fremdversand
+ANA;Autoimmunologie
+ANNA3;Autoimmunologie
+xAQUA;Autoimmunologie
+AQUAP;Autoimmunologie
+ASGPR;Autoimmunologie
+DDNS;Autoimmunologie
+DNS;Autoimmunologie
+SM;Autoimmunologie
+RNP;Autoimmunologie
+SSA;Autoimmunologie
+SSB;Autoimmunologie
+JO1;Autoimmunologie
+SCL70;Autoimmunologie
+HIS;Autoimmunologie
+NUK;Autoimmunologie
+RIBB;Autoimmunologie
+RIB;Autoimmunologie
+RNAPAK;Autoimmunologie
+SMB;Autoimmunologie
+RNPB;Autoimmunologie
+SSAB;Autoimmunologie
+SSBB;Autoimmunologie
+JO1B;Autoimmunologie
+SCLB;Autoimmunologie
+HISB;Autoimmunologie
+PMSB;Autoimmunologie
+PCNB;Autoimmunologie
+CANC;Autoimmunologie
+PANC;Autoimmunologie
+CATG;Autoimmunologie
+ELAS;Autoimmunologie
+MPO;Autoimmunologie
+MPON;Autoimmunologie
+LAKT;Autoimmunologie
+PRO3;Autoimmunologie
+PRO3N;Autoimmunologie
+BPI;Autoimmunologie
+GBM;Autoimmunologie
+GBME;Autoimmunologie
+GBMN;Autoimmunologie
+PLA2R;Autoimmunologie
+INFETT;Autoimmunologie
+THSD7A;Autoimmunologie
+MEMNEP;Autoimmunologie
+AMA;Autoimmunologie
+SMA;Autoimmunologie
+LKM;Autoimmunologie
+HMA;Autoimmunologie
+LSP;Autoimmunologie
+LMA;Autoimmunologie
+SLA;Autoimmunologie
+AMA2;Autoimmunologie
+AMA4;Autoimmunologie
+AMA4FV;Autoimmunologie
+AMA9;Autoimmunologie
+AMA9FV;Autoimmunologie
+CYTAK;Autoimmunologie
+AKTAK;Autoimmunologie
+LAC;Autoimmunologie
+CARDG;Autoimmunologie
+CARDA;Autoimmunologie
+CARDM;Autoimmunologie
+CARBOAK;Autoimmunologie
+B2GLG;Autoimmunologie
+B2GLA;Autoimmunologie
+B2GLM;Autoimmunologie
+GLIG;Autoimmunologie
+TTG;Autoimmunologie
+EMAKG;Autoimmunologie
+EMAKA;Autoimmunologie
+PCAAK;Autoimmunologie
+IFAK;Autoimmunologie
+PANK;Autoimmunologie
+ICA;Autoimmunologie
+GADR;Autoimmunologie
+GAD;Autoimmunologie
+GADB;Autoimmunologie
+-KIAA;Autoimmunologie
+IA2;Autoimmunologie
+IAK;Autoimmunologie
+NSD;Autoimmunologie
+RECB;Autoimmunologie
+TAK;Autoimmunologie
+MAK;Autoimmunologie
+NNR;Autoimmunologie
+OVAR;Autoimmunologie
+TESTIS;Autoimmunologie
+QMA;Autoimmunologie
+ACHR;Autoimmunologie
+CAKA;Autoimmunologie
+MUSK;Autoimmunologie
+TITB;Autoimmunologie
+LRP4;Autoimmunologie
+TIT;Autoimmunologie
+YO;Autoimmunologie
+YOB;Autoimmunologie
+HU;Autoimmunologie
+HUB;Autoimmunologie
+RI;Autoimmunologie
+RIBL;Autoimmunologie
+TR;Autoimmunologie
+TRB;Autoimmunologie
+AMPHIB;Autoimmunologie
+CV2B;Autoimmunologie
+MA2B;Autoimmunologie
+MI2AK;Autoimmunologie
+MYE;Autoimmunologie
+MAG;Autoimmunologie
+GM1GAM;Autoimmunologie
+GD1bGAM;Autoimmunologie
+GQ1bGAM;Autoimmunologie
+GABR1;Autoimmunologie
+xGD1A;Autoimmunologie
+xGD1B;Autoimmunologie
+xGQ1B;Autoimmunologie
+xGM1;Autoimmunologie
+xGM2;Autoimmunologie
+xGM1AS;Autoimmunologie
+GM1G;Autoimmunologie
+GM1M;Autoimmunologie
+GM2M;Autoimmunologie
+GM2G;Autoimmunologie
+GM2AK;Autoimmunologie
+GM3G;Autoimmunologie
+GM3M;Autoimmunologie
+GD1aG;Autoimmunologie
+GD1aM;Autoimmunologie
+GD1bG;Autoimmunologie
+GD1bM;Autoimmunologie
+GT1bG;Autoimmunologie
+GT1bM;Autoimmunologie
+GQ1bG;Autoimmunologie
+GQ1bM;Autoimmunologie
+GQ1bGF;Autoimmunologie
+GQ1bMF;Autoimmunologie
+GD1bGF;Autoimmunologie
+GD1bMF;Autoimmunologie
+GM1GF;Autoimmunologie
+GM1MF;Autoimmunologie
+CCP;Autoimmunologie
+LEBL;Autoimmunologie
+AMA2B;Autoimmunologie
+AMA23E;Autoimmunologie
+SP100B;Autoimmunologie
+PMLB;Autoimmunologie
+GP210B;Autoimmunologie
+LKM1B;Autoimmunologie
+LC1B;Autoimmunologie
+RO52B;Autoimmunologie
+SLAB;Autoimmunologie
+MYOB;Autoimmunologie
+MI2B;Autoimmunologie
+TIF1B;Autoimmunologie
+MDA5B;Autoimmunologie
+NXP2B;Autoimmunologie
+SAEB;Autoimmunologie
+KU;Autoimmunologie
+PMSCL100B;Autoimmunologie
+PMSCL75B;Autoimmunologie
+SRPB;Autoimmunologie
+PL7B;Autoimmunologie
+PL12B;Autoimmunologie
+EJB;Autoimmunologie
+OJB;Autoimmunologie
+RO52BFV;Autoimmunologie
+SKLB;Autoimmunologie
+SKSCLB;Autoimmunologie
+SKCENAB;Autoimmunologie
+SKCENBB;Autoimmunologie
+SKRP11B;Autoimmunologie
+SKRP155B;Autoimmunologie
+SKFIB;Autoimmunologie
+SKNOR90B;Autoimmunologie
+SKTHTOB;Autoimmunologie
+SKPSC100B;Autoimmunologie
+SKPSC75B;Autoimmunologie
+SKKU;Autoimmunologie
+SKPDGFRB;Autoimmunologie
+SKRO52B;Autoimmunologie
+IFBAK;Autoimmunologie
+GABR;Autoimmunologie
+VGKC;Autoimmunologie
+LGI1;Autoimmunologie
+CASPR2;Autoimmunologie
+AMPAR;Autoimmunologie
+NMDAR;Autoimmunologie
+PCA2;Autoimmunologie
+ZIC4B;Autoimmunologie
+ZNT8AK;Autoimmunologie
+SOX1;Autoimmunologie
+SOX1B;Autoimmunologie
+DPPX;Autoimmunologie
+GLYC;Autoimmunologie
+MOG;Autoimmunologie
+LHU;Autoimmunologie
+LYO;Autoimmunologie
+LRI;Autoimmunologie
+LTR;Autoimmunologie
+LMA2B;Autoimmunologie
+LAMPHIB;Autoimmunologie
+LCV2B;Autoimmunologie
+LSOX1;Autoimmunologie
+LMYE;Autoimmunologie
+LMAG;Autoimmunologie
+LGAD;Autoimmunologie
+LNMDAR;Autoimmunologie
+LAMPAR;Autoimmunologie
+LGABR;Autoimmunologie
+LDPPX;Autoimmunologie
+LCASPR2;Autoimmunologie
+LLGI1;Autoimmunologie
+LVGKC;Autoimmunologie
+ANAOD;Autoimmunologie
+SACEA;Autoimmunologie
+SACEG;Autoimmunologie
+BEAUTO;Autoimmunologie
+BEIMMF;Autoimmunologie
+UBEIMMF;Autoimmunologie
+KCAN;Kommentare
+KCST;Kommentare
+KCMA;Kommentare
+KCPA;Kommentare
+KCANSD;Kommentare
+KCANST;Kommentare
+KCANPO;Kommentare
+KCFREMDL;Kommentare
+KCANGER;Kommentare
+KCOEFRA;Kommentare
+KCOEBEM;Kommentare
+KCBEUR;Kommentare
+BEUDIA;Kommentare
+BEURIN;Kommentare
+BETYR;Kommentare
+BEGER;Kommentare
+BEGERT;Kommentare
+0000;Kommentare
+0001;Kommentare
+0002;Kommentare
+0003;Kommentare
+0004;Kommentare
+0005;Kommentare
+TELE;Kommentare
+MTYP-POCT;POCT
+PO2-POCT;POCT
+PH(T)-POCT;POCT
+PO2(T)-POCT;POCT
+PCO2(T)-POCT;POCT
+THB-POCT;POCT
+SO2-POCT;POCT
+COHB-POCT;POCT
+METHB-POCT;POCT
+HCT-POCT;POCT
+K+-POCT;POCT
+NA+-POCT;POCT
+CA++-POCT;POCT
+CL--POCT;POCT
+GLU-POCT;POCT
+LAC-POCT;POCT
+ABE-POCT;POCT
+SBE-POCT;POCT
+SBC-POCT;POCT
+TO2-POCT;POCT
+ANIONGAP-POCT;POCT
+P50(ACT)-POCT;POCT
+TBIL-POCT;POCT
+GLUCPO;POCT
+GLUCN-POCT;POCT
+VENOES-POCT;POCT
+DIALYS-POCT;POCT
+QUI;Hämostaseologie (TM)
+INOR;Hämostaseologie (TM)
+APTT;Hämostaseologie (TM)
+FBR;Hämostaseologie (TM)
+THZ;Hämostaseologie (TM)
+TC;Hämostaseologie (TM)
+ATX;Hämostaseologie (TM)
+AT;Hämostaseologie (TM)
+DD;Hämostaseologie (TM)
+DIM;Hämostaseologie (TM)
+PLS;Hämostaseologie (TM)
+APC;Hämostaseologie (TM)
+APCO;Hämostaseologie (TM)
+ACR;Hämostaseologie (TM)
+PRC;Hämostaseologie (TM)
+PRCC;Hämostaseologie (TM)
+PRS;Hämostaseologie (TM)
+ProtSfrei;Hämostaseologie (TM)
+PSfrei;Hämostaseologie (TM)
+PRZ;Hämostaseologie (TM)
+PLAT;Hämostaseologie (TM)
+LAPTT;Hämostaseologie (TM)
+PNT;Hämostaseologie (TM)
+GF2;Hämostaseologie (TM)
+GF5;Hämostaseologie (TM)
+GMTHFR677;Hämostaseologie (TM)
+GMTHFR1298;Hämostaseologie (TM)
+FIM;Hämostaseologie (TM)
+AXA;Hämostaseologie (TM)
+AXAH;Hämostaseologie (TM)
+F13;Hämostaseologie (TM)
+LMW;Hämostaseologie (TM)
+LMWH;Hämostaseologie (TM)
+HIR;Hämostaseologie (TM)
+ARGA;Hämostaseologie (TM)
+PROT;Hämostaseologie (TM)
+C1INH;Hämostaseologie (TM)
+ORG;Hämostaseologie (TM)
+HEPL;Hämostaseologie (TM)
+DABI;Hämostaseologie (TM)
+RIVA;Hämostaseologie (TM)
+EDOX;Hämostaseologie (TM)
+FONDA;Hämostaseologie (TM)
+APIXA;Hämostaseologie (TM)
+EMICI;Hämostaseologie (TM)
+F2;Hämostaseologie (TM)
+F5;Hämostaseologie (TM)
+F7;Hämostaseologie (TM)
+F10;Hämostaseologie (TM)
+F8;Hämostaseologie (TM)
+F9;Hämostaseologie (TM)
+F11;Hämostaseologie (TM)
+F12;Hämostaseologie (TM)
+FIBC;Hämostaseologie (TM)
+KCT;Hämostaseologie (TM)
+PTA;Hämostaseologie (TM)
+PTA1;Hämostaseologie (TM)
+FIBAG;Hämostaseologie (TM)
+FIBIM;Hämostaseologie (TM)
+FBLO;Hämostaseologie (TM)
+IVBC;Hämostaseologie (TM)
+IVBA;Hämostaseologie (TM)
+RTG;Hämostaseologie (TM)
+EXTEM_CT5;Hämostaseologie (TM)
+EXTEM_MCF15;Hämostaseologie (TM)
+EXTEM_ML60;Hämostaseologie (TM)
+INTEM_CT5;Hämostaseologie (TM)
+FIBTEM_MCF15;Hämostaseologie (TM)
+TAG;Hämostaseologie (TM)
+VBAGG;Hämostaseologie (TM)
+THELA;Hämostaseologie (TM)
+ATPFR;Hämostaseologie (TM)
+MPTRAP;Hämostaseologie (TM)
+MPASPI;Hämostaseologie (TM)
+MPADP;Hämostaseologie (TM)
+MPADPHS;Hämostaseologie (TM)
+RICO;Hämostaseologie (TM)
+RICOI;Hämostaseologie (TM)
+VWA;Hämostaseologie (TM)
+IVY;Hämostaseologie (TM)
+HIPA;Hämostaseologie (TM)
+HEL;Hämostaseologie (TM)
+HID;Hämostaseologie (TM)
+HITQ;Hämostaseologie (TM)
+MULTI;Hämostaseologie (TM)
+PSAGf;Hämostaseologie (TM)
+PSAGg;Hämostaseologie (TM)
+PCAG;Hämostaseologie (TM)
+APLS;Hämostaseologie (TM)
+ABGM;Hämostaseologie (TM)
+ABGG;Hämostaseologie (TM)
+ACAM;Hämostaseologie (TM)
+ACAG;Hämostaseologie (TM)
+LASCR;Hämostaseologie (TM)
+LACON;Hämostaseologie (TM)
+LARAT;Hämostaseologie (TM)
+PAI;Hämostaseologie (TM)
+F2LO;Hämostaseologie (TM)
+F5LO;Hämostaseologie (TM)
+F7LO;Hämostaseologie (TM)
+F8LO;Hämostaseologie (TM)
+F8chromLO;Hämostaseologie (TM)
+F9LO;Hämostaseologie (TM)
+F10LO;Hämostaseologie (TM)
+F11LO;Hämostaseologie (TM)
+F12LO;Hämostaseologie (TM)
+F5INH;Hämostaseologie (TM)
+F8INH;Hämostaseologie (TM)
+F8HI;Hämostaseologie (TM)
+F9INH;Hämostaseologie (TM)
+F10INH;Hämostaseologie (TM)
+F11INH;Hämostaseologie (TM)
+F8chrom;Hämostaseologie (TM)
+ADAMTS13AKT;Hämostaseologie (TM)
+ADAMTS13AG;Hämostaseologie (TM)
+ADAMTS13INH;Hämostaseologie (TM)
+THEP;Hämostaseologie (TM)
+TCUM;Hämostaseologie (TM)
+TCUM2;Hämostaseologie (TM)
+TCUM3;Hämostaseologie (TM)
+TCUM4;Hämostaseologie (TM)
+TCUM5;Hämostaseologie (TM)
+TCUM6;Hämostaseologie (TM)
+TCUM7;Hämostaseologie (TM)
+BEUR;Hämostaseologie (TM)
+NACH;Befundnachtrag
+MAT;Befundnachtrag
+SMAT;Befundnachtrag
+HAVG;Infektionsdiagnostik Blut (Hepatitis)
+HAVM;Infektionsdiagnostik Blut (Hepatitis)
+HBS;Infektionsdiagnostik Blut (Hepatitis)
+HBSN;Infektionsdiagnostik Blut (Hepatitis)
+AC;Infektionsdiagnostik Blut (Hepatitis)
+ACM;Infektionsdiagnostik Blut (Hepatitis)
+ASTI;Infektionsdiagnostik Blut (Hepatitis)
+HBE;Infektionsdiagnostik Blut (Hepatitis)
+AE;Infektionsdiagnostik Blut (Hepatitis)
+HBBT;Infektionsdiagnostik Blut (Hepatitis)
+HBSBT;Infektionsdiagnostik Blut (Hepatitis)
+HBSQT;Infektionsdiagnostik Blut (Hepatitis)
+HCV;Infektionsdiagnostik Blut (Hepatitis)
+HCVN;Infektionsdiagnostik Blut (Hepatitis)
+HCAG;Infektionsdiagnostik Blut (Hepatitis)
+HCBT;Infektionsdiagnostik Blut (Hepatitis)
+HDV;Infektionsdiagnostik Blut (Hepatitis)
+HEVG;Infektionsdiagnostik Blut (Hepatitis)
+HEVM;Infektionsdiagnostik Blut (Hepatitis)
+ADG;Infektionsdiagnostik Blut
+ADM;Infektionsdiagnostik Blut
+AMHA;Infektionsdiagnostik Blut
+PO1S;Infektionsdiagnostik Blut
+PO3S;Infektionsdiagnostik Blut
+DNB;Infektionsdiagnostik Blut
+HYALU;Infektionsdiagnostik Blut
+STAP;Infektionsdiagnostik Blut
+STRE;Infektionsdiagnostik Blut
+AFUG;Infektionsdiagnostik Blut
+AFUM;Infektionsdiagnostik Blut
+BAHG;Infektionsdiagnostik Blut
+BAHM;Infektionsdiagnostik Blut
+BAQG;Infektionsdiagnostik Blut
+BAQM;Infektionsdiagnostik Blut
+BBGS;Infektionsdiagnostik Blut
+BBXS;Infektionsdiagnostik Blut
+BBMS;Infektionsdiagnostik Blut
+BBGW;Infektionsdiagnostik Blut
+BBMW;Infektionsdiagnostik Blut
+BRUWSP;Infektionsdiagnostik Blut
+BUWG;Infektionsdiagnostik Blut
+BUWM;Infektionsdiagnostik Blut
+CAMI;Infektionsdiagnostik Blut
+CAMJ;Infektionsdiagnostik Blut
+CAAKG;Infektionsdiagnostik Blut
+CAAKM;Infektionsdiagnostik Blut
+CLPG;Infektionsdiagnostik Blut
+CLPA;Infektionsdiagnostik Blut
+CLPM;Infektionsdiagnostik Blut
+CPGS;Infektionsdiagnostik Blut
+CPAS;Infektionsdiagnostik Blut
+CPMS;Infektionsdiagnostik Blut
+CP;Infektionsdiagnostik Blut
+CLOS;Infektionsdiagnostik Blut
+CLTG;Infektionsdiagnostik Blut
+CLTA;Infektionsdiagnostik Blut
+CTGS;Infektionsdiagnostik Blut
+CTAS;Infektionsdiagnostik Blut
+CT;Infektionsdiagnostik Blut
+COXS;Infektionsdiagnostik Blut
+CA9G;Infektionsdiagnostik Blut
+CA9M;Infektionsdiagnostik Blut
+CMG;Infektionsdiagnostik Blut
+CMXS;Infektionsdiagnostik Blut
+CMM;Infektionsdiagnostik Blut
+CMAVBT;Infektionsdiagnostik Blut
+CMWG;Infektionsdiagnostik Blut
+CMWM;Infektionsdiagnostik Blut
+DENG;Infektionsdiagnostik Blut
+DENM;Infektionsdiagnostik Blut
+DIPAT;Infektionsdiagnostik Blut
+ECHS;Infektionsdiagnostik Blut
+ECHA;Infektionsdiagnostik Blut
+ECML;Infektionsdiagnostik Blut
+EBMA;Infektionsdiagnostik Blut
+EBVA;Infektionsdiagnostik Blut
+EBEA;Infektionsdiagnostik Blut
+EBM;Infektionsdiagnostik Blut
+EBV;Infektionsdiagnostik Blut
+EBE;Infektionsdiagnostik Blut
+EBWG;Infektionsdiagnostik Blut
+EBWM;Infektionsdiagnostik Blut
+EBWA;Infektionsdiagnostik Blut
+EBVAV;Infektionsdiagnostik Blut
+EHRLG;Infektionsdiagnostik Blut
+EHRLM;Infektionsdiagnostik Blut
+FSXS;Infektionsdiagnostik Blut
+FSGS;Infektionsdiagnostik Blut
+FSMS;Infektionsdiagnostik Blut
+GONAK;Infektionsdiagnostik Blut
+HPYG;Infektionsdiagnostik Blut
+HPYA;Infektionsdiagnostik Blut
+HSXS;Infektionsdiagnostik Blut
+HSGS;Infektionsdiagnostik Blut
+HSMS;Infektionsdiagnostik Blut
+HH6G;Infektionsdiagnostik Blut
+HH6M;Infektionsdiagnostik Blut
+HHV8AK;Infektionsdiagnostik Blut
+HTLV;Infektionsdiagnostik Blut
+IAGS;Infektionsdiagnostik Blut
+IAAS;Infektionsdiagnostik Blut
+IBGS;Infektionsdiagnostik Blut
+IBAS;Infektionsdiagnostik Blut
+LEGAK1;Infektionsdiagnostik Blut
+LEGAK7;Infektionsdiagnostik Blut
+LEGAKG;Infektionsdiagnostik Blut
+LEIDG;Infektionsdiagnostik Blut
+LEING;Infektionsdiagnostik Blut
+LEIAK;Infektionsdiagnostik Blut
+LEIG;Infektionsdiagnostik Blut
+LEIM;Infektionsdiagnostik Blut
+LEPAKG;Infektionsdiagnostik Blut
+LEPAKM;Infektionsdiagnostik Blut
+LISTS;Infektionsdiagnostik Blut
+MAS;Infektionsdiagnostik Blut
+MALA;Infektionsdiagnostik Blut
+MENAK;Infektionsdiagnostik Blut
+DAUS;Infektionsdiagnostik Blut
+DTRO;Infektionsdiagnostik Blut
+MAXS;Infektionsdiagnostik Blut
+MAGS;Infektionsdiagnostik Blut
+MAMS;Infektionsdiagnostik Blut
+MUXS;Infektionsdiagnostik Blut
+MUGS;Infektionsdiagnostik Blut
+MUMS;Infektionsdiagnostik Blut
+MYPNG;Infektionsdiagnostik Blut
+MYPNM;Infektionsdiagnostik Blut
+MYPNA;Infektionsdiagnostik Blut
+PIG;Infektionsdiagnostik Blut
+PIA;Infektionsdiagnostik Blut
+PBGS;Infektionsdiagnostik Blut
+PBMS;Infektionsdiagnostik Blut
+PBWG;Infektionsdiagnostik Blut
+PBWM;Infektionsdiagnostik Blut
+PBAV;Infektionsdiagnostik Blut
+PERAKG;Infektionsdiagnostik Blut
+PERAKM;Infektionsdiagnostik Blut
+PERAKA;Infektionsdiagnostik Blut
+POLS;Infektionsdiagnostik Blut
+CB1G;Infektionsdiagnostik Blut
+CB1A;Infektionsdiagnostik Blut
+CB2G;Infektionsdiagnostik Blut
+CB2M;Infektionsdiagnostik Blut
+QFS;Infektionsdiagnostik Blut
+RSG;Infektionsdiagnostik Blut
+RSA;Infektionsdiagnostik Blut
+RIRIG;Infektionsdiagnostik Blut
+RIRIM;Infektionsdiagnostik Blut
+RITYG;Infektionsdiagnostik Blut
+RITYM;Infektionsdiagnostik Blut
+ROEG;Infektionsdiagnostik Blut
+ROHS;Infektionsdiagnostik Blut
+ROHG;Infektionsdiagnostik Blut
+ROXS;Infektionsdiagnostik Blut
+ROGS;Infektionsdiagnostik Blut
+ROEVG;Infektionsdiagnostik Blut
+ROMS;Infektionsdiagnostik Blut
+ROTS;Infektionsdiagnostik Blut
+S2AXS;Infektionsdiagnostik Blut
+S2AS;Infektionsdiagnostik Blut
+S2XS;Infektionsdiagnostik Blut
+S2GS;Infektionsdiagnostik Blut
+SALMAK;Infektionsdiagnostik Blut
+SALMAAK;Infektionsdiagnostik Blut
+SALPTAOH;Infektionsdiagnostik Blut
+SALPTBOH;Infektionsdiagnostik Blut
+SALPTCOH;Infektionsdiagnostik Blut
+SALTYOH;Infektionsdiagnostik Blut
+SHID1;Infektionsdiagnostik Blut
+SHID2;Infektionsdiagnostik Blut
+SHIF;Infektionsdiagnostik Blut
+SHIS;Infektionsdiagnostik Blut
+SCHIFV;Infektionsdiagnostik Blut
+STHA;Infektionsdiagnostik Blut
+SRPNT;Infektionsdiagnostik Blut
+TEAT;Infektionsdiagnostik Blut
+TOCAK;Infektionsdiagnostik Blut
+TOCAWG;Infektionsdiagnostik Blut
+TOCAWM;Infektionsdiagnostik Blut
+TGEG;Infektionsdiagnostik Blut
+TGXS;Infektionsdiagnostik Blut
+TGEM;Infektionsdiagnostik Blut
+TGEA;Infektionsdiagnostik Blut
+TXGA;Infektionsdiagnostik Blut
+TOLLAK;Infektionsdiagnostik Blut
+TPPA;Infektionsdiagnostik Blut
+TPVS;Infektionsdiagnostik Blut
+TPAG;Infektionsdiagnostik Blut
+TPAM;Infektionsdiagnostik Blut
+TPEG;Infektionsdiagnostik Blut
+TPEM;Infektionsdiagnostik Blut
+TF;Infektionsdiagnostik Blut
+TFDG;Infektionsdiagnostik Blut
+TFDM;Infektionsdiagnostik Blut
+TFCG;Infektionsdiagnostik Blut
+TFCM;Infektionsdiagnostik Blut
+TFZG;Infektionsdiagnostik Blut
+TFZM;Infektionsdiagnostik Blut
+TRCG;Infektionsdiagnostik Blut
+TRCM;Infektionsdiagnostik Blut
+TULG;Infektionsdiagnostik Blut
+TULM;Infektionsdiagnostik Blut
+VZXS;Infektionsdiagnostik Blut
+VZGS;Infektionsdiagnostik Blut
+VZMS;Infektionsdiagnostik Blut
+YEIGG;Infektionsdiagnostik Blut
+YEIGM;Infektionsdiagnostik Blut
+YEIGA;Infektionsdiagnostik Blut
+ZIKG;Infektionsdiagnostik Blut
+ZIKM;Infektionsdiagnostik Blut
+BVZK;Infektionsdiagnostik Blut
+CYSG;Infektionsdiagnostik Blut
+ELEKMIK;Infektionsdiagnostik Blut
+EME;Infektionsdiagnostik Blut
+GILAG;Infektionsdiagnostik Blut
+MALAK;Infektionsdiagnostik Blut
+SFGB;Infektionsdiagnostik Blut
+SFMB;Infektionsdiagnostik Blut
+ADGL;Infektionsdiagnostik Liquor
+ADML;Infektionsdiagnostik Liquor
+BBGL;Infektionsdiagnostik Liquor
+BBML;Infektionsdiagnostik Liquor
+BBGWL;Infektionsdiagnostik Liquor
+BBMWL;Infektionsdiagnostik Liquor
+CLOL;Infektionsdiagnostik Liquor
+COXL;Infektionsdiagnostik Liquor
+CA9GL;Infektionsdiagnostik Liquor
+CA9ML;Infektionsdiagnostik Liquor
+CMGL;Infektionsdiagnostik Liquor
+CMML;Infektionsdiagnostik Liquor
+CMWGL;Infektionsdiagnostik Liquor
+CMWML;Infektionsdiagnostik Liquor
+EBOG;Infektionsdiagnostik Liquor
+EBOM;Infektionsdiagnostik Liquor
+EBVL;Infektionsdiagnostik Liquor
+EBEL;Infektionsdiagnostik Liquor
+EBML;Infektionsdiagnostik Liquor
+EBWGL;Infektionsdiagnostik Liquor
+EBWML;Infektionsdiagnostik Liquor
+EBWAL;Infektionsdiagnostik Liquor
+ECHL;Infektionsdiagnostik Liquor
+FSGL;Infektionsdiagnostik Liquor
+FSML;Infektionsdiagnostik Liquor
+HSGL;Infektionsdiagnostik Liquor
+HSML;Infektionsdiagnostik Liquor
+HH6GL;Infektionsdiagnostik Liquor
+HH6ML;Infektionsdiagnostik Liquor
+IAGL;Infektionsdiagnostik Liquor
+IAAL;Infektionsdiagnostik Liquor
+IBGL;Infektionsdiagnostik Liquor
+IBAL;Infektionsdiagnostik Liquor
+MRVG;Infektionsdiagnostik Liquor
+MRWG;Infektionsdiagnostik Liquor
+MRVM;Infektionsdiagnostik Liquor
+MAGL;Infektionsdiagnostik Liquor
+MAML;Infektionsdiagnostik Liquor
+MUGL;Infektionsdiagnostik Liquor
+MUML;Infektionsdiagnostik Liquor
+PIGL;Infektionsdiagnostik Liquor
+PIAL;Infektionsdiagnostik Liquor
+-VPIALVIR;Infektionsdiagnostik Liquor
+PBGL;Infektionsdiagnostik Liquor
+PBML;Infektionsdiagnostik Liquor
+POLL;Infektionsdiagnostik Liquor
+QFL;Infektionsdiagnostik Liquor
+RSGL;Infektionsdiagnostik Liquor
+RSAL;Infektionsdiagnostik Liquor
+RSGLVIR;Infektionsdiagnostik Liquor
+RSALVIR;Infektionsdiagnostik Liquor
+RESTG;Infektionsdiagnostik Liquor
+RESTM;Infektionsdiagnostik Liquor
+ROHL;Infektionsdiagnostik Liquor
+ROGL;Infektionsdiagnostik Liquor
+ROML;Infektionsdiagnostik Liquor
+ROTL;Infektionsdiagnostik Liquor
+TPPAL;Infektionsdiagnostik Liquor
+TPVL;Infektionsdiagnostik Liquor
+TPAGL;Infektionsdiagnostik Liquor
+TPAML;Infektionsdiagnostik Liquor
+TPEGL;Infektionsdiagnostik Liquor
+TPEML;Infektionsdiagnostik Liquor
+TGLEG;Infektionsdiagnostik Liquor
+TGLEA;Infektionsdiagnostik Liquor
+TGLEM;Infektionsdiagnostik Liquor
+VZGL;Infektionsdiagnostik Liquor
+VZML;Infektionsdiagnostik Liquor
+SONSTB;Sonstige Untersuchungen
+PCRTEXT;PCR (Inst. f. Virologie)
+ADV;PCR (Inst. f. Virologie)
+ADVN;PCR (Inst. f. Virologie)
+BKPCR;PCR (Inst. f. Virologie)
+BKIU;PCR (Inst. f. Virologie)
+BVPC;PCR (Inst. f. Virologie)
+CHIKV;PCR (Inst. f. Virologie)
+xCMPE;PCR (Inst. f. Virologie)
+CMPIU;PCR (Inst. f. Virologie)
+CMVRO;PCR (Inst. f. Virologie)
+CMPV;PCR (Inst. f. Virologie)
+DVPCR;PCR (Inst. f. Virologie)
+EBPC;PCR (Inst. f. Virologie)
+EBVA1;PCR (Inst. f. Virologie)
+EVCE;PCR (Inst. f. Virologie)
+EVPCR;PCR (Inst. f. Virologie)
+EVSEQ;PCR (Inst. f. Virologie)
+FIPE;PCR (Inst. f. Virologie)
+FIPU;PCR (Inst. f. Virologie)
+FSPCR;PCR (Inst. f. Virologie)
+GVPCR;PCR (Inst. f. Virologie)
+H6PCR;PCR (Inst. f. Virologie)
+H8PCR;PCR (Inst. f. Virologie)
+HAPE;PCR (Inst. f. Virologie)
+HAPU;PCR (Inst. f. Virologie)
+HAVPCR;PCR (Inst. f. Virologie)
+HBV;PCR (Inst. f. Virologie)
+HBVRO;PCR (Inst. f. Virologie)
+HBVGEN;PCR (Inst. f. Virologie)
+HCP;PCR (Inst. f. Virologie)
+HCPQ;PCR (Inst. f. Virologie)
+HCVCE;PCR (Inst. f. Virologie)
+HCVRO;PCR (Inst. f. Virologie)
+HCVGEN;PCR (Inst. f. Virologie)
+HDVPCR;PCR (Inst. f. Virologie)
+HEVPCR;PCR (Inst. f. Virologie)
+HIPE;PCR (Inst. f. Virologie)
+HIVCE;PCR (Inst. f. Virologie)
+HIVRO;PCR (Inst. f. Virologie)
+HI2PE;PCR (Inst. f. Virologie)
+HPVPCR;PCR (Inst. f. Virologie)
+HS1P;PCR (Inst. f. Virologie)
+HS2P;PCR (Inst. f. Virologie)
+HTLV1PCR;PCR (Inst. f. Virologie)
+HMPV;PCR (Inst. f. Virologie)
+IACE;PCR (Inst. f. Virologie)
+IACEX;PCR (Inst. f. Virologie)
+IAPCR;PCR (Inst. f. Virologie)
+IBCE;PCR (Inst. f. Virologie)
+IBCEX;PCR (Inst. f. Virologie)
+IBPCR;PCR (Inst. f. Virologie)
+IH1CE;PCR (Inst. f. Virologie)
+IH1PCR;PCR (Inst. f. Virologie)
+IH5PCR;PCR (Inst. f. Virologie)
+JCPCR;PCR (Inst. f. Virologie)
+JCIU;PCR (Inst. f. Virologie)
+KKVPCR;PCR (Inst. f. Virologie)
+LVPCR;PCR (Inst. f. Virologie)
+MAPCR;PCR (Inst. f. Virologie)
+NV1CE;PCR (Inst. f. Virologie)
+NV2CE;PCR (Inst. f. Virologie)
+NVPCR;PCR (Inst. f. Virologie)
+ST4PLEX;PCR (Inst. f. Virologie)
+ADVPS;PCR (Inst. f. Virologie)
+ASTRPS;PCR (Inst. f. Virologie)
+NVPS;PCR (Inst. f. Virologie)
+ROPS;PCR (Inst. f. Virologie)
+SAPS;PCR (Inst. f. Virologie)
+PBPCR;PCR (Inst. f. Virologie)
+PCRD;PCR (Inst. f. Virologie)
+PCRE;PCR (Inst. f. Virologie)
+PIVPCR;PCR (Inst. f. Virologie)
+PKVPCR;PCR (Inst. f. Virologie)
+RESP21;PCR (Inst. f. Virologie)
+IAFT;PCR (Inst. f. Virologie)
+IBFT;PCR (Inst. f. Virologie)
+IH1FT;PCR (Inst. f. Virologie)
+RHIFT;PCR (Inst. f. Virologie)
+COFT;PCR (Inst. f. Virologie)
+PIVFT;PCR (Inst. f. Virologie)
+HMPFT;PCR (Inst. f. Virologie)
+BOCFT;PCR (Inst. f. Virologie)
+RSVFT;PCR (Inst. f. Virologie)
+ADFT;PCR (Inst. f. Virologie)
+EVFT;PCR (Inst. f. Virologie)
+PVFT;PCR (Inst. f. Virologie)
+MPFT;PCR (Inst. f. Virologie)
+RHIPCR;PCR (Inst. f. Virologie)
+RSVCE;PCR (Inst. f. Virologie)
+RSVCEX;PCR (Inst. f. Virologie)
+RSVPCR;PCR (Inst. f. Virologie)
+RTVPCR;PCR (Inst. f. Virologie)
+SARS2;PCR (Inst. f. Virologie)
+SARSL2;PCR (Inst. f. Virologie)
+SARSL4;PCR (Inst. f. Virologie)
+TVPCR;PCR (Inst. f. Virologie)
+VZP;PCR (Inst. f. Virologie)
+WNV;PCR (Inst. f. Virologie)
+ZIKPCR;PCR (Inst. f. Virologie)
+BBPCR;PCR (Inst. f. Mikrobiologie)
+CPPCR;PCR (Inst. f. Mikrobiologie)
+CTPCR;PCR (Inst. f. Mikrobiologie)
+LISTPCR;PCR (Inst. f. Mikrobiologie)
+MPPCR;PCR (Inst. f. Mikrobiologie)
+QFPCR;PCR (Inst. f. Mikrobiologie)
+TXPCR;PCR (Inst. f. Mikrobiologie)
+ZKT;PCR (Inst. f. Mikrobiologie)
+ADAG;Antigen-Nachweise
+ADEI;Antigen-Nachweise
+ROAG;Antigen-Nachweise
+ASTRO;Antigen-Nachweise
+NORO12;Antigen-Nachweise
+ASPAG;Antigen-Nachweise
+CAAG;Antigen-Nachweise
+CLOI;Antigen-Nachweise
+CLPI;Antigen-Nachweise
+CLT;Antigen-Nachweise
+CLT2;Antigen-Nachweise
+CMEA;Antigen-Nachweise
+DVAG;Antigen-Nachweise
+HYPST;Antigen-Nachweise
+IAAG;Antigen-Nachweise
+IAI;Antigen-Nachweise
+IBAG;Antigen-Nachweise
+IBI;Antigen-Nachweise
+LEGAGU;Antigen-Nachweise
+PI1I;Antigen-Nachweise
+PI2I;Antigen-Nachweise
+PI3I;Antigen-Nachweise
+UPNAG;Antigen-Nachweise
+RSAG;Antigen-Nachweise
+RESI;Antigen-Nachweise
+VZI;Antigen-Nachweise
+-VADST;Antigen-Nachweise
+-VNORWA1;Antigen-Nachweise
+-VNORWA2;Antigen-Nachweise
+-VROST;Antigen-Nachweise
+SONSTLVER;Fremdversand
+SONSTLVERL;Fremdversand
+KCFREMDL;Fremdversand
+IAALE;Schnelltests (Inst. f. Virologie)
+IBALE;Schnelltests (Inst. f. Virologie)
+RSVALE;Schnelltests (Inst. f. Virologie)
+VI1TEXT;Kommentar
+VI2TEXT;Kommentar
+MATANG;Kommentar
+BELANG;Kommentar
+KCAN;Kommentar
+KCMA;Kommentar
+KCST;Kommentar
+0000;Kommentar
+VIDIA;Sonstige Angaben
+BSON;Sonstige Angaben
+ZDVALKC;Sonstige Angaben
+ZDVALMB;Sonstige Angaben
+ZDVALVI;Sonstige Angaben

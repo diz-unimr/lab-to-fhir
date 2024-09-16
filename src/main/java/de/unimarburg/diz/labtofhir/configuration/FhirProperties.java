@@ -35,16 +35,15 @@ public class FhirProperties {
         private String laboratorySystem;
         @NotNull
         private String laboratoryUnitSystem;
-
         @NotNull
-        private String labReportMetaSystem;
+        private String mapperTagSystem;
 
-        public String getLabReportMetaSystem() {
-            return labReportMetaSystem;
+        public String getMapperTagSystem() {
+            return mapperTagSystem;
         }
 
-        public void setLabReportMetaSystem(String labReportMetaSystem) {
-            this.labReportMetaSystem = labReportMetaSystem;
+        public void setMapperTagSystem(String mapperTagSystem) {
+            this.mapperTagSystem = mapperTagSystem;
         }
 
         public String getLaboratorySystem() {

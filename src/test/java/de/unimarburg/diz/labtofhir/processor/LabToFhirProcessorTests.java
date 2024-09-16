@@ -1,25 +1,25 @@
 package de.unimarburg.diz.labtofhir.processor;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.model.v22.message.ORU_R01;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
-import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
-import de.unimarburg.diz.labtofhir.mapper.LoincMapper;
-import de.unimarburg.diz.labtofhir.mapper.MiiLabReportMapper;
+import de.unimarburg.diz.labtofhir.configuration.KafkaConfiguration;
+import de.unimarburg.diz.labtofhir.mapper.AimLabMapper;
+import de.unimarburg.diz.labtofhir.mapper.Hl7LabMapper;
+import de.unimarburg.diz.labtofhir.serde.JsonSerdes;
 import org.hl7.fhir.r4.model.Coding;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+
+import java.io.IOException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
-@SpringBootTest(classes = {LabToFhirProcessor.class, MiiLabReportMapper.class,
-    LoincMapper.class, FhirConfiguration.class, MappingConfiguration.class})
-@TestPropertySource(properties = {"mapping.loinc.version=''",
-    "mapping.loinc.credentials.user=''",
-    "mapping.loinc.credentials.password=''",
-    "mapping.loinc.local=mapping-swl-loinc.zip"})
+@SpringBootTest(classes = {LabToFhirProcessor.class, AimLabMapper.class,
+    Hl7LabMapper.class, FhirConfiguration.class})
 
 public class LabToFhirProcessorTests extends BaseProcessorTests {
 
@@ -32,17 +32,17 @@ public class LabToFhirProcessorTests extends BaseProcessorTests {
 
     @SuppressWarnings("checkstyle:MagicNumber")
     @Test
-    public void observationIsLoincMapped() {
+    public void observationCodeIsMapped() {
         // build stream
-        try (var driver = buildStream(processor.process())) {
+        try (var driver = buildStream(processor.aim(),
+            JsonSerdes.laboratoryReport())) {
 
-            var labTopic = createInputTopic(driver);
+            var labTopic = createAimInputTopic(driver);
             var outputTopic = createOutputTopic(driver);
 
-            var labReport = createReport(42, new Coding()
-                .setSystem(fhirProperties
-                    .getSystems()
-                    .getLaboratorySystem())
+            var labReport = createReport(42, new Coding().setSystem(
+                    fhirProperties.getSystems()
+                        .getLaboratorySystem())
                 .setCode("NA"));
 
             // create input record
@@ -51,16 +51,37 @@ public class LabToFhirProcessorTests extends BaseProcessorTests {
             // get record from output topic
             var outputRecords = outputTopic.readRecordsToList();
 
-            var obsCodes = getObservationsCodes(outputRecords)
-                .findAny()
+            var obsCodes = getObservationsCodes(outputRecords).findAny()
                 .orElseThrow();
 
-            // assert both codings exist
-            assertThat(
-                obsCodes.hasCoding("http://loinc.org", "2951-2")).isTrue();
-            assertThat(obsCodes.hasCoding(fhirProperties
-                .getSystems()
+            // assert coding exists
+            assertThat(obsCodes.hasCoding(fhirProperties.getSystems()
                 .getLaboratorySystem(), "NA")).isTrue();
         }
+    }
+
+    @Test
+    public void hl7streamFiltersNull() throws HL7Exception, IOException {
+        // build stream
+        try (var driver = buildStream(processor.hl7(),
+            new KafkaConfiguration().hl7Serde())) {
+
+            var labTopic = createHl7InputTopic(driver);
+            var outputTopic = createOutputTopic(driver);
+
+            var msg = new ORU_R01();
+            msg.initQuickstart("ORU", "R01", "P");
+
+            // create input record
+            labTopic.pipeInput("hl7-msg", msg);
+
+            // get record from output topic
+            var outputRecords = outputTopic.readRecordsToList();
+
+            // assert filtered
+            assertThat(outputRecords).isEmpty();
+
+        }
+
     }
 }

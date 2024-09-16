@@ -1,0 +1,10 @@
+# default behavior: core.autocrlf
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.c text
+*.h text
+
+# hl7 line segments always end with CR
+*.hl7 text eol=crlf

@@ -1,12 +1,11 @@
 package de.unimarburg.diz.labtofhir.processor;
 
+import ca.uhn.hl7v2.model.v22.message.ORU_R01;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
-import de.unimarburg.diz.labtofhir.serde.JsonSerdes;
 import de.unimarburg.diz.labtofhir.serializer.FhirDeserializer;
 import de.unimarburg.diz.labtofhir.serializer.FhirSerializer;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Stream;
+import de.unimarburg.diz.labtofhir.serializer.Hl7Serializer;
+import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -31,6 +30,10 @@ import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Reference;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
 @SuppressWarnings("checkstyle:LineLength")
 abstract class BaseProcessorTests {
 
@@ -48,10 +51,16 @@ abstract class BaseProcessorTests {
             .map(Observation::getCode);
     }
 
-    TestInputTopic<String, LaboratoryReport> createInputTopic(
+    TestInputTopic<String, LaboratoryReport> createAimInputTopic(
         TopologyTestDriver driver) {
         return driver.createInputTopic("lab", new StringSerializer(),
             new JsonSerializer<>());
+    }
+
+    TestInputTopic<String, ORU_R01> createHl7InputTopic(
+        TopologyTestDriver driver) {
+        return driver.createInputTopic("lab", new StringSerializer(),
+            new Hl7Serializer<>());
     }
 
     TestOutputTopic<String, Bundle> createOutputTopic(
@@ -60,12 +69,13 @@ abstract class BaseProcessorTests {
             new FhirDeserializer<>(Bundle.class));
     }
 
-    TopologyTestDriver buildStream(
-        Function<KStream<String, LaboratoryReport>, KStream<String, Bundle>> processor) {
+    <T> TopologyTestDriver buildStream(
+        Function<KStream<String, T>, KStream<String, Bundle>> processor,
+        Serde<T> serde) {
         var builder = new StreamsBuilder();
-        final KStream<String, LaboratoryReport> labStream = builder.stream(
+        final KStream<String, T> labStream = builder.stream(
             "lab",
-            Consumed.with(Serdes.String(), JsonSerdes.laboratoryReport()));
+            Consumed.with(Serdes.String(), serde));
 
         processor
             .apply(labStream)
