@@ -66,7 +66,7 @@ The following environment variables can be set:
 | AIM_TOPIC                         | aim-lab                             | AIM input topic                                                          |
 | HL7_TOPIC                         | hl7-lab                             | HL7v2 input topic                                                        |
 | OUTPUT_TOPIC                      | lab-fhir                            | Topic to store result bundles                                            |
-| MAPPING_AIM_FILTER                |                                     | Filter expression for the `AIM_TOPIC`. See [Filters](#filters).          |                                          
+| MAPPING_AIM_FILTER                |                                     | Filter expression for the `AIM_TOPIC`. See [Filters](#filters).          |
 | MAPPING_HL7_FILTER                |                                     | Filter expression for the `HL7_TOPIC`. See [Filters](#filters).          |
 | CONSUMER_CONCURRENCY              | 3                                   | Number of concurrent Kafka consumer clients                              |
 | REPLICATION_FACTOR                | 3                                   | Output topic replication factor                                          |
