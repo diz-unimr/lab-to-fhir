@@ -1,17 +1,19 @@
-version: "3.7"
-
 services:
+
   lab-to-fhir:
     image: ghcr.io/diz-unimr/lab-to-fhir:latest
     environment:
-      SPRING_CLOUD_STREAM_BINDINGS_PROCESS_IN_0_DESTINATION: aim-lab
-      SPRING_CLOUD_STREAM_BINDINGS_PROCESS_OUT_0_DESTINATION: lab-fhir
-      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: ${KAFKA_BROKERS}
-      SECURITY_PROTOCOL: SSL
-      SSL_KEY_STORE_PASSWORD: ${SSL_KEY_STORE_PASSWORD}
-      SSL_TRUST_STORE_PASSWORD: ${SSL_TRUST_STORE_PASSWORD}
+      AIM_TOPIC: aim-lab
+      HL7_TOPIC: hl7-lab
+      OUTPUT_TOPIC: lab-test
+      LOG_LEVEL: info
+      MAPPING_AIM_FILTER: "<2022-01-01"
+      MAPPING_HL7_FILTER: ">=2022-01-01"
+      CONSUMER_CONCURRENCY: 3
+      REPLICATION_FACTOR: 3
+      MIN_PARTITION_COUNT: 3
     ports:
-      - "${WEB_PORT:-8090}:8080"
+      - "${LAB_WEB_PORT}:8080"
     volumes:
-      - ${SSL_KEYSTORE_LOCATION}:/opt/lab-to-fhir/ssl/keystore.jks
-      - ${SSL_TRUSTSTORE_LOCATION}:/opt/lab-to-fhir/ssl/truststore.jks
+      - ${LAB_SSL_KEY_STORE_LOCATION}:/opt/lab-to-fhir/ssl/keystore.jks
+      - ${LAB_SSL_TRUST_STORE_LOCATION}:/opt/lab-to-fhir/ssl/truststore.jks

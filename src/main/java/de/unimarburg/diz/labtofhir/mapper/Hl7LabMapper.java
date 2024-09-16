@@ -106,10 +106,10 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
             mapPatient(msg, bundle);
             mapEncounter(msg, bundle);
 
-        } catch (Exception e) {
+        } catch (HL7Exception e) {
             log.error(
                 "Mapping failed for HL7 message with [id={}], "
-                    + "[order-number={}]", msgId, orderId);
+                    + "[order-number={}]", msgId, orderId, e);
 
             return null;
         }
@@ -352,7 +352,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     }
 
     private DiagnosticReport mapDiagnosticReport(ORU_R01 msg)
-        throws DataTypeException {
+        throws HL7Exception {
         // id
         var reportId = getOrderNumber(msg);
 
@@ -466,11 +466,16 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     }
 
     private DiagnosticReport.DiagnosticReportStatus parseResultStatus(
-        ORU_R01 msg) {
+        ORU_R01 msg) throws HL7Exception {
 
-        return switch (msg.getPATIENT_RESULT().getORDER_OBSERVATION()
+        var status = msg.getPATIENT_RESULT().getORDER_OBSERVATION()
             .getOBR()
-            .getResultStatus().getValue()) {
+            .getResultStatus();
+        if (status.isEmpty()) {
+            return DiagnosticReport.DiagnosticReportStatus.UNKNOWN;
+        }
+
+        return switch (status.getValue()) {
             case "O", "I", "S" ->
                 DiagnosticReport.DiagnosticReportStatus.REGISTERED;
             case "P" -> DiagnosticReport.DiagnosticReportStatus.PRELIMINARY;
