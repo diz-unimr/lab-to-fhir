@@ -1,5 +1,4 @@
 services:
-
   lab-to-fhir:
     image: ghcr.io/diz-unimr/lab-to-fhir:latest
     environment:
