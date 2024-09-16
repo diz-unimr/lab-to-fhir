@@ -2,19 +2,21 @@ package de.unimarburg.diz.labtofhir.serde;
 
 import ca.uhn.hl7v2.model.v22.message.ORU_R01;
 import de.unimarburg.diz.labtofhir.serializer.Hl7Deserializer;
+import de.unimarburg.diz.labtofhir.serializer.Hl7Serializer;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class Hl7DeserializerTests {
+public class Hl7SerdeTests {
 
 
     @SuppressWarnings("checkstyle:LineLength")
     @Test
-    public void deserializeHl7() {
+    void deserializeHl7() {
         var msg = """
             MSH|^~\\&|SWISSLAB|KLIN|DBSERV||20220702120811|LAB|ORU^R01|test-msg.000010|P|2.2|||AL|NE\r
             PID|||123456||Tester^Test||19811029000000|M\r
@@ -67,12 +69,32 @@ public class Hl7DeserializerTests {
     }
 
     @Test
-    public void deserializeNull() {
+    void deserializeNull() {
         try (var deserializer = new Hl7Deserializer<>()) {
             var actual = deserializer.deserialize(null,
                 null);
 
             assertThat(actual).isNull();
+        }
+    }
+
+    @Test
+    void deserializeErrorThrowsRuntimeException() {
+        try (var deserializer = new Hl7Deserializer<>()) {
+            assertThatThrownBy(() ->
+                deserializer.deserialize(null,
+                    "null".getBytes(StandardCharsets.UTF_8))
+            ).isInstanceOf(RuntimeException.class);
+        }
+    }
+
+    @Test
+    void serializeErrorThrowsRuntimeException() {
+        try (var serializer = new Hl7Serializer<>()) {
+            assertThatThrownBy(() ->
+                serializer.serialize(null,
+                    new ORU_R01())
+            ).isInstanceOf(RuntimeException.class);
         }
     }
 }
