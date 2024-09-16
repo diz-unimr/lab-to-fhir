@@ -74,7 +74,7 @@ public class Hl7LabMapperTests {
             1);
         assertThat(
             bundle.getEntry().stream().map(BundleEntryComponent::getResource)
-                .filter(Observation.class::isInstance).count()).isEqualTo(8);
+                .filter(Observation.class::isInstance).count()).isEqualTo(9);
     }
 
     private Message getTestReport(Resource testReport)
