@@ -106,7 +106,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
             mapPatient(msg, bundle);
             mapEncounter(msg, bundle);
 
-        } catch (HL7Exception e) {
+        } catch (HL7Exception | RuntimeException e) {
             log.error(
                 "Mapping failed for HL7 message with [id={}], "
                     + "[order-number={}]", msgId, orderId, e);
@@ -410,7 +410,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     }
 
     private ServiceRequest mapServiceRequest(ORU_R01 msg)
-        throws DataTypeException {
+        throws HL7Exception {
         // id
         var requestId = getRequestNumber(msg);
 
@@ -450,11 +450,17 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     }
 
     private ServiceRequest.ServiceRequestStatus parseOrderStatus(ORU_R01
-                                                                     msg) {
+                                                                     msg)
+        throws HL7Exception {
 
-        return switch (msg.getPATIENT_RESULT().getORDER_OBSERVATION()
+        var status = msg.getPATIENT_RESULT().getORDER_OBSERVATION()
             .getORC()
-            .getOrderStatus().getValue()) {
+            .getOrderStatus();
+        if (status.isEmpty()) {
+            return ServiceRequest.ServiceRequestStatus.UNKNOWN;
+        }
+
+        return switch (status.getValue()) {
             case "A", "IP" -> ServiceRequest.ServiceRequestStatus.ACTIVE;
             case "CM", "DC" -> ServiceRequest.ServiceRequestStatus.COMPLETED;
             case "HD" -> ServiceRequest.ServiceRequestStatus.ONHOLD;
@@ -490,7 +496,11 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
     @SuppressWarnings("checkstyle:LineLength")
     private Observation.ObservationStatus parseObservationStatus(
-        OBX obx) {
+        OBX obx) throws HL7Exception {
+
+        if (obx.getObservationResultStatus().isEmpty()) {
+            return Observation.ObservationStatus.UNKNOWN;
+        }
 
         return switch (obx.getObservationResultStatus().getValue()) {
 
