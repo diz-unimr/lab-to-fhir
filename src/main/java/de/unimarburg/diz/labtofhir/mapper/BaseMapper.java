@@ -160,6 +160,12 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
         return serviceRequestCode;
     }
 
+    protected Reference getObservationsReference(Observation obs) {
+        return new Reference(
+            getConditionalReference(ResourceType.Observation,
+                obs.getIdentifierFirstRep()));
+    }
+
     protected void addResourceToBundle(Bundle bundle, DomainResource resource,
                                        Identifier identifier) {
 

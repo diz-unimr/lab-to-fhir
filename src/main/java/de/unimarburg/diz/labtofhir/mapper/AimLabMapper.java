@@ -72,7 +72,7 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
             var mappedReport = mapDiagnosticReport(report.getResource(), bundle)
 
                 // observations
-                .setResult((report.getObservations()
+                .setResult(report.getObservations()
                     .stream()
                     // map observations
                     .map(this::mapObservation)
@@ -81,9 +81,8 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                     .peek(o -> addResourceToBundle(bundle, o,
                         o.getIdentifierFirstRep()))
                     // set result references
-                    .map(o -> new Reference(
-                        getConditionalReference(ResourceType.Observation,
-                            o.getId())))).collect(Collectors.toList()));
+                    .map(this::getObservationsReference)
+                    .toList());
 
             if (mappedReport.getResult()
                 .isEmpty()) {

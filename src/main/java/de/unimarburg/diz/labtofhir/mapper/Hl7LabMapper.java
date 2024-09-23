@@ -95,6 +95,11 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
             var report = mapDiagnosticReport(msg);
             var obs = mapObservations(msg);
 
+            // set report result
+            report.setResult(
+                obs.stream().map(this::getObservationsReference).toList());
+
+            // add resources to bundle
             addResourceToBundle(bundle, request,
                 request.getIdentifierFirstRep());
             addResourceToBundle(bundle, report,
