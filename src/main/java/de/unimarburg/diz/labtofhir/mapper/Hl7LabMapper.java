@@ -367,7 +367,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                                 "http://terminology.hl7.org/CodeSystem/v2-0203")
                             .setCode("FILL"))))
                     .setSystem(fhirProperties().getSystems()
-                        .getServiceRequestId()).setValue(reportId)
+                        .getDiagnosticReportId()).setValue(reportId)
                     .setAssigner(
                         new Reference().setIdentifier(identifierAssigner())))
 
