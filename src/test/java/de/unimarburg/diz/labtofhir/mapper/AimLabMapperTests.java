@@ -21,6 +21,7 @@ import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.SimpleQuantity;
 import org.hl7.fhir.r4.model.StringType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -129,6 +130,18 @@ public class AimLabMapperTests {
                 x -> assertThat(x).satisfies(
                         y -> assertThat(y.getMethod()).isEqualTo(HTTPVerb.PUT))
                     .satisfies(z -> assertThat(z.getUrl()).isNotBlank()));
+    }
+
+    @Test
+    void parseReferenceRangeSupportsSingleBounds() {
+        var textRange = "-<90";
+
+        var refRange = mapper.parseReferenceRange(textRange, new Quantity());
+
+        assertThat(refRange.hasLow()).isFalse();
+        assertThat(refRange.hasHigh()).isTrue();
+        assertThat(refRange.getHigh()).usingRecursiveComparison().isEqualTo(
+            new SimpleQuantity().setValue(90.0));
     }
 
     private LaboratoryReport createDummyReport() {

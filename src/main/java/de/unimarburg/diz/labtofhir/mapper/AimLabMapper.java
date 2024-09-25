@@ -26,6 +26,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -205,14 +206,26 @@ public class AimLabMapper extends BaseMapper<LaboratoryReport> {
                         .collect(Collectors.toList())))
                 .collect(Collectors.toList()))
             // map reference range to simple quantity with value only
-            .setReferenceRange(source.getReferenceRange()
-                .stream()
-                .map(this::harmonizeRangeQuantities)
-                .collect(Collectors.toList()))
+            .setReferenceRange(getReferenceRange(source))
             // note
             .setNote(source.getNote());
 
         return obs;
+    }
+
+    private List<ObservationReferenceRangeComponent> getReferenceRange(
+        Observation obs) {
+
+        // already mapped; set code system
+        return obs.getReferenceRange().stream().map(refRange -> {
+
+            if (refRange.hasLow() || refRange.hasHigh()) {
+                return harmonizeRangeQuantities(refRange);
+            }
+
+            // parse
+            return parseReferenceRange(refRange.getText(), obs.getValue());
+        }).filter(Objects::nonNull).toList();
     }
 
     private ObservationReferenceRangeComponent harmonizeRangeQuantities(

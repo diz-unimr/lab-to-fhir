@@ -22,6 +22,8 @@ import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
+import org.hl7.fhir.r4.model.SimpleQuantity;
+import org.hl7.fhir.r4.model.Type;
 
 import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
@@ -287,6 +289,8 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
             return null;
         }
 
+        value = value.trim();
+
         if (NumberUtils.isCreatable(value)) {
             return new Quantity(
                 NumberUtils.createDouble(value));
@@ -326,5 +330,57 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
             .setValue(id)
             .setAssigner(new Reference()
                 .setIdentifier(identifierAssigner())));
+    }
+
+    protected Observation.ObservationReferenceRangeComponent
+    parseReferenceRange(String rangeString, Type value) {
+
+        if (rangeString == null) {
+            return null;
+        }
+
+        var refRange =
+            new Observation.ObservationReferenceRangeComponent().setText(
+                rangeString);
+
+        // fix trim on open bounded reference string
+        if (rangeString.startsWith("-")) {
+            rangeString = " " + rangeString;
+        } else if (rangeString.endsWith("-")) {
+            rangeString = rangeString + " ";
+        }
+
+        var parts = rangeString.split("-", 2);
+
+        if (parts.length == 2 && value instanceof Quantity q) {
+            var left = parts[0];
+            var right = parts[1];
+
+            // set code and system according to its quantity value
+            var low = parseQuantity(left);
+            var high = parseQuantity(right);
+
+            // lower and higher bounds need to be empty or quantity
+            if ((low == null && !StringUtils.isBlank(left))
+                || (high == null && !StringUtils.isBlank(right))) {
+                return refRange;
+            }
+
+            // SimpleQuantity does not allow comparator (sqty-1)
+            if (low != null) {
+                refRange.setLow(
+                    new SimpleQuantity().setValue(low.getValue())
+                        .setSystem(q.getSystem()).setCode(q.getCode())
+                        .setUnit(q.getUnit()));
+            }
+            if (high != null) {
+                refRange.setHigh(
+                    new SimpleQuantity().setValue(high.getValue())
+                        .setSystem(q.getSystem()).setCode(q.getCode())
+                        .setUnit(q.getUnit()));
+            }
+        }
+
+        return refRange;
     }
 }

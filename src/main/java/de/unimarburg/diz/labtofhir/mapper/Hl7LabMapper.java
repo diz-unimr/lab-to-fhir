@@ -24,7 +24,6 @@ import org.hl7.fhir.r4.model.Quantity;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.ServiceRequest;
-import org.hl7.fhir.r4.model.SimpleQuantity;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.codesystems.V3ObservationInterpretation;
@@ -185,7 +184,9 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                 // interpretation
                 .setInterpretation(parseInterpretation(obx))
                 // map reference range to simple quantity with value only
-                .setReferenceRange(parseReferenceRange(obx, obs.getValue()))
+                .setReferenceRange(Optional.ofNullable(
+                    parseReferenceRange(obx.getReferencesRange().getValue(),
+                        obs.getValue())).map(List::of).orElse(null))
 
                 // note
                 .setNote(Arrays.stream(nte.getComment())
@@ -197,45 +198,6 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         }
 
         return result;
-    }
-
-
-    @SuppressWarnings("checkstyle:LineLength")
-    private List<Observation.ObservationReferenceRangeComponent>
-    parseReferenceRange(
-        OBX obx, Type value) {
-
-        var rangeString = obx.getReferencesRange().getValue();
-        if (rangeString == null) {
-            return List.of();
-        }
-        var refRange =
-            new Observation.ObservationReferenceRangeComponent().setText(
-                rangeString);
-
-        var parts = rangeString.split(" - ", 2);
-
-        if (parts.length == 2 && value instanceof Quantity q) {
-            // set code and system according to its quantity value
-            var low = parseQuantity(parts[0]);
-            var high = parseQuantity(parts[1]);
-
-            // SimpleQuantity does not allow comparator (sqty-1)
-            if (low != null) {
-                refRange.setLow(
-                    new SimpleQuantity().setValue(low.getValue())
-                        .setSystem(q.getSystem()).setCode(q.getCode())
-                        .setUnit(q.getUnit()));
-            }
-            if (high != null) {
-                refRange.setHigh(
-                    new SimpleQuantity().setValue(high.getValue())
-                        .setSystem(q.getSystem()).setCode(q.getCode())
-                        .setUnit(q.getUnit()));
-            }
-        }
-
-        return List.of(refRange);
     }
 
     private List<CodeableConcept> parseInterpretation(OBX obx) {
