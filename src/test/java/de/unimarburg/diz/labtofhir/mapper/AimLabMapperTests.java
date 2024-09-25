@@ -132,6 +132,7 @@ public class AimLabMapperTests {
                     .satisfies(z -> assertThat(z.getUrl()).isNotBlank()));
     }
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     @Test
     void parseReferenceRangeSupportsSingleBounds() {
         var textRange = "-<90";
