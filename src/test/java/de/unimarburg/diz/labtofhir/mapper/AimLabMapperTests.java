@@ -41,7 +41,6 @@ import java.util.stream.StreamSupport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SuppressWarnings("CheckStyle")
 @SpringBootTest(classes = {AimLabMapper.class, FhirConfiguration.class,
     MappingConfiguration.class})
 public class AimLabMapperTests {
@@ -59,6 +58,7 @@ public class AimLabMapperTests {
     @Autowired
     private FhirContext fhirContext;
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     private static Stream<Arguments> parseRefRangeCases() {
         return Stream.of(
             Arguments.of("- <90", null, new SimpleQuantity().setValue(90.0)),
