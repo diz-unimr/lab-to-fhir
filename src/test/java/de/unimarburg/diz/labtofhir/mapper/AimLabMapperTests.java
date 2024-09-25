@@ -25,6 +25,9 @@ import org.hl7.fhir.r4.model.SimpleQuantity;
 import org.hl7.fhir.r4.model.StringType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,10 +36,12 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("CheckStyle")
 @SpringBootTest(classes = {AimLabMapper.class, FhirConfiguration.class,
     MappingConfiguration.class})
 public class AimLabMapperTests {
@@ -53,6 +58,16 @@ public class AimLabMapperTests {
     private AimLabMapper mapper;
     @Autowired
     private FhirContext fhirContext;
+
+    private static Stream<Arguments> parseRefRangeCases() {
+        return Stream.of(
+            Arguments.of("- <90", null, new SimpleQuantity().setValue(90.0)),
+            Arguments.of(">10-", new SimpleQuantity().setValue(10.0), null),
+            Arguments.of("text10-9", null, null),
+            Arguments.of("1 - test", null, null)
+        );
+    }
+
 
     @Disabled("TODO move validation to processor tests")
     @Test
@@ -132,17 +147,28 @@ public class AimLabMapperTests {
                     .satisfies(z -> assertThat(z.getUrl()).isNotBlank()));
     }
 
-    @SuppressWarnings("checkstyle:MagicNumber")
-    @Test
-    void parseReferenceRangeSupportsSingleBounds() {
-        var textRange = "-<90";
+    @ParameterizedTest
+    @MethodSource("parseRefRangeCases")
+    void parseReferenceRangeSupportsSingleBounds(String textRange,
+                                                 SimpleQuantity expectedLow,
+                                                 SimpleQuantity expectedHigh) {
 
         var refRange = mapper.parseReferenceRange(textRange, new Quantity());
 
-        assertThat(refRange.hasLow()).isFalse();
-        assertThat(refRange.hasHigh()).isTrue();
-        assertThat(refRange.getHigh()).usingRecursiveComparison().isEqualTo(
-            new SimpleQuantity().setValue(90.0));
+        // low
+        if (expectedLow == null) {
+            assertThat(refRange.hasLow()).isFalse();
+        } else {
+            assertThat(refRange.getLow()).usingRecursiveComparison()
+                .isEqualTo(expectedLow);
+        }
+        // high
+        if (expectedHigh == null) {
+            assertThat(refRange.hasHigh()).isFalse();
+        } else {
+            assertThat(refRange.getHigh()).usingRecursiveComparison()
+                .isEqualTo(expectedHigh);
+        }
     }
 
     private LaboratoryReport createDummyReport() {
