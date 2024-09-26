@@ -115,10 +115,7 @@ public class Hl7LabMapperTests {
     void parseValueMapsNumericRangeToString() throws HL7Exception, IOException {
 
         var msg = """
-            MSH|^~\\&|SWISSLAB|KLIN|DBSERV||20220702120811|LAB|ORU^R01|test-msg.000010|P|2.2|||AL|NE\r
-            PID|||123456||Tester^Test||19811029000000|M\r
-            PV1|||GYN||||||||||||||||23651159\r
-            ORC|RE|20220702_88888888|||IP||||20220702120811\r
+            MSH|^~\\&|SWISSLAB|KLIN|DBSERV||20220702120811|LAB|ORU^R01|test-msg.000000|P|2.2|||AL|NE\r
             OBR|1|20220702_88888888|||||20220702120811||||||||||||||||||F\r
             OBX|1|NM|CMG^Cytomegalievirus IgG||3-9|AU/ml| - <6||||F
             """;
