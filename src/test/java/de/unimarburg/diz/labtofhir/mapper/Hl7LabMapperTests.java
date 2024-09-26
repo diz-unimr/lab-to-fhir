@@ -6,6 +6,7 @@ import ca.uhn.hl7v2.model.v22.message.ORU_R01;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
 import de.unimarburg.diz.labtofhir.configuration.KafkaConfiguration;
 import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
+import de.unimarburg.diz.labtofhir.serializer.Hl7Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.DiagnosticReport;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -106,6 +108,31 @@ public class Hl7LabMapperTests {
             new DateFilter(LocalDate.parse("2022-02-22"), comp));
 
         assertThat(filter.test(msg)).isEqualTo(expected);
+    }
+
+    @SuppressWarnings("checkstyle:LineLength")
+    @Test
+    void parseValueMapsNumericRangeToString() throws HL7Exception, IOException {
+
+        var msg = """
+            MSH|^~\\&|SWISSLAB|KLIN|DBSERV||20220702120811|LAB|ORU^R01|test-msg.000010|P|2.2|||AL|NE\r
+            PID|||123456||Tester^Test||19811029000000|M\r
+            PV1|||GYN||||||||||||||||23651159\r
+            ORC|RE|20220702_88888888|||IP||||20220702120811\r
+            OBR|1|20220702_88888888|||||20220702120811||||||||||||||||||F\r
+            OBX|1|NM|CMG^Cytomegalievirus IgG||3-9|AU/ml| - <6||||F
+            """;
+
+        try (var deserializer = new Hl7Deserializer<>()) {
+            var oru = (ORU_R01) deserializer.deserialize(null,
+                msg.getBytes(StandardCharsets.UTF_8));
+            var obx =
+                oru.getPATIENT_RESULT().getORDER_OBSERVATION().getOBSERVATION()
+                    .getOBX();
+            var actual = mapper.parseValue(obx);
+
+            assertThat(actual.primitiveValue()).isEqualTo("3-9");
+        }
     }
 
 }

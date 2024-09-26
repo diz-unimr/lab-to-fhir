@@ -249,7 +249,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         return components;
     }
 
-    private Type parseValue(OBX obx) throws HL7Exception {
+    Type parseValue(OBX obx) throws HL7Exception {
 
         var valueType = obx.getValueType();
         var value = obx.getObservationValue();
@@ -262,6 +262,13 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         return switch (valueType.getValue()) {
             case "NM" -> {
                 var valueNumeric = (NM) value.getData();
+
+                // numeric could be a numeric range here, which is not
+                // supported -> map to string instead
+                if (!NumberUtils.isCreatable(valueNumeric.getValue())) {
+                    yield new StringType(valueNumeric.getValue());
+                }
+
                 yield new Quantity(
                     NumberUtils.createDouble(valueNumeric.getValue()))
                     .setUnit(unit).setSystem(fhirProperties().getSystems()
@@ -288,7 +295,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                 yield new StringType(valueString);
             }
 
-            default -> null;
+            default -> new StringType(valueType.getValue());
         };
     }
 
