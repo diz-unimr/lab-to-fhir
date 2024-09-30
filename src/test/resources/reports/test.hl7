@@ -13,6 +13,7 @@ OBX|1|NM|EBVA^Epstein-Barr-Virus VCA-IgG||40.56~positiv|S/CO|0.75 - <1.00|H|||F
 OBR|5|20190417_55555555|||||20190417111000||||||||||||||||||F
 OBX|1|NM|EBEA^Epstein-Barr-Virus EBNA IgG||20.95~positiv|S/CO|0.50 - <1.00|H|||F
 NTE|1||Beurteilung: abgelaufene Infektion
+NTE|2||Test
 OBR|6|20190417_55555555|||||20190417111000||||||||||||||||||R
 OBX|1|NM|APTT^aPTT||31|sec|23 - 38||||R
 OBR|7|20190417_55555555|||||20190417111000||||||||||||||||||F
