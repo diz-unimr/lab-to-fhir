@@ -138,7 +138,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
             var obr = order.getOBR();
             var obx = order.getOBSERVATION().getOBX();
-            var nte = order.getOBSERVATION().getNTE();
+            var nte = order.getOBSERVATION().getNTEAll();
 
             // code
             var code =
@@ -189,9 +189,10 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                         obs.getValue())).map(List::of).orElse(null))
 
                 // note
-                .setNote(Arrays.stream(nte.getComment())
-                    .map(n -> new Annotation().setText(n.getValue()))
-                    .toList());
+                .setNote(
+                    nte.stream().flatMap(n -> Arrays.stream(n.getComment()))
+                        .map(c -> new Annotation().setText(c.getValue()))
+                        .toList());
 
             result.add(obs);
 
