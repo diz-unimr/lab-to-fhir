@@ -112,7 +112,7 @@ public class Hl7LabMapperTests {
 
     @SuppressWarnings("checkstyle:LineLength")
     @Test
-    void parseValueMapsNumericRangeToString() throws HL7Exception, IOException {
+    void parseValueMapsNumericRangeToString() throws HL7Exception {
 
         var msg = """
             MSH|^~\\&|SWISSLAB|KLIN|DBSERV||20220702120811|LAB|ORU^R01|test-msg.000000|P|2.2|||AL|NE\r
@@ -129,6 +129,31 @@ public class Hl7LabMapperTests {
             var actual = mapper.parseValue(obx);
 
             assertThat(actual.primitiveValue()).isEqualTo("3-9");
+        }
+    }
+
+    @SuppressWarnings("checkstyle:LineLength")
+    @Test
+    void duplicateObservationCodesAreMapped() throws HL7Exception {
+
+        var msg = """
+            MSH|^~\\&|SWISSLAB|KLIN|DBSERV||20220702120811|LAB|ORU^R01|test-msg.000000|P|2.2|||AL|NE\r
+            OBR|1|20220702_88888888|||||20220702120811||||||||||||||||||F\r
+            OBX|1|ST|HST^Harnstoff||folgt||||||I\r
+            OBR|2|20220702_88888888|||||20220702120811||||||||||||||||||F\r
+            OBX|2|ST|HST^Harnstoff||folgt||||||I
+            """;
+
+        try (var deserializer = new Hl7Deserializer<>()) {
+            var oru = (ORU_R01) deserializer.deserialize(null,
+                msg.getBytes(StandardCharsets.UTF_8));
+            var actual = mapper.mapObservations(oru);
+
+            assertThat(actual).hasSize(2);
+            // observations have different identifier values
+            assertThat(
+                actual.get(0).getIdentifierFirstRep().getValue()).isNotEqualTo(
+                actual.get(1).getIdentifierFirstRep().getValue());
         }
     }
 

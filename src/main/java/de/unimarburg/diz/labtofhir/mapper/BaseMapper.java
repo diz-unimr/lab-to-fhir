@@ -174,8 +174,6 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
         var idElement = resource.getIdElement()
             .getValue();
         bundle.addEntry()
-            .setFullUrl(resource.getResourceType()
-                .name() + "/" + idElement)
             .setResource(resource)
             .setRequest(
                 new Bundle.BundleEntryRequestComponent().setMethod(
