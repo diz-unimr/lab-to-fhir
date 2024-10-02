@@ -127,7 +127,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         return bundle;
     }
 
-    private List<Observation> mapObservations(ORU_R01 msg) throws
+    List<Observation> mapObservations(ORU_R01 msg) throws
         HL7Exception {
 
         var result = new ArrayList<Observation>();
@@ -158,9 +158,25 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                         .getValueAsDate());
 
             // identifier
-            var identifierValue =
+            var obsId =
                 createObsId(msg.getMSH().getSendingApplication().getValue(),
                     getRequestNumber(msg), code, effective);
+            // check duplicate
+            var dup =
+                result.stream()
+                    .filter(o -> o.getIdentifierFirstRep().getValue()
+                        .equals(obsId)).count();
+            // check duplicates
+            String identifierValue;
+            if (dup > 0) {
+                identifierValue =
+                    createObsId(msg.getMSH().getSendingApplication().getValue(),
+                        getRequestNumber(msg), String.format("%s_%d", code,
+                            dup),
+                        effective);
+            } else {
+                identifierValue = obsId;
+            }
 
             var obs = createObservation(identifierValue);
 
