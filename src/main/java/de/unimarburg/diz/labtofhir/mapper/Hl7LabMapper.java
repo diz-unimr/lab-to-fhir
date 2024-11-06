@@ -5,7 +5,6 @@ import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.DataTypeException;
 import ca.uhn.hl7v2.model.v22.datatype.NM;
 import ca.uhn.hl7v2.model.v22.datatype.ST;
-import ca.uhn.hl7v2.model.v22.group.ORU_R01_ORDER_OBSERVATION;
 import ca.uhn.hl7v2.model.v22.message.ORU_R01;
 import ca.uhn.hl7v2.model.v22.segment.OBX;
 import de.unimarburg.diz.labtofhir.configuration.FhirProperties;
@@ -134,7 +133,9 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
         var orderObs = msg.getPATIENT_RESULT().getORDER_OBSERVATIONAll();
 
-        for (ORU_R01_ORDER_OBSERVATION order : orderObs) {
+//        for (ORU_R01_ORDER_OBSERVATION order : orderObs) {
+        for (int i = 0; i < orderObs.size(); i++) {
+            var order = orderObs.get(i);
 
             var obr = order.getOBR();
             var obx = order.getOBSERVATION().getOBX();
@@ -172,7 +173,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                 identifierValue =
                     createObsId(msg.getMSH().getSendingApplication().getValue(),
                         getRequestNumber(msg), String.format("%s_%d", code,
-                            dup),
+                            i),
                         effective);
             } else {
                 identifierValue = obsId;
@@ -317,8 +318,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     }
 
     private String createObsId(String sendingApplication, String
-        requestNumber,
-                               String code, DateTimeType effective) {
+        requestNumber, String code, DateTimeType effective) {
         // conforms to id generation from Synedra AIM FHIR mapping
         // i.e. msg.get('MSH.3')+'_'+msg.get('OBR.2') + "_" + msg.get("OBX.3.1")
         return createId(null, String.format("%s_%s_%s", sendingApplication,

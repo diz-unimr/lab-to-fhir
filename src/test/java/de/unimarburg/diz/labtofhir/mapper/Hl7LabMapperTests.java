@@ -141,7 +141,9 @@ public class Hl7LabMapperTests {
             OBR|1|bla|||||20240702120811||||||||||||||||||F\r
             OBX|1|ST|HST^Harnstoff||folgt||||||I\r
             OBR|2|bla|||||20240702120811||||||||||||||||||F\r
-            OBX|2|ST|HST^Harnstoff||folgt||||||I
+            OBX|1|ST|HST^Harnstoff||folgt||||||I\r
+            OBR|3|bla|||||20240702120811||||||||||||||||||F\r
+            OBX|1|ST|HST^Harnstoff||folgt||||||I
             """;
 
         try (var deserializer = new Hl7Deserializer<>()) {
@@ -149,11 +151,11 @@ public class Hl7LabMapperTests {
                 msg.getBytes(StandardCharsets.UTF_8));
             var actual = mapper.mapObservations(oru);
 
-            assertThat(actual).hasSize(2);
+            assertThat(actual).hasSize(3);
             // observations have different identifier values
-            assertThat(
-                actual.get(0).getIdentifierFirstRep().getValue()).isNotEqualTo(
-                actual.get(1).getIdentifierFirstRep().getValue());
+            assertThat(actual).extracting(
+                    o -> o.getIdentifierFirstRep().getValue())
+                .doesNotHaveDuplicates();
         }
     }
 
