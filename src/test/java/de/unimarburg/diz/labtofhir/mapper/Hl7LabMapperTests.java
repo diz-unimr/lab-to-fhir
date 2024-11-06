@@ -132,7 +132,7 @@ public class Hl7LabMapperTests {
         }
     }
 
-    @SuppressWarnings("checkstyle:LineLength")
+    @SuppressWarnings({"checkstyle:LineLength", "checkstyle:MagicNumber"})
     @Test
     void duplicateObservationCodesAreMapped() throws HL7Exception {
 
