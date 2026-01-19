@@ -53,7 +53,7 @@ dependencies {
     implementation "ca.uhn.hapi:hapi-structures-v22:2.5.1"
 
     // mapper
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.16.1'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.21.0'
 
     // unit tests
     testImplementation 'org.apache.kafka:kafka-streams-test-utils:3.6.1'
