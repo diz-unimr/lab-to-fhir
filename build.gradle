@@ -19,8 +19,8 @@ repositories {
 
 ext {
     set('springBootVersion', "3.2.3")
-    set('springCloudDepsVersion', "2023.0.0")
-    set('springCloudStreamVersion', "4.1.0")
+    set('springCloudDepsVersion', "2023.0.6")
+    set('springCloudStreamVersion', "4.3.1")
     set('springKafkaVersion', "3.1.1")
     set("hapiFhirVersion", "6.10.5")
 }
