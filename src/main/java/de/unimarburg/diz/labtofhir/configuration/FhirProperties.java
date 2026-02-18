@@ -9,13 +9,14 @@ import org.springframework.validation.annotation.Validated;
 public class FhirProperties {
 
     private final Systems systems = new Systems();
+    private final Profile profile = new Profile();
 
     public Systems getSystems() {
         return systems;
     }
+    public Profile getProfile() { return profile; }
 
     public static class Systems {
-
 
         @NotNull
         private String serviceRequestId;
@@ -116,6 +117,39 @@ public class FhirProperties {
 
         public void setLaboratoryUnitSystem(String laboratoryUnitSystem) {
             this.laboratoryUnitSystem = laboratoryUnitSystem;
+        }
+    }
+
+    public static class Profile {
+        @NotNull
+        private String observation;
+        @NotNull
+        private String serviceRequest;
+        @NotNull
+        private String diagnosticReport;
+
+        public String getObservation() {
+            return observation;
+        }
+
+        public void setObservation(String observation) {
+            this.observation = observation;
+        }
+
+        public String getServiceRequest() {
+            return serviceRequest;
+        }
+
+        public void setServiceRequest(String serviceRequest) {
+            this.serviceRequest = serviceRequest;
+        }
+
+        public String getDiagnosticReport() {
+            return diagnosticReport;
+        }
+
+        public void setDiagnosticReport(String diagnosticReport) {
+            this.diagnosticReport = diagnosticReport;
         }
     }
 }
