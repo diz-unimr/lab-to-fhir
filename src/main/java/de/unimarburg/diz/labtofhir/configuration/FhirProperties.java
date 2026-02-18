@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 public class FhirProperties {
 
     private final Systems systems = new Systems();
+
     private final Profile profile = new Profile();
 
     public Systems getSystems() {
