@@ -72,9 +72,9 @@ The following environment variables can be set:
 | REPLICATION_FACTOR                | 3                                                                                                                     | Output topic replication factor                                          |
 | MIN_PARTITION_COUNT               | 3                                                                                                                     | Number of minimum partitions for the output topic (if created on demand) |
 | LOG_LEVEL                         | info                                                                                                                  | Log level (error, warn, info, debug)                                     |
-| FHIR_PROFILE_OBSERVATION          | "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab\|2026.0.0"      |                                                                          |
-| FHIR_PROFILE_DIAGNOSTICREPORT     | "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab\|2026.0.0" |                                                                          |
-| FHIR_PROFILE_SERVICEREQUEST       | "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab\|2026.0.0"  |                                                                          |
+| FHIR_PROFILE_OBSERVATION          | `https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab\|2026.0.0`      |                                                                          |
+| FHIR_PROFILE_DIAGNOSTICREPORT     | `https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab\|2026.0.0` |                                                                          |
+| FHIR_PROFILE_SERVICEREQUEST       | `https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab\|2026.0.0`   |                                                                          |
 
 Additional application properties can be set by overriding values form
 the [application.yml](src/main/resources/application.yml) by using environment
