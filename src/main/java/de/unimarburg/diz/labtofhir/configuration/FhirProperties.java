@@ -1,21 +1,30 @@
 package de.unimarburg.diz.labtofhir.configuration;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "fhir")
 @Validated
-public class FhirProperties {
+public final class FhirProperties {
 
     private final Systems systems = new Systems();
+
+    private final Profile profile = new Profile();
+
+    public Profile getProfile() {
+        return profile;
+    }
 
     public Systems getSystems() {
         return systems;
     }
 
-    public static class Systems {
-
+    @Setter
+    @Getter
+    public static final class Systems {
 
         @NotNull
         private String serviceRequestId;
@@ -38,84 +47,17 @@ public class FhirProperties {
         @NotNull
         private String mapperTagSystem;
 
-        public String getMapperTagSystem() {
-            return mapperTagSystem;
-        }
+    }
 
-        public void setMapperTagSystem(String mapperTagSystem) {
-            this.mapperTagSystem = mapperTagSystem;
-        }
+    @Setter
+    @Getter
+    public static final class Profile {
+        @NotNull
+        private String observation;
+        @NotNull
+        private String serviceRequest;
+        @NotNull
+        private String diagnosticReport;
 
-        public String getLaboratorySystem() {
-            return laboratorySystem;
-        }
-
-        public void setLaboratorySystem(String laboratorySystem) {
-            this.laboratorySystem = laboratorySystem;
-        }
-
-        public String getServiceRequestId() {
-            return serviceRequestId;
-        }
-
-        public void setServiceRequestId(String serviceRequestId) {
-            this.serviceRequestId = serviceRequestId;
-        }
-
-        public String getDiagnosticReportId() {
-            return diagnosticReportId;
-        }
-
-        public void setDiagnosticReportId(String diagnosticReportId) {
-            this.diagnosticReportId = diagnosticReportId;
-        }
-
-        public String getObservationId() {
-            return observationId;
-        }
-
-        public void setObservationId(String observationId) {
-            this.observationId = observationId;
-        }
-
-        public String getPatientId() {
-            return patientId;
-        }
-
-        public void setPatientId(String patientId) {
-            this.patientId = patientId;
-        }
-
-        public String getEncounterId() {
-            return encounterId;
-        }
-
-        public void setEncounterId(String encounterId) {
-            this.encounterId = encounterId;
-        }
-
-        public String getAssignerId() {
-            return assignerId;
-        }
-
-        public void setAssignerId(String assignerId) {
-            this.assignerId = assignerId;
-        }
-
-        public String getAssignerCode() {
-            return assignerCode;
-        }
-
-        public void setAssignerCode(String assignerCode) {
-            this.assignerCode = assignerCode;
-        }
-
-        public String getLaboratoryUnitSystem() {
-            return this.laboratoryUnitSystem;
-        }
-
-        public void setLaboratoryUnitSystem(String laboratoryUnitSystem) {
-            this.laboratoryUnitSystem = laboratoryUnitSystem;
-        }
     }
 }

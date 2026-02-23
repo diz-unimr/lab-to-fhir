@@ -56,6 +56,10 @@ fhir:
     laboratorySystem: "https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-code"
     laboratoryUnitSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/swisslab-unit"
     mapperTagSystem: "https://fhir.diz.uni-marburg.de/CodeSystem/mapper"
+  profile:
+    observation: "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab|2026.0.0"
+    diagnosticReport: "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab|2026.0.0"
+    serviceRequest: "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab|2026.0.0"
 
 mapping:
   aim:

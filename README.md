@@ -54,24 +54,27 @@ mapping.hl7.filter: ">=2022-01-01"
 
 The following environment variables can be set:
 
-| Variable                          | Default                             | Description                                                              |
-|-----------------------------------|-------------------------------------|--------------------------------------------------------------------------|
-| BOOTSTRAP_SERVERS                 | localhost:9092                      | Kafka brokers                                                            |
-| SECURITY_PROTOCOL                 | PLAINTEXT                           | Kafka communication protocol                                             |
-| SSL_TRUST_STORE_LOCATION_INTERNAL | /opt/lab-to-fhir/ssl/truststore.jks | Truststore location                                                      |
-| SSL_TRUST_STORE_PASSWORD          |                                     | Truststore password (if using `SECURITY_PROTOCOL=SSL`)                   |
-| SSL_KEY_STORE_LOCATION_INTERNAL   | /opt/lab-to-fhir/ssl/keystore.jks   | Keystore location                                                        |
-| SSL_KEY_STORE_PASSWORD            |                                     | Keystore password (if using `SECURITY_PROTOCOL=SSL`)                     |
-| SSL_TRUST_STORE_PASSWORD          |                                     | Truststore password (if using `SECURITY_PROTOCOL=SSL`)                   |
-| AIM_TOPIC                         | aim-lab                             | AIM input topic                                                          |
-| HL7_TOPIC                         | hl7-lab                             | HL7v2 input topic                                                        |
-| OUTPUT_TOPIC                      | lab-fhir                            | Topic to store result bundles                                            |
-| MAPPING_AIM_FILTER                |                                     | Filter expression for the `AIM_TOPIC`. See [Filters](#filters).          |
-| MAPPING_HL7_FILTER                |                                     | Filter expression for the `HL7_TOPIC`. See [Filters](#filters).          |
-| CONSUMER_CONCURRENCY              | 3                                   | Number of concurrent Kafka consumer clients                              |
-| REPLICATION_FACTOR                | 3                                   | Output topic replication factor                                          |
-| MIN_PARTITION_COUNT               | 3                                   | Number of minimum partitions for the output topic (if created on demand) |
-| LOG_LEVEL                         | info                                | Log level (error, warn, info, debug)                                     |
+| Variable                          | Default                                                                                                               | Description                                                              |
+|-----------------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| BOOTSTRAP_SERVERS                 | localhost:9092                                                                                                        | Kafka brokers                                                            |
+| SECURITY_PROTOCOL                 | PLAINTEXT                                                                                                             | Kafka communication protocol                                             |
+| SSL_TRUST_STORE_LOCATION_INTERNAL | /opt/lab-to-fhir/ssl/truststore.jks                                                                                   | Truststore location                                                      |
+| SSL_TRUST_STORE_PASSWORD          |                                                                                                                       | Truststore password (if using `SECURITY_PROTOCOL=SSL`)                   |
+| SSL_KEY_STORE_LOCATION_INTERNAL   | /opt/lab-to-fhir/ssl/keystore.jks                                                                                     | Keystore location                                                        |
+| SSL_KEY_STORE_PASSWORD            |                                                                                                                       | Keystore password (if using `SECURITY_PROTOCOL=SSL`)                     |
+| SSL_TRUST_STORE_PASSWORD          |                                                                                                                       | Truststore password (if using `SECURITY_PROTOCOL=SSL`)                   |
+| AIM_TOPIC                         | aim-lab                                                                                                               | AIM input topic                                                          |
+| HL7_TOPIC                         | hl7-lab                                                                                                               | HL7v2 input topic                                                        |
+| OUTPUT_TOPIC                      | lab-fhir                                                                                                              | Topic to store result bundles                                            |
+| MAPPING_AIM_FILTER                |                                                                                                                       | Filter expression for the `AIM_TOPIC`. See [Filters](#filters).          |
+| MAPPING_HL7_FILTER                |                                                                                                                       | Filter expression for the `HL7_TOPIC`. See [Filters](#filters).          |
+| CONSUMER_CONCURRENCY              | 3                                                                                                                     | Number of concurrent Kafka consumer clients                              |
+| REPLICATION_FACTOR                | 3                                                                                                                     | Output topic replication factor                                          |
+| MIN_PARTITION_COUNT               | 3                                                                                                                     | Number of minimum partitions for the output topic (if created on demand) |
+| LOG_LEVEL                         | info                                                                                                                  | Log level (error, warn, info, debug)                                     |
+| FHIR_PROFILE_OBSERVATION          | `https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab\|2026.0.0`      |                                                                          |
+| FHIR_PROFILE_DIAGNOSTICREPORT     | `https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab\|2026.0.0` |                                                                          |
+| FHIR_PROFILE_SERVICEREQUEST       | `https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab\|2026.0.0`   |                                                                          |
 
 Additional application properties can be set by overriding values form
 the [application.yml](src/main/resources/application.yml) by using environment
