@@ -8,30 +8,13 @@ RUN ./gradlew clean build --info && \
 
 FROM gcr.io/distroless/java17:nonroot
 
-USER root
-COPY cert/RKA_CA.crt /tmp/RKA_CA.crt
-RUN [\
- "/usr/lib/jvm/java-17-openjdk-amd64/bin/keytool",\
- "-import",\
- "-trustcacerts",\
- "-cacerts",\
- "-noprompt",\
- "-storepass",\
- "changeit",\
- "-alias",\
- "rka_ca",\
- "-file",\
- "/tmp/RKA_CA.crt"\
-]
-USER nonroot
-
-
 WORKDIR /opt/lab-to-fhir
 COPY --from=build /home/gradle/src/dependencies/ ./
 COPY --from=build /home/gradle/src/spring-boot-loader/ ./
 COPY --from=build /home/gradle/src/application/ ./
 COPY HealthCheck.java .
 
+USER nonroot
 ARG GIT_REF=""
 ARG GIT_URL=""
 ARG BUILD_TIME=""
