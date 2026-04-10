@@ -18,15 +18,11 @@ spring:
         # aim source
         aim-in-0:
           destination: ${AIM_TOPIC:aim-lab}
-          consumer:
-            concurrency: ${CONSUMER_CONCURRENCY:3}
         aim-out-0:
           destination: ${OUTPUT_TOPIC:lab-fhir-idat}
         # hl7 source
         hl7-in-0:
           destination: ${HL7_TOPIC:hl7-lab}
-          consumer:
-            concurrency: ${CONSUMER_CONCURRENCY:3}
         hl7-out-0:
           destination: ${OUTPUT_TOPIC:lab-fhir-idat}
       kafka:
