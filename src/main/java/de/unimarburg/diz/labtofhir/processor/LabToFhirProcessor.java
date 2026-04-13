@@ -23,8 +23,9 @@ public class LabToFhirProcessor {
     @Autowired(required = false)
     public LabToFhirProcessor(@Nullable AimLabMapper reportMapper,
                               @Nullable Hl7LabMapper hl7Mapper) {
-        if (reportMapper == null && hl7Mapper ==null) {
-            throw new IllegalArgumentException("No mapper configured! Set either {mapper.aim.enabled} or {mapper.hl7.enabled} to 'true'");
+        if (reportMapper == null && hl7Mapper == null) {
+            throw new IllegalArgumentException("No mapper configured! "
+                    + "Set either {mapper.aim.enabled} or {mapper.hl7.enabled} to 'true'");
         }
         this.aimMapper = reportMapper;
         this.hl7Mapper = hl7Mapper;
