@@ -32,8 +32,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@ConditionalOnProperty(prefix = "mapping", name = "aim.enabled",
-    matchIfMissing = true)
+@ConditionalOnProperty(prefix = "mapping", name = "aim.enabled", havingValue = "true")
 public class AimLabMapper extends BaseMapper<LaboratoryReport> {
 
     public AimLabMapper(FhirContext fhirContext,

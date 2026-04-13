@@ -41,8 +41,7 @@ import java.util.function.Predicate;
 
 @Slf4j
 @Service
-@ConditionalOnProperty(prefix = "mapping", name = "hl7.enabled",
-    matchIfMissing = true)
+@ConditionalOnProperty(prefix = "mapping", name = "hl7.enabled", havingValue = "true")
 public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
     private static final int OBX_OBSERVATION_VALUE_SEGMENT = 5;
