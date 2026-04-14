@@ -12,7 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ContextConfigurationTests {
 
     private final ApplicationContextRunner contextRunner
-            = new ApplicationContextRunner().withUserConfiguration(LabToFhirProcessor.class, AimLabMapper.class, Hl7LabMapper.class, FhirConfiguration.class);
+            = new ApplicationContextRunner().withUserConfiguration(LabToFhirProcessor.class, AimLabMapper.class,
+            Hl7LabMapper.class, FhirConfiguration.class);
 
     @Test
     void failsOnMissingMapper() {
@@ -20,7 +21,8 @@ public class ContextConfigurationTests {
                 .withPropertyValues("mapping.aim.enabled=false", "mapping.hl7.enabled=false")
                 .run((context) -> context.getBean(LabToFhirProcessor.class)));
         assertThat(t).hasRootCauseInstanceOf(IllegalArgumentException.class)
-                .hasRootCauseMessage("No mapper configured! Set either {mapper.aim.enabled} or {mapper.hl7.enabled} to 'true'");
+                .hasRootCauseMessage("No mapper configured!"
+                        + " Set either {mapper.aim.enabled} or {mapper.hl7.enabled} to 'true'");
     }
 
     @Test
