@@ -19,31 +19,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest(classes = {LabToFhirProcessor.class, AimLabMapper.class,
-    Hl7LabMapper.class, FhirConfiguration.class})
+        Hl7LabMapper.class, FhirConfiguration.class})
 
 public class LabToFhirProcessorTests extends BaseProcessorTests {
 
     @Autowired
     private LabToFhirProcessor processor;
 
-
     @Autowired
     private FhirProperties fhirProperties;
 
     @SuppressWarnings("checkstyle:MagicNumber")
     @Test
-    public void observationCodeIsMapped() {
+    void observationCodeIsMapped() {
         // build stream
         try (var driver = buildStream(processor.aim(),
-            JsonSerdes.laboratoryReport())) {
+                JsonSerdes.laboratoryReport())) {
 
             var labTopic = createAimInputTopic(driver);
             var outputTopic = createOutputTopic(driver);
 
             var labReport = createReport(42, new Coding().setSystem(
-                    fhirProperties.getSystems()
-                        .getLaboratorySystem())
-                .setCode("NA"));
+                            fhirProperties.getSystems()
+                                    .getLaboratorySystem())
+                    .setCode("NA"));
 
             // create input record
             labTopic.pipeInput(String.valueOf(labReport.getId()), labReport);
@@ -52,19 +51,19 @@ public class LabToFhirProcessorTests extends BaseProcessorTests {
             var outputRecords = outputTopic.readRecordsToList();
 
             var obsCodes = getObservationsCodes(outputRecords).findAny()
-                .orElseThrow();
+                    .orElseThrow();
 
             // assert coding exists
             assertThat(obsCodes.hasCoding(fhirProperties.getSystems()
-                .getLaboratorySystem(), "NA")).isTrue();
+                    .getLaboratorySystem(), "NA")).isTrue();
         }
     }
 
     @Test
-    public void hl7streamFiltersNull() throws HL7Exception, IOException {
+    void hl7streamFiltersNull() throws HL7Exception, IOException {
         // build stream
         try (var driver = buildStream(processor.hl7(),
-            new KafkaConfiguration().hl7Serde())) {
+                new KafkaConfiguration().hl7Serde())) {
 
             var labTopic = createHl7InputTopic(driver);
             var outputTopic = createOutputTopic(driver);

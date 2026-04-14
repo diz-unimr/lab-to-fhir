@@ -1,13 +1,11 @@
 package de.unimarburg.diz.labtofhir.mapper;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.validation.ValidationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.unimarburg.diz.labtofhir.configuration.FhirConfiguration;
 import de.unimarburg.diz.labtofhir.configuration.MappingConfiguration;
 import de.unimarburg.diz.labtofhir.model.LaboratoryReport;
-import de.unimarburg.diz.labtofhir.validator.FhirProfileValidator;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
 import org.hl7.fhir.r4.model.Bundle.HTTPVerb;
 import org.hl7.fhir.r4.model.CodeableConcept;
@@ -23,7 +21,6 @@ import org.hl7.fhir.r4.model.Quantity.QuantityComparator;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.SimpleQuantity;
 import org.hl7.fhir.r4.model.StringType;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -42,7 +39,7 @@ import java.util.stream.StreamSupport;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = {AimLabMapper.class, FhirConfiguration.class,
-    MappingConfiguration.class})
+        MappingConfiguration.class})
 public class AimLabMapperTests {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -61,30 +58,11 @@ public class AimLabMapperTests {
     @SuppressWarnings("checkstyle:MagicNumber")
     private static Stream<Arguments> parseRefRangeCases() {
         return Stream.of(
-            Arguments.of("- <90", null, new SimpleQuantity().setValue(90.0)),
-            Arguments.of(">10-", new SimpleQuantity().setValue(10.0), null),
-            Arguments.of("text10-9", null, null),
-            Arguments.of("1 - test", null, null)
+                Arguments.of("- <90", null, new SimpleQuantity().setValue(90.0)),
+                Arguments.of(">10-", new SimpleQuantity().setValue(10.0), null),
+                Arguments.of("text10-9", null, null),
+                Arguments.of("1 - test", null, null)
         );
-    }
-
-
-    @Disabled("TODO move validation to processor tests")
-    @Test
-    public void resourceTypeIsValid() throws IOException {
-        var validator = FhirProfileValidator.create(fhirContext);
-
-        var report = getTestReport(testReport, testObservations);
-
-        var bundle = mapper.apply(report);
-
-        var validations = bundle.getEntry().stream()
-            .map(x -> validator.validateWithResult(x.getResource()))
-            .collect(Collectors.toList());
-
-        validations.forEach(FhirProfileValidator::prettyPrint);
-
-        assertThat(validations).allMatch(ValidationResult::isSuccessful);
     }
 
     @SuppressWarnings("checkstyle:MagicNumber")
@@ -93,36 +71,36 @@ public class AimLabMapperTests {
         // arrange
         var report = createDummyReport();
         report.setObservations(List.of(
-            new Observation().setValue(new StringType("<42")).setCode(
-                new CodeableConcept().addCoding(new Coding().setCode("LEU")))));
+                new Observation().setValue(new StringType("<42")).setCode(
+                        new CodeableConcept().addCoding(new Coding().setCode("LEU")))));
 
         // act
         var result = mapper.apply(report);
 
         // assert
         var obs =
-            result.getEntry().stream().map(BundleEntryComponent::getResource)
-                .filter(Observation.class::isInstance)
-                .map(Observation.class::cast).findFirst().orElseThrow();
+                result.getEntry().stream().map(BundleEntryComponent::getResource)
+                        .filter(Observation.class::isInstance)
+                        .map(Observation.class::cast).findFirst().orElseThrow();
 
         assertThat(obs.getValueQuantity()).usingRecursiveComparison()
-            .ignoringExpectedNullFields()
-            .isEqualTo(new Quantity(42.0)
-                .setComparator(QuantityComparator.fromCode("<")));
+                .ignoringExpectedNullFields()
+                .isEqualTo(new Quantity(42.0)
+                        .setComparator(QuantityComparator.fromCode("<")));
     }
 
     private LaboratoryReport getTestReport(Resource testReport,
                                            Resource testObservations)
-        throws IOException {
+            throws IOException {
         var parser = fhirContext.newJsonParser();
         var diagnosticReport = parser.parseResource(DiagnosticReport.class,
-            testReport.getInputStream());
+                testReport.getInputStream());
 
         var node = objectMapper.readTree(testObservations.getInputStream());
         var observations = StreamSupport.stream(node.spliterator(), false)
-            .map(JsonNode::toString)
-            .map(s -> parser.parseResource(Observation.class, s))
-            .collect(Collectors.toList());
+                .map(JsonNode::toString)
+                .map(s -> parser.parseResource(Observation.class, s))
+                .collect(Collectors.toList());
 
         var report = new LaboratoryReport();
         report.setId(1);
@@ -141,10 +119,10 @@ public class AimLabMapperTests {
 
         // assert entries
         assertThat(result.getEntry())
-            .extracting(BundleEntryComponent::getRequest).allSatisfy(
-                x -> assertThat(x).satisfies(
-                        y -> assertThat(y.getMethod()).isEqualTo(HTTPVerb.PUT))
-                    .satisfies(z -> assertThat(z.getUrl()).isNotBlank()));
+                .extracting(BundleEntryComponent::getRequest).allSatisfy(
+                        x -> assertThat(x).satisfies(
+                                        y -> assertThat(y.getMethod()).isEqualTo(HTTPVerb.PUT))
+                                .satisfies(z -> assertThat(z.getUrl()).isNotBlank()));
     }
 
     @ParameterizedTest
@@ -160,26 +138,26 @@ public class AimLabMapperTests {
             assertThat(refRange.hasLow()).isFalse();
         } else {
             assertThat(refRange.getLow()).usingRecursiveComparison()
-                .isEqualTo(expectedLow);
+                    .isEqualTo(expectedLow);
         }
         // high
         if (expectedHigh == null) {
             assertThat(refRange.hasHigh()).isFalse();
         } else {
             assertThat(refRange.getHigh()).usingRecursiveComparison()
-                .isEqualTo(expectedHigh);
+                    .isEqualTo(expectedHigh);
         }
     }
 
     private LaboratoryReport createDummyReport() {
         var report = new LaboratoryReport();
         report.setResource(new DiagnosticReport()
-            .addIdentifier(new Identifier().setValue("reportId")).setSubject(
-                new Reference(new Patient().addIdentifier(
-                    new Identifier().setValue("test")))).setEncounter(
-                new Reference(new Encounter().addIdentifier(
-                    new Identifier().setValue("encounterId"))))
-            .setEffective(DateTimeType.now()));
+                .addIdentifier(new Identifier().setValue("reportId")).setSubject(
+                        new Reference(new Patient().addIdentifier(
+                                new Identifier().setValue("test")))).setEncounter(
+                        new Reference(new Encounter().addIdentifier(
+                                new Identifier().setValue("encounterId"))))
+                .setEffective(DateTimeType.now()));
         report.setObservations(List.of());
         return report;
     }
