@@ -20,7 +20,7 @@ public class LabToFhirProcessor {
     private final AimLabMapper aimMapper;
     private final Hl7LabMapper hl7Mapper;
 
-    @Autowired(required = false)
+    @Autowired
     public LabToFhirProcessor(@Nullable AimLabMapper reportMapper,
                               @Nullable Hl7LabMapper hl7Mapper) {
         if (reportMapper == null && hl7Mapper == null) {
@@ -34,10 +34,10 @@ public class LabToFhirProcessor {
     @Bean
     @ConditionalOnBean(AimLabMapper.class)
     public Function<KStream<String, LaboratoryReport>, KStream<String,
-        Bundle>> aim() {
+            Bundle>> aim() {
 
         return report -> report.mapValues(aimMapper)
-            .filter((k, v) -> v != null);
+                .filter((k, v) -> v != null);
     }
 
     @Bean
@@ -45,6 +45,6 @@ public class LabToFhirProcessor {
     public Function<KStream<String, ORU_R01>, KStream<String, Bundle>> hl7() {
 
         return report -> report.mapValues(hl7Mapper)
-            .filter((k, v) -> v != null);
+                .filter((k, v) -> v != null);
     }
 }

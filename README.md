@@ -80,21 +80,6 @@ Additional application properties can be set by overriding values form
 the [application.yml](src/main/resources/application.yml) by using environment
 variables.
 
-## Tests
-
-This project includes unit and integration tests.
-
-### Setup
-
-FHIR validation tests need the profile files used in this processor (i.e. MII
-profiles). Those are managed as NPM
-dependencies ([package.json](package.json)) and must be installed locally prior
-to testing:
-
-```sh
-npm i
-```
-
 ## Error handling
 
 ### Serialization errors
