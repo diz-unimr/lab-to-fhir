@@ -66,7 +66,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         return msg -> {
             try {
                 return createDateTimeFilter(
-                    new DateTimeType(getOrderDate(msg)), filter);
+                        new DateTimeType(getOrderDate(msg)), filter);
             } catch (DataTypeException e) {
                 throw new RuntimeException(e);
             }
@@ -77,7 +77,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     Bundle map(ORU_R01 msg) {
 
         var msgId = msg.getMSH()
-            .getMsh10_MessageControlID().getValue();
+                .getMsh10_MessageControlID().getValue();
 
         var orderId = getOrderNumber(msg);
 
@@ -94,39 +94,39 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
             // set report result
             report.setResult(
-                obs.stream().map(this::getObservationsReference).toList());
+                    obs.stream().map(this::getObservationsReference).toList());
 
             // add resources to bundle
             addResourceToBundle(bundle, request,
-                request.getIdentifierFirstRep());
+                    request.getIdentifierFirstRep());
             addResourceToBundle(bundle, report,
-                report.getIdentifierFirstRep());
+                    report.getIdentifierFirstRep());
             obs.forEach(
-                o -> addResourceToBundle(bundle, o,
-                    o.getIdentifierFirstRep()));
+                    o -> addResourceToBundle(bundle, o,
+                            o.getIdentifierFirstRep()));
 
             mapPatient(msg, bundle);
             mapEncounter(msg, bundle);
 
         } catch (HL7Exception | RuntimeException e) {
             log.error(
-                "Mapping failed for HL7 message with [id={}], "
-                    + "[order-number={}]", msgId, orderId, e);
+                    "Mapping failed for HL7 message with [id={}], "
+                            + "[order-number={}]", msgId, orderId, e);
 
             return null;
         }
 
         log.debug(
-            "Mapped successfully to FHIR bundle: [id={}], [order-number={}]",
-            msgId, orderId);
+                "Mapped successfully to FHIR bundle: [id={}], [order-number={}]",
+                msgId, orderId);
         log.trace("FHIR bundle: {}",
-            fhirParser().encodeResourceToString(bundle));
+                fhirParser().encodeResourceToString(bundle));
 
         return bundle;
     }
 
     List<Observation> mapObservations(ORU_R01 msg) throws
-        HL7Exception {
+            HL7Exception {
 
         var result = new ArrayList<Observation>();
 
@@ -142,38 +142,38 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
             // code
             var code =
-                obx.getObservationIdentifier().getCe1_Identifier()
-                    .getValue();
+                    obx.getObservationIdentifier().getCe1_Identifier()
+                            .getValue();
             var codeCoding = new CodeableConcept()
-                .addCoding(
-                    new Coding(fhirProperties().getSystems()
-                        .getLaboratorySystem(),
-                        code,
-                        obx.getObservationIdentifier().getCe2_Text()
-                            .getValue()));
+                    .addCoding(
+                            new Coding(fhirProperties().getSystems()
+                                    .getLaboratorySystem(),
+                                    code,
+                                    obx.getObservationIdentifier().getCe2_Text()
+                                            .getValue()));
 
             var effective =
-                new DateTimeType(
-                    obr.getObservationDateTime().getTimeOfAnEvent()
-                        .getValueAsDate());
+                    new DateTimeType(
+                            obr.getObservationDateTime().getTimeOfAnEvent()
+                                    .getValueAsDate());
 
             // identifier
             var obsId =
-                createObsId(msg.getMSH().getSendingApplication().getValue(),
-                    getRequestNumber(msg), code, effective);
+                    createObsId(msg.getMSH().getSendingApplication().getValue(),
+                            getRequestNumber(msg), code, effective);
             // check duplicate
             var dup =
-                result.stream()
-                    .filter(o -> o.getIdentifierFirstRep().getValue()
-                        .equals(obsId)).count();
+                    result.stream()
+                            .filter(o -> o.getIdentifierFirstRep().getValue()
+                                    .equals(obsId)).count();
             // check duplicates
             String identifierValue;
             if (dup > 0) {
                 identifierValue =
-                    createObsId(msg.getMSH().getSendingApplication().getValue(),
-                        getRequestNumber(msg), String.format("%s_%d", code,
-                            i),
-                        effective);
+                        createObsId(msg.getMSH().getSendingApplication().getValue(),
+                                getRequestNumber(msg), String.format("%s_%d", code,
+                                        i),
+                                effective);
             } else {
                 identifierValue = obsId;
             }
@@ -183,32 +183,32 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
             // status
             obs.setStatus(parseObservationStatus(obx))
 
-                // category
-                .setCategory(List.of(getObservationCategory()
-                    // with local category
-                    .addCoding(mapReportCategory(code))
-                ))
+                    // category
+                    .setCategory(List.of(getObservationCategory()
+                            // with local category
+                            .addCoding(mapReportCategory(code))
+                    ))
 
-                // code
-                .setCode(codeCoding)
-                // effective
-                .setEffective(effective)
-                // value
-                .setValue(parseValue(obx))
-                // secondary value in component
-                .setComponent(parseRepeatingValue(obx, codeCoding))
-                // interpretation
-                .setInterpretation(parseInterpretation(obx))
-                // map reference range to simple quantity with value only
-                .setReferenceRange(Optional.ofNullable(
-                    parseReferenceRange(obx.getReferencesRange().getValue(),
-                        obs.getValue())).map(List::of).orElse(null))
+                    // code
+                    .setCode(codeCoding)
+                    // effective
+                    .setEffective(effective)
+                    // value
+                    .setValue(parseValue(obx))
+                    // secondary value in component
+                    .setComponent(parseRepeatingValue(obx, codeCoding))
+                    // interpretation
+                    .setInterpretation(parseInterpretation(obx))
+                    // map reference range to simple quantity with value only
+                    .setReferenceRange(Optional.ofNullable(
+                            parseReferenceRange(obx.getReferencesRange().getValue(),
+                                    obs.getValue())).map(List::of).orElse(null))
 
-                // note
-                .setNote(
-                    nte.stream().flatMap(n -> Arrays.stream(n.getComment()))
-                        .map(c -> new Annotation().setText(c.getValue()))
-                        .toList());
+                    // note
+                    .setNote(
+                            nte.stream().flatMap(n -> Arrays.stream(n.getComment()))
+                                    .map(c -> new Annotation().setText(c.getValue()))
+                                    .toList());
 
             result.add(obs);
 
@@ -220,15 +220,15 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     private List<CodeableConcept> parseInterpretation(OBX obx) {
 
         return Arrays.stream(obx.getAbnormalFlags()).map(flag -> {
-                var interpretationCode = V3ObservationInterpretation.fromCode(
-                    flag.getValue());
+                    var interpretationCode = V3ObservationInterpretation.fromCode(
+                            flag.getValue());
 
-                return new CodeableConcept().addCoding(new Coding(
-                    "http://terminology.hl7.org/CodeSystem/v3"
-                        + "-ObservationInterpretation",
-                    interpretationCode.toCode(),
-                    interpretationCode.getDisplay()));
-            }
+                    return new CodeableConcept().addCoding(new Coding(
+                            "http://terminology.hl7.org/CodeSystem/v3"
+                                    + "-ObservationInterpretation",
+                            interpretationCode.toCode(),
+                            interpretationCode.getDisplay()));
+                }
         ).toList();
     }
 
@@ -238,7 +238,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
      */
     private List<Observation.ObservationComponentComponent>
     parseRepeatingValue(
-        OBX obx, CodeableConcept code) {
+            OBX obx, CodeableConcept code) {
 
         var reps = getObservationValueReps(obx);
         if (reps == null) {
@@ -246,7 +246,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
         }
 
         var components =
-            new ArrayList<Observation.ObservationComponentComponent>();
+                new ArrayList<Observation.ObservationComponentComponent>();
 
         for (var rep : reps) {
             // parse value
@@ -258,9 +258,9 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
             }
 
             components.add(
-                new Observation.ObservationComponentComponent(
-                    code).setValue(
-                    valueType));
+                    new Observation.ObservationComponentComponent(
+                            code).setValue(
+                            valueType));
         }
 
         return components;
@@ -287,9 +287,9 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                 }
 
                 yield new Quantity(
-                    NumberUtils.createDouble(valueNumeric.getValue()))
-                    .setUnit(unit).setSystem(fhirProperties().getSystems()
-                        .getLaboratoryUnitSystem()).setCode(unit);
+                        NumberUtils.createDouble(valueNumeric.getValue()))
+                        .setUnit(unit).setSystem(fhirProperties().getSystems()
+                                .getLaboratoryUnitSystem()).setCode(unit);
             }
             case "ST" -> {
                 var valueString = ((ST) value.getData()).getValue();
@@ -297,16 +297,16 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
                 // check first character for comparator value
                 var comp = valueString.charAt(0);
                 var valuePart = valueString.substring(1)
-                    .trim();
+                        .trim();
 
                 if ((comp == '<' || comp == '>') && NumberUtils.isCreatable(
-                    valuePart)) {
+                        valuePart)) {
                     yield new Quantity(
-                        NumberUtils.createDouble(valuePart)).setComparator(
-                            Quantity.QuantityComparator.fromCode(
-                                String.valueOf(comp))).setUnit(unit)
-                        .setSystem(fhirProperties().getSystems()
-                            .getLaboratoryUnitSystem()).setCode(unit);
+                            NumberUtils.createDouble(valuePart)).setComparator(
+                                    Quantity.QuantityComparator.fromCode(
+                                            String.valueOf(comp))).setUnit(unit)
+                            .setSystem(fhirProperties().getSystems()
+                                    .getLaboratoryUnitSystem()).setCode(unit);
                 }
 
                 yield new StringType(valueString);
@@ -317,81 +317,80 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     }
 
     private String createObsId(String sendingApplication, String
-        requestNumber, String code, DateTimeType effective) {
+            requestNumber, String code, DateTimeType effective) {
         // conforms to id generation from Synedra AIM FHIR mapping
         // i.e. msg.get('MSH.3')+'_'+msg.get('OBR.2') + "_" + msg.get("OBX.3.1")
         return createId(null, String.format("%s_%s_%s", sendingApplication,
-            requestNumber, code), effective);
+                requestNumber, code), effective);
     }
 
     private void mapEncounter(ORU_R01 msg, Bundle bundle) {
         var encounterId =
-            msg.getPATIENT_RESULT().getPATIENT().getPV1()
-                .getVisitNumber().getIDNumber().getValue();
+                msg.getPATIENT_RESULT().getPATIENT().getPV1()
+                        .getVisitNumber().getIDNumber().getValue();
 
         setEncounter(encounterId, bundle);
     }
 
     private void mapPatient(ORU_R01 msg, Bundle bundle) {
         var patientId =
-            msg.getPATIENT_RESULT().getPATIENT().getPID()
-                .getPatientIDInternalID(0).getCm_pat_id1_IDNumber()
-                .getValue();
+                msg.getPATIENT_RESULT().getPATIENT().getPID()
+                        .getPatientIDInternalID(0).getCm_pat_id1_IDNumber()
+                        .getValue();
 
         setPatient(patientId, bundle);
     }
 
     private DiagnosticReport mapDiagnosticReport(ORU_R01 msg)
-        throws HL7Exception {
+            throws HL7Exception {
         // id
         var reportId = getOrderNumber(msg);
 
         var report = new DiagnosticReport();
 
         // id and meta data
-        report.setId(sanitizeId(reportId))
-            .setMeta(getMeta(ResourceType.DiagnosticReport.name()));
+        report.setId(sanitizeId(reportId));
         report.addIdentifier(
-                new Identifier().setType(new CodeableConcept().setCoding(
-                        List.of(new Coding().setSystem(
-                                "http://terminology.hl7.org/CodeSystem/v2-0203")
-                            .setCode("FILL"))))
-                    .setSystem(fhirProperties().getSystems()
-                        .getDiagnosticReportId()).setValue(reportId)
-                    .setAssigner(
-                        new Reference().setIdentifier(identifierAssigner())))
+                        new Identifier().setType(new CodeableConcept().setCoding(
+                                        List.of(new Coding().setSystem(
+                                                        "http://terminology.hl7.org/CodeSystem/v2-0203")
+                                                .setCode("FILL"))))
+                                .setSystem(fhirProperties().getSystems()
+                                        .getDiagnosticReportId()).setValue(reportId)
+                                .setAssigner(
+                                        new Reference().setIdentifier(identifierAssigner())))
 
-            // basedOn
-            .setBasedOn(List.of(new Reference(
-                getConditionalReference(ResourceType.ServiceRequest,
-                    getRequestNumber(msg)))))
+                // basedOn
+                .setBasedOn(List.of(new Reference(
+                        getConditionalReference(ResourceType.ServiceRequest,
+                                getRequestNumber(msg)))))
 
-            // status
-            .setStatus(parseResultStatus(msg))
+                // status
+                .setStatus(parseResultStatus(msg))
 
-            // category
-            .setCategory(getReportCategory())
+                // category
+                .setCategory(getReportCategory())
 
-            // code
-            .setCode(new CodeableConcept(new Coding("http://loinc.org",
-                "11502-2", "Laboratory report")).setText(
-                "Laboratory report"))
+                // code
+                .setCode(new CodeableConcept(new Coding("http://loinc.org",
+                        "11502-2", "Laboratory report")).setText(
+                        "Laboratory report"))
 
-            // effective
-            .setEffective(new DateTimeType(getOrderDate(msg)))
+                // effective
+                .setEffective(new DateTimeType(getOrderDate(msg)))
 
-            // issued
-            .setIssuedElement(
-                new InstantType(getOrderDate(msg)));
+                // issued
+                .setIssuedElement(
+                        new InstantType(getOrderDate(msg)));
 
         return report;
     }
 
     private Date getOrderDate(ORU_R01 msg) throws DataTypeException {
         return msg.getPATIENT_RESULT().getORDER_OBSERVATION().getOBR()
-            .getObservationDateTime()
-            .getTimeOfAnEvent()
-            .getValueAsDate();
+                .getObservationDateTime()
+                .getTimeOfAnEvent()
+                .getValueAsDate();
     }
 
     private Coding mapReportCategory(String code) {
@@ -400,52 +399,51 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
     }
 
     private ServiceRequest mapServiceRequest(ORU_R01 msg)
-        throws HL7Exception {
+            throws HL7Exception {
         // id
         var requestId = getRequestNumber(msg);
 
         var request = new ServiceRequest();
 
         // id and meta data
-        request.setId(sanitizeId(requestId))
-            .setMeta(getMeta(ResourceType.ServiceRequest.name()));
+        request.setId(sanitizeId(requestId));
         request.addIdentifier(
-                new Identifier().setType(new CodeableConcept().setCoding(
-                        List.of(new Coding().setSystem(
-                                "http://terminology.hl7.org/CodeSystem/v2-0203")
-                            .setCode("PLAC"))))
-                    .setSystem(fhirProperties().getSystems()
-                        .getServiceRequestId()).setValue(requestId)
-                    .setAssigner(
-                        new Reference().setIdentifier(identifierAssigner())))
+                        new Identifier().setType(new CodeableConcept().setCoding(
+                                        List.of(new Coding().setSystem(
+                                                        "http://terminology.hl7.org/CodeSystem/v2-0203")
+                                                .setCode("PLAC"))))
+                                .setSystem(fhirProperties().getSystems()
+                                        .getServiceRequestId()).setValue(requestId)
+                                .setAssigner(
+                                        new Reference().setIdentifier(identifierAssigner())))
 
 
-            // authoredOn (ORC-9)
-            .setAuthoredOnElement(new DateTimeType(
-                msg.getPATIENT_RESULT().getORDER_OBSERVATION().getORC()
-                    .getDateTimeOfTransaction().getTimeOfAnEvent()
-                    .getValueAsDate()))
+                // authoredOn (ORC-9)
+                .setAuthoredOnElement(new DateTimeType(
+                        msg.getPATIENT_RESULT().getORDER_OBSERVATION().getORC()
+                                .getDateTimeOfTransaction().getTimeOfAnEvent()
+                                .getValueAsDate()))
 
-            // status & intent
-            .setStatus(parseOrderStatus(msg))
-            .setIntent(ServiceRequest.ServiceRequestIntent.ORDER)
+                // status & intent
+                .setStatus(parseOrderStatus(msg))
+                .setIntent(ServiceRequest.ServiceRequestIntent.ORDER)
 
-            // category
-            .setCategory(getServiceRequestCategory())
+                // category
+                .setCategory(getServiceRequestCategory())
 
-            // code
-            .setCode(getServiceRequestCode());
+                // code
+                .setCode(getServiceRequestCode());
 
         return request;
     }
 
     private ServiceRequest.ServiceRequestStatus parseOrderStatus(ORU_R01
-                                                                     msg)
-        throws HL7Exception {
+                                                                         msg)
+            throws HL7Exception {
 
         var status = msg.getPATIENT_RESULT().getORDER_OBSERVATION()
-            .getORC()
-            .getOrderStatus();
+                .getORC()
+                .getOrderStatus();
         if (status.isEmpty()) {
             return ServiceRequest.ServiceRequestStatus.UNKNOWN;
         }
@@ -455,25 +453,23 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
             case "CM", "DC" -> ServiceRequest.ServiceRequestStatus.COMPLETED;
             case "HD" -> ServiceRequest.ServiceRequestStatus.ONHOLD;
             case "SC" -> ServiceRequest.ServiceRequestStatus.DRAFT;
-            case "CA", "RP", "ER" ->
-                ServiceRequest.ServiceRequestStatus.REVOKED;
+            case "CA", "RP", "ER" -> ServiceRequest.ServiceRequestStatus.REVOKED;
             default -> ServiceRequest.ServiceRequestStatus.UNKNOWN;
         };
     }
 
     private DiagnosticReport.DiagnosticReportStatus parseResultStatus(
-        ORU_R01 msg) throws HL7Exception {
+            ORU_R01 msg) throws HL7Exception {
 
         var status = msg.getPATIENT_RESULT().getORDER_OBSERVATION()
-            .getOBR()
-            .getResultStatus();
+                .getOBR()
+                .getResultStatus();
         if (status.isEmpty()) {
             return DiagnosticReport.DiagnosticReportStatus.UNKNOWN;
         }
 
         return switch (status.getValue()) {
-            case "O", "I", "S" ->
-                DiagnosticReport.DiagnosticReportStatus.REGISTERED;
+            case "O", "I", "S" -> DiagnosticReport.DiagnosticReportStatus.REGISTERED;
             case "P" -> DiagnosticReport.DiagnosticReportStatus.PRELIMINARY;
             case "F" -> DiagnosticReport.DiagnosticReportStatus.FINAL;
             case "C" -> DiagnosticReport.DiagnosticReportStatus.CORRECTED;
@@ -486,7 +482,7 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
     @SuppressWarnings("checkstyle:LineLength")
     private Observation.ObservationStatus parseObservationStatus(
-        OBX obx) throws HL7Exception {
+            OBX obx) throws HL7Exception {
 
         if (obx.getObservationResultStatus().isEmpty()) {
             return Observation.ObservationStatus.UNKNOWN;
@@ -507,19 +503,19 @@ public class Hl7LabMapper extends BaseMapper<ORU_R01> {
 
     private String getRequestNumber(ORU_R01 msg) {
         return msg.getPATIENT_RESULT()
-            .getORDER_OBSERVATION()
-            .getOBR()
-            .getPlacerOrderNumber().getUniquePlacerId().getValue();
+                .getORDER_OBSERVATION()
+                .getOBR()
+                .getPlacerOrderNumber().getUniquePlacerId().getValue();
     }
 
     private String getOrderNumber(ORU_R01 msg) {
         var orderId = msg.getPATIENT_RESULT()
-            .getORDER_OBSERVATION()
-            .getORC().getFillerOrderNumber().getUniqueFillerId();
+                .getORDER_OBSERVATION()
+                .getORC().getFillerOrderNumber().getUniqueFillerId();
 
         // Filler Order Number seems to be empty
         return Optional.ofNullable(orderId.getValue())
-            .orElse(getRequestNumber(msg));
+                .orElse(getRequestNumber(msg));
     }
 
     List<String> getObservationValueReps(OBX obx) {

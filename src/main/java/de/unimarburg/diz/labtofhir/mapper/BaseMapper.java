@@ -70,36 +70,9 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
                         .setCode("LAB")));
     }
 
-    protected Meta getMeta(String resourceType) {
+    protected Meta getMeta() {
 
-        String profile;
-
-        switch (resourceType) {
-            case "Observation": {
-                profile = fhirProperties.getProfile().getObservation();
-                break;
-            }
-            case "DiagnosticReport": {
-                profile = fhirProperties.getProfile().getDiagnosticReport();
-                break;
-            }
-            case "ServiceRequest": {
-                profile = fhirProperties.getProfile().getServiceRequest();
-                break;
-            }
-            default: {
-                throw new IllegalArgumentException(
-                        "Invalid resource type: " + resourceType);
-            }
-        }
-
-        if (profile == null) {
-            throw new IllegalStateException(String.format(
-                    "FHIR Profile configuration for %s is missing!",
-                    resourceType));
-        }
-
-        return new Meta().addProfile(profile).addTag(getMapperTag())
+        return new Meta().addTag(getMapperTag())
                 .setSource("#swisslab");
     }
 
@@ -194,7 +167,6 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
     protected void addResourceToBundle(Bundle bundle, DomainResource resource,
                                        Identifier identifier) {
 
-        var idElement = resource.getIdElement().getValue();
         bundle.addEntry().setResource(resource).setRequest(
                 new Bundle.BundleEntryRequestComponent().setMethod(
                         Bundle.HTTPVerb.PUT).setUrl(getConditionalReference(
@@ -206,16 +178,13 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
 
         String idSystem;
         switch (resourceType) {
-            case Patient ->
-                    idSystem = fhirProperties().getSystems().getPatientId();
-            case Encounter ->
-                    idSystem = fhirProperties().getSystems().getEncounterId();
+            case Patient -> idSystem = fhirProperties().getSystems().getPatientId();
+            case Encounter -> idSystem = fhirProperties().getSystems().getEncounterId();
             case ServiceRequest -> idSystem =
                     fhirProperties().getSystems().getServiceRequestId();
             case DiagnosticReport -> idSystem =
                     fhirProperties().getSystems().getDiagnosticReportId();
-            case Observation ->
-                    idSystem = fhirProperties().getSystems().getObservationId();
+            case Observation -> idSystem = fhirProperties().getSystems().getObservationId();
             default -> throw new IllegalArgumentException(
                     "Unsupported resource type when building conditional "
                             + "reference");
@@ -329,8 +298,8 @@ abstract class BaseMapper<T> implements ValueMapper<T, Bundle> {
         var obs = new Observation();
         // id
         obs.setId(id);
-        // meta data
-        obs.setMeta(getMeta(ResourceType.Observation.name()));
+        // metadata
+        obs.setMeta(getMeta());
 
         // identifier
         return obs.addIdentifier(new Identifier().setType(identifierType)

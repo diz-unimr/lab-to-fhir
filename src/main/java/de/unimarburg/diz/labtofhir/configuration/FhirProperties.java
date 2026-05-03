@@ -12,12 +12,6 @@ public final class FhirProperties {
 
     private final Systems systems = new Systems();
 
-    private final Profile profile = new Profile();
-
-    public Profile getProfile() {
-        return profile;
-    }
-
     public Systems getSystems() {
         return systems;
     }
@@ -46,18 +40,6 @@ public final class FhirProperties {
         private String laboratoryUnitSystem;
         @NotNull
         private String mapperTagSystem;
-
-    }
-
-    @Setter
-    @Getter
-    public static final class Profile {
-        @NotNull
-        private String observation;
-        @NotNull
-        private String serviceRequest;
-        @NotNull
-        private String diagnosticReport;
 
     }
 }

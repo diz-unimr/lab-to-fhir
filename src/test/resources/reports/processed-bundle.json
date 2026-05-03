@@ -8,11 +8,6 @@
       "resource": {
         "resourceType": "ServiceRequest",
         "id": "24318114",
-        "meta": {
-          "profile": [
-            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab"
-          ]
-        },
         "identifier": [
           {
             "type": {
@@ -67,11 +62,6 @@
       "resource": {
         "resourceType": "DiagnosticReport",
         "id": "24318114",
-        "meta": {
-          "profile": [
-            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab"
-          ]
-        },
         "identifier": [
           {
             "type": {
@@ -142,11 +132,6 @@
       "resource": {
         "resourceType": "Observation",
         "id": "33224cbc59e9",
-        "meta": {
-          "profile": [
-            "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab"
-          ]
-        },
         "identifier": [
           {
             "type": {
